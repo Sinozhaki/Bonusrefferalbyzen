@@ -1,1 +1,1863 @@
-Maintenance
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zen x 8800</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body{font-family:'Inter',sans-serif;background-color:#f4f6f8}
+        @keyframes soft-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+        .card-aesthetic{background-color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.08);transition:transform .3s,box-shadow .3s;border-radius:1.5rem;animation:soft-float 3s ease-in-out infinite}
+        .card-aesthetic:hover{box-shadow:0 8px 20px rgba(0,0,0,.15);transform:scale(1.02) translateY(-3px);animation-play-state:paused}
+        @keyframes blink-green{0%,100%{background-color:#10B981}50%{background-color:#D1FAE5}}
+        @keyframes blink-red{0%,100%{background-color:#EF4444}50%{background-color:#FEE2E2}}
+        @keyframes gold-shine{0%,100%{box-shadow:0 0 0 1px #FFD700,0 0 15px #FFD700}50%{box-shadow:0 0 0 3px rgba(255,215,0,.8),0 0 25px rgba(255,215,0,.5)}}
+        /* Animasi Api */
+        @keyframes fire-pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px #ff4500); }
+            50% { transform: scale(1.2); filter: drop-shadow(0 0 8px #ff8c00); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 2px #ff4500); }
+        }
+        .fire-badge { animation: fire-pulse 1.5s infinite ease-in-out; display: inline-block; margin-right: 5px;}
+        
+        .light-green{animation:blink-green 1.5s infinite}
+        .light-red{animation:blink-red 1.5s infinite}
+        .fire-active{position:relative;overflow:hidden}
+        .fire-active::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;border-radius:inherit;border:2px solid transparent;background:linear-gradient(45deg,#FFD700,#FFA500,rgba(255,215,0,0)) border-box;mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);mask-composite:exclude;animation:gold-shine 2s ease-in-out infinite}
+        .data-row{display:grid;grid-template-columns:1fr auto;align-items:center;border-radius:1rem}
+        #admin-modal-content{max-width:320px}
+        .shadow-blue-glow{box-shadow:0 0 10px rgba(59,130,246,.6)}
+        .top-referer-card{background-color:#1f2937!important;border:2px solid #FFD700;box-shadow:0 6px 20px rgba(255,215,0,.5)}
+        .modal-content{transition:all .3s ease-out;transform:translateY(0);opacity:1}
+        .modal-close{transform:translateY(-10px);opacity:0}
+        .toggle-switch-bg{transition:all .3s ease-in-out}
+        .toggle-switch-circle{transition:all .3s ease-in-out}
+        
+        /* Custom Scrollbar */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #888; border-radius: 2px; }
+
+        /* ANIMASI PROGRESS BAR: EFEK 4 (ELASTIS) */
+        .progress-elastic {
+            transition: width 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        /* ANIMASI PROGRESS BAR: EFEK 2 (GARIS BERJALAN) */
+        @keyframes barberpole {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 0; }
+        }
+
+        .progress-striped {
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+            background-size: 40px 40px;
+            animation: barberpole 1s linear infinite;
+        }
+        
+        /* Shake Animation for Wrong Password */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .shake-anim { animation: shake 0.5s; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto p-4 sm:px-6 lg:px-8 max-w-xl">
+        <header class="text-center py-6 bg-white card-aesthetic rounded-3xl mb-6">
+            <h1 class="text-3xl font-extrabold text-gray-800">Zen x 8800</h1>
+            <p class="text-sm text-gray-500 mt-1">Program refferal By Zen</p>
+        </header>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-3 mb-4">
+            <a href="javascript:void(0)" onclick="showTermsModal()" class="shadow-blue-glow flex items-center justify-center px-4 py-2 text-sm font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition duration-150">Syarat & Ketentuan</a>
+            <button onclick="showJoinFormModal()" class="shadow-blue-glow flex items-center justify-center px-4 py-2 text-sm font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition duration-150">Gabung Menjadi Pengundang</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-8 border-b pb-4">
+            <button onclick="openInputModal()" class="flex items-center justify-center px-4 py-2.5 text-xs font-bold rounded-xl text-white bg-green-600 hover:bg-green-700 transition duration-150 shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Input Data Agen
+            </button>
+            <button onclick="promptAdminPassword('open_dashboard')" class="flex items-center justify-center px-4 py-2.5 text-xs font-bold rounded-xl text-white bg-gray-800 hover:bg-gray-900 transition duration-150 shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                Menu Admin / List
+            </button>
+        </div>
+
+        <section class="mb-10">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">Kode Referal Agen</h2>
+            
+            <div id="loading-indicator" class="text-center py-6 text-gray-500 hidden">
+                <div class="animate-spin inline-block w-6 h-6 border-3 border-blue-500 border-t-transparent rounded-full"></div>
+                <p class="mt-2 text-sm">Memuat data...</p>
+            </div>
+
+            <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl relative mb-4" role="alert">
+                <strong class="font-bold">Gagal memuat data!</strong>
+                <span id="error-details" class="block sm:inline text-sm"></span>
+            </div>
+
+            <div id="data-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+
+            <div id="custom-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 hidden items-center justify-center z-50 p-4" onclick="closeModal()">
+                <div class="bg-white p-5 rounded-2xl shadow-2xl max-w-sm w-full modal-content modal-close" id="custom-modal-content" onclick="event.stopPropagation()">
+                    <h3 class="text-lg font-bold mb-3 hidden" id="modal-title">Notifikasi</h3> 
+                    <div class="text-gray-600 mb-4 text-sm max-h-80 overflow-y-auto" id="modal-body"></div>
+                    <button onclick="closeModal()" class="w-full bg-gray-200 text-gray-700 py-2 rounded-xl hover:bg-gray-300 text-sm font-semibold mt-2">Tutup</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="input-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white p-5 rounded-2xl shadow-2xl w-full max-w-xs transform transition-all duration-300 relative max-h-[90vh] overflow-y-auto custom-scroll">
+            <h4 class="text-lg font-bold text-gray-800 mb-4" id="form-title">Input Data Agen Baru</h4>
+            
+            <input type="hidden" id="data-id-field">
+            
+            <div class="mb-2 p-3 bg-red-50 border border-red-200 rounded-xl flex items-start">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <p class="text-xs text-red-700 font-bold leading-snug">
+                    Ketauan Isi email asal yang ga ada di database, admin kasih penalty pengurangan Rate Reff menjadi 16.000 Per invite
+                </p>
+            </div>
+
+            <div class="mb-3">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Email Teman</label>
+                <div id="email-inputs-container">
+                    <div class="flex gap-2 mb-2" id="initial-email-row">
+                        <input type="email" class="email-input-dynamic w-full p-2.5 border border-gray-300 rounded-xl text-sm focus:ring-green-500 focus:border-green-500" placeholder="contoh@agent.com">
+                        <button onclick="addEmailRow()" id="add-email-btn" class="bg-blue-600 text-white px-3 rounded-xl font-bold text-lg hover:bg-blue-700 transition shadow-md" title="Tambah Email Lain">+</button>
+                    </div>
+                </div>
+                <p class="text-[10px] text-gray-400 italic">Klik tombol (+) untuk input banyak sekaligus.</p>
+            </div>
+
+            <div class="mb-4">
+                <label for="referral-field" class="block text-xs font-medium text-gray-700 mb-1">Pilih Kode Referal</label>
+                <select id="referral-field" class="w-full p-2.5 border border-gray-300 rounded-xl text-sm focus:ring-green-500 focus:border-green-500 bg-white">
+                    <option value="" disabled selected>-- Pilih Kode --</option>
+                    </select>
+                <p class="text-[10px] text-blue-500 italic mt-1">*Kode baru bisa ditambah di Menu Admin</p>
+            </div>
+            
+            <input type="hidden" id="status-field" value="Normal">
+            <div class="mb-4 p-2 bg-green-50 border border-green-100 rounded-lg text-center">
+                 <p class="text-[10px] text-green-700 font-medium">Status Otomatis: <span class="font-bold">Normal</span></p>
+            </div>
+
+            <button onclick="handleSaveClick()" id="save-button" class="w-full bg-green-600 text-white py-2.5 rounded-xl text-sm font-bold hover:bg-green-700 transition duration-150 shadow-md">Simpan Data</button>
+            <button onclick="closeInputModal()" class="w-full mt-2 text-gray-500 py-2 text-sm hover:bg-gray-100 rounded-xl border">Batal</button>
+        </div>
+    </div>
+
+    <div id="dashboard-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white p-5 rounded-2xl shadow-2xl w-full transform transition-all duration-300 relative h-[85vh] flex flex-col max-w-sm mx-auto">
+            <div class="flex justify-between items-center mb-3 border-b pb-2">
+                <h3 class="text-xl font-bold text-gray-800">Menu Admin</h3>
+                <button onclick="closeDashboardModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="overflow-y-auto flex-1 pr-1 custom-scroll">
+                
+                <details class="mb-3 border border-purple-200 bg-purple-50 rounded-xl overflow-hidden shadow-sm group open">
+                    <summary class="p-3 font-bold text-purple-800 cursor-pointer text-sm flex justify-between items-center select-none">
+                        <div class="flex items-center">
+                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                             ⚙️ Manajemen Kode Referal
+                        </div>
+                        <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="p-3 bg-white border-t border-purple-100">
+                        <div class="mb-2">
+                            <label class="text-[10px] text-gray-500 font-bold">1. Kode Referal</label>
+                            <input type="text" id="new-reff-code-input" class="w-full p-2 border border-gray-300 rounded-lg text-xs focus:ring-purple-500 focus:border-purple-500 uppercase mb-2" placeholder="CONTOH: SULTAN">
+                        </div>
+                        <div class="mb-2">
+                            <label class="text-[10px] text-gray-500 font-bold">2. No WA Pemilik (Untuk Kunci Verifikasi)</label>
+                            <input type="tel" id="new-reff-phone-input" class="w-full p-2 border border-gray-300 rounded-lg text-xs focus:ring-purple-500 focus:border-purple-500" placeholder="0812xxxx (Wajib diisi!)">
+                        </div>
+                        
+                        <div class="flex gap-2 mb-3">
+                            <button id="btn-save-reff" onclick="handleReferralCodeSubmit()" class="flex-1 bg-purple-600 text-white py-2 rounded-lg text-xs font-bold hover:bg-purple-700 shadow-sm transition">Simpan Kode & Kunci WA</button>
+                            <button id="btn-cancel-edit" onclick="cancelEditReferralCode()" class="hidden px-3 bg-gray-200 text-gray-600 rounded-lg text-xs font-bold hover:bg-gray-300 transition">Batal</button>
+                        </div>
+                        
+                        <p class="text-[10px] text-gray-500 mb-1 font-bold border-t pt-2">List Kode Aktif:</p>
+                        <div id="reff-code-management-list" class="space-y-1 max-h-32 overflow-y-auto custom-scroll border rounded p-1">
+                            </div>
+                    </div>
+                </details>
+
+                <details class="mb-3 border border-blue-200 bg-blue-50 rounded-xl overflow-hidden shadow-sm group">
+                    <summary class="p-3 font-bold text-blue-800 cursor-pointer text-sm flex justify-between items-center select-none">
+                        <div class="flex items-center">
+                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                             🔍 Identifikasi Email Massal
+                        </div>
+                        <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="p-3 bg-white border-t border-blue-100">
+                        <textarea id="mass-email-input" class="w-full p-2 border border-gray-300 rounded-lg text-xs mb-2 focus:ring-blue-500 focus:border-blue-500" rows="4" placeholder="Paste daftar email di sini..."></textarea>
+                        <div class="flex gap-2 mb-3">
+                             <button onclick="checkMassEmails()" class="flex-1 bg-blue-600 text-white py-1.5 text-xs font-bold rounded-lg hover:bg-blue-700">Cek Data</button>
+                             <button onclick="document.getElementById('mass-email-input').value=''; document.getElementById('mass-result-container').innerHTML=''" class="px-3 bg-gray-200 text-gray-600 py-1.5 text-xs font-bold rounded-lg hover:bg-gray-300">Reset</button>
+                        </div>
+                        <div id="mass-result-container" class="space-y-2"></div>
+                    </div>
+                </details>
+
+                <div class="mb-4 p-3 rounded-2xl bg-gray-50 flex items-center justify-between border shadow-sm">
+                    <p class="font-semibold text-sm text-gray-700">Tombol Withdraw:</p>
+                    <div class="flex items-center space-x-2">
+                        <span id="withdraw-status-text" class="text-xs font-bold text-green-600">AKTIF</span>
+                        <button id="withdraw-toggle" onclick="toggleWithdrawStatus(true)" class="relative inline-flex items-center h-6 rounded-full w-11 toggle-switch-bg bg-green-500">
+                            <span id="withdraw-toggle-circle" class="inline-block w-4 h-4 transform bg-white rounded-full toggle-switch-circle translate-x-6"></span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="text-xs font-bold text-gray-600 ml-1 block mb-1">Filter & Salin Data:</label>
+                    <div class="flex gap-2">
+                        <select id="admin-filter-reff" onchange="renderAdminList()" class="flex-1 p-2 border border-gray-300 rounded-xl text-sm bg-white focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+                            <option value="ALL">📂 Tampilkan Semua Data</option>
+                        </select>
+                        <button onclick="copyFilteredEmails()" class="bg-gray-800 text-white px-3 py-2 rounded-xl text-xs font-bold hover:bg-gray-900 shadow-md flex items-center justify-center transition transform active:scale-95" title="Salin Email yang difilter">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                            </svg>
+                            Salin
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mb-2 px-1">
+                    <h4 class="text-sm font-bold text-gray-700 flex items-center">
+                        <svg class="w-4 h-4 mr-1.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                        List Data Agen
+                        <span id="total-count-badge" class="ml-2 bg-gray-200 text-gray-700 text-[10px] px-2 py-0.5 rounded-full border border-gray-300">0</span>
+                    </h4>
+                    <div class="flex items-center">
+                         <input type="checkbox" id="select-all-checkbox" onchange="toggleSelectAll()" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-1.5 cursor-pointer">
+                         <label for="select-all-checkbox" class="text-xs font-semibold text-gray-600 cursor-pointer">Pilih Semua</label>
+                    </div>
+                </div>
+                
+                <div id="admin-data-list" class="space-y-2 pb-20">
+                   </div>
+                
+                <div class="absolute bottom-0 left-0 w-full p-4 bg-white border-t border-gray-200 shadow-inner">
+                     <button id="bulk-delete-btn" onclick="promptAdminPassword('bulkDelete')" disabled class="w-full bg-gray-300 text-gray-500 py-3 text-sm rounded-xl font-bold transition duration-200 flex items-center justify-center cursor-not-allowed">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        <span id="bulk-delete-text">Pilih data untuk dihapus</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white p-5 rounded-2xl shadow-2xl max-w-xs w-full">
+            <h3 class="text-lg font-bold mb-3 text-red-600">Autentikasi Admin</h3>
+            <p class="text-gray-600 mb-4 text-sm">Masukkan kode admin untuk melanjutkan aksi:</p>
+            <input type="password" id="auth-password-input" placeholder="Kode Rahasia" class="w-full p-2 border border-gray-300 rounded-xl text-sm focus:ring-blue-500 focus:border-blue-500">
+            <input type="hidden" id="auth-action-type">
+            <input type="hidden" id="auth-target-id">
+            <div class="flex justify-end gap-2 mt-4">
+                <button onclick="closeAuthModal()" class="px-3 py-1.5 bg-gray-200 text-gray-800 text-sm rounded-xl hover:bg-gray-300">Batal</button>
+                <button onclick="checkAdminPasswordAndExecute()" class="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-xl hover:bg-blue-700 font-semibold">Konfirmasi</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 hidden items-center justify-center z-50">
+        <div class="bg-white p-5 rounded-2xl shadow-2xl max-w-xs w-full">
+            <h3 class="text-lg font-bold mb-3 text-red-600">Konfirmasi Penghapusan</h3>
+            <p class="text-gray-600 mb-4 text-sm">Apakah Anda yakin ingin menghapus data ini?</p>
+            <div class="flex justify-end gap-2">
+                <button onclick="closeDeleteModal()" class="px-3 py-1.5 bg-gray-200 text-gray-800 text-sm rounded-xl hover:bg-gray-300">Batal</button>
+                <button onclick="confirmDeleteData()" class="px-3 py-1.5 bg-red-600 text-white text-sm rounded-xl hover:bg-red-700 font-semibold">Hapus Permanen</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="bulk-delete-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 hidden items-center justify-center z-50">
+        <div class="bg-white p-5 rounded-2xl shadow-2xl max-w-xs w-full">
+            <h3 class="text-lg font-bold mb-3 text-red-600">Hapus Massal?</h3>
+            <p class="text-gray-600 mb-4 text-sm">Anda akan menghapus <span id="bulk-count-confirm" class="font-bold text-black">0</span> data yang dipilih. Tindakan ini tidak dapat dibatalkan.</p>
+            <div class="flex justify-end gap-2">
+                <button onclick="closeBulkDeleteModal()" class="px-3 py-1.5 bg-gray-200 text-gray-800 text-sm rounded-xl hover:bg-gray-300">Batal</button>
+                <button onclick="confirmBulkDelete()" class="px-3 py-1.5 bg-red-600 text-white text-sm rounded-xl hover:bg-red-700 font-semibold">YA, Hapus Semua</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="verification-modal" class="fixed inset-0 bg-gray-800 bg-opacity-90 hidden items-center justify-center z-[60] p-4">
+        <div class="bg-white p-6 rounded-3xl shadow-2xl max-w-xs w-full relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 to-orange-500"></div>
+            
+            <div class="text-center mb-4">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <h3 class="text-xl font-extrabold text-gray-800">Verifikasi Pemilik</h3>
+                <p class="text-xs text-gray-500 mt-1">Kode Referal: <span id="verify-code-target" class="font-bold text-blue-600">---</span></p>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-xs font-bold text-gray-700 mb-2 text-center">Masukkan No. WhatsApp Terdaftar</label>
+                <input type="tel" id="verification-phone-input" class="w-full text-center p-3 border-2 border-gray-300 rounded-xl text-lg font-bold tracking-wider focus:ring-red-500 focus:border-red-500 outline-none transition-all" placeholder="0812xxxx">
+                <p id="verification-error" class="text-[10px] text-red-600 font-bold text-center mt-2 hidden">⛔ Nomor Salah! Akses Ditolak.</p>
+            </div>
+
+            <button onclick="submitVerification()" class="w-full bg-red-600 text-white py-3 rounded-xl text-sm font-bold hover:bg-red-700 shadow-lg transition duration-200">
+                Buka Gembok Withdraw 🔓
+            </button>
+            <button onclick="closeVerificationModal()" class="w-full mt-3 text-gray-400 text-xs font-medium hover:text-gray-600">Batal</button>
+        </div>
+    </div>
+
+    <script>
+        // KONFIGURASI API JSONBIN.IO
+        const BIN_ID = '68c9791f43b1c97be945093d'; 
+        const API_KEY = '$2a$10$CyEgkHrw6xtwHt.RE3ZqEulgvcK5yzSmlYJmn.aRA23csA9a8u/.2';
+        const ADMIN_CODE = '2003'; 
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        
+        // NOMOR WHATSAPP
+        const WA_NUMBER_JOIN = '6285293591174'; 
+        const WA_NUMBER_WITHDRAW = '6289513304878'; 
+        
+        // RATE KONFIGURASI
+        const USD_RATE = 16000;
+        const RATE_NORMAL_USD = 2; // $2
+        const RATE_PREMIUM_USD = 3; // $3
+        
+        const RATE_NORMAL = RATE_NORMAL_USD * USD_RATE; // 32.000
+        const RATE_PREMIUM = RATE_PREMIUM_USD * USD_RATE; // 48.000
+        const ACCOUNT_REWARD_IDR = 189500; // Reward per akun jika disatukan
+
+        // TARGET BARU
+        const TARGET_RATE_UP = 10;
+        const TARGET_BONUS = 20;
+        const BONUS_IDR = 15 * USD_RATE; // $15 = 240.000
+
+        let currentData = [];
+        // ReferralCodes sekarang berisi Array of Objects: [{code: 'ABC', phone: '081...'}, ...]
+        let currentReferralCodes = []; 
+        let dataToDeleteId = null;
+        let isWithdrawEnabled = true; 
+        
+        // Variabel untuk menyimpan state verifikasi sementara
+        let pendingWithdrawData = { code: null, earnings: 0, count: 0 };
+        // Variabel untuk Mode Edit
+        let editingCodeOriginalName = null;
+
+        // --- HELPER CURRENCY ---
+        function formatIDR(amount) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount);
+        }
+
+        // --- ADMIN PANEL FUNCTIONS ---
+        function openInputModal() {
+            resetForm(); 
+            document.getElementById('input-modal').classList.remove('hidden');
+            document.getElementById('input-modal').classList.add('flex');
+            populateReferralDropdown(); // Pastikan dropdown terisi
+        }
+
+        function closeInputModal() {
+            document.getElementById('input-modal').classList.add('hidden');
+            document.getElementById('input-modal').classList.remove('flex');
+        }
+
+        // FUNGSI TAMBAH KOLOM EMAIL DINAMIS
+        function addEmailRow() {
+            const container = document.getElementById('email-inputs-container');
+            const newDiv = document.createElement('div');
+            newDiv.className = 'flex gap-2 mb-2 dynamic-row';
+            newDiv.innerHTML = `
+                <input type="email" class="email-input-dynamic w-full p-2.5 border border-gray-300 rounded-xl text-sm focus:ring-green-500 focus:border-green-500" placeholder="Email selanjutnya...">
+                <button onclick="removeEmailRow(this)" class="bg-red-100 text-red-600 px-3 rounded-xl font-bold text-sm hover:bg-red-200 transition border border-red-200">✕</button>
+            `;
+            container.appendChild(newDiv);
+        }
+
+        function removeEmailRow(btn) {
+            btn.parentElement.remove();
+        }
+
+        function openDashboardModal() {
+            const filterSelect = document.getElementById('admin-filter-reff');
+            if(filterSelect) filterSelect.value = 'ALL';
+
+            document.getElementById('dashboard-modal').classList.remove('hidden');
+            document.getElementById('dashboard-modal').classList.add('flex');
+            renderAdminList();
+            renderReferralCodeManager(); // Render management list
+            updateWithdrawToggleState();
+            updateBulkDeleteButton(); 
+        }
+
+        function closeDashboardModal() {
+            document.getElementById('dashboard-modal').classList.add('hidden');
+            document.getElementById('dashboard-modal').classList.remove('flex');
+            cancelEditReferralCode(); // Reset form edit jika ditutup
+        }
+
+        // --- NEW: COPY EMAILS FUNCTION ---
+        function copyFilteredEmails() {
+            const filterSelect = document.getElementById('admin-filter-reff');
+            const selectedFilter = filterSelect.value;
+            
+            let dataToCopy = currentData;
+            let titleMsg = "Semua Email";
+
+            if (selectedFilter !== 'ALL') {
+                dataToCopy = currentData.filter(item => item.referral_code === selectedFilter);
+                titleMsg = `Email Kode ${selectedFilter}`;
+            }
+
+            if (dataToCopy.length === 0) {
+                showModal("Zonk!", "Tidak ada data email untuk disalin.");
+                return;
+            }
+
+            // Hanya ambil emailnya saja, dipisah baris baru
+            const emailList = dataToCopy.map(item => item.email).join('\n');
+
+            navigator.clipboard.writeText(emailList).then(() => {
+                showModal("Berhasil Salin", `Berhasil menyalin ${dataToCopy.length} email ke clipboard!`);
+            }).catch(err => {
+                console.error('Gagal salin', err);
+                showModal("Error", "Gagal menyalin ke clipboard (Izin browser ditolak).");
+            });
+        }
+
+        // --- REFERRAL CODE MANAGEMENT ---
+        function renderReferralCodeManager() {
+            const container = document.getElementById('reff-code-management-list');
+            container.innerHTML = '';
+
+            if (currentReferralCodes.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-[10px] text-center p-2">Belum ada kode ditambahkan.</p>';
+                return;
+            }
+
+            currentReferralCodes.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center bg-gray-50 p-2 rounded border border-gray-100 text-xs';
+                div.innerHTML = `
+                    <div class="flex flex-col">
+                        <span class="font-bold text-gray-800">${item.code}</span>
+                        <span class="text-[10px] text-blue-600 font-medium">Kunci WA: ${item.phone || '-'}</span>
+                    </div>
+                    <div class="flex gap-1">
+                        <button onclick="startEditReferralCode('${item.code}', '${item.phone || ''}')" class="text-blue-500 hover:text-blue-700 font-bold px-2 py-1 bg-blue-50 rounded">✏️</button>
+                        <button onclick="deleteReferralCode('${item.code}')" class="text-red-500 hover:text-red-700 font-bold px-2 py-1 bg-red-50 rounded">✕</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function startEditReferralCode(code, phone) {
+            document.getElementById('new-reff-code-input').value = code;
+            document.getElementById('new-reff-phone-input').value = phone;
+            
+            // Set Mode to Edit
+            editingCodeOriginalName = code;
+            
+            // Update UI Buttons
+            const btnSave = document.getElementById('btn-save-reff');
+            btnSave.textContent = 'Update Data';
+            btnSave.classList.replace('bg-purple-600', 'bg-blue-600');
+            btnSave.classList.replace('hover:bg-purple-700', 'hover:bg-blue-700');
+            
+            document.getElementById('btn-cancel-edit').classList.remove('hidden');
+        }
+
+        function cancelEditReferralCode() {
+            document.getElementById('new-reff-code-input').value = '';
+            document.getElementById('new-reff-phone-input').value = '';
+            
+            editingCodeOriginalName = null;
+            
+            // Reset UI Buttons
+            const btnSave = document.getElementById('btn-save-reff');
+            btnSave.textContent = 'Simpan Kode & Kunci WA';
+            btnSave.classList.replace('bg-blue-600', 'bg-purple-600');
+            btnSave.classList.replace('hover:bg-blue-700', 'hover:bg-purple-700');
+            
+            document.getElementById('btn-cancel-edit').classList.add('hidden');
+        }
+
+        async function handleReferralCodeSubmit() {
+            const inputCode = document.getElementById('new-reff-code-input');
+            const inputPhone = document.getElementById('new-reff-phone-input');
+            
+            const newCode = inputCode.value.trim().toUpperCase();
+            const newPhone = inputPhone.value.trim();
+
+            if (!newCode || !newPhone) {
+                showModal("Data Kurang", "Kode Referal DAN Nomor WhatsApp (sebagai kunci) wajib diisi!");
+                return;
+            }
+
+            // MODE: ADD NEW
+            if (!editingCodeOriginalName) {
+                // Validasi Duplikat
+                const exists = currentReferralCodes.some(c => c.code === newCode);
+                if (exists) {
+                    showModal("Duplikat", "Kode referal ini sudah ada.");
+                    return;
+                }
+                // Add new
+                currentReferralCodes.push({ code: newCode, phone: newPhone });
+            } 
+            // MODE: EDIT (UPDATE)
+            else {
+                // Cek jika nama kode berubah, apakah nama baru bentrok dengan yang lain?
+                if (newCode !== editingCodeOriginalName) {
+                    const duplicateCheck = currentReferralCodes.some(c => c.code === newCode);
+                    if (duplicateCheck) {
+                        showModal("Gagal Update", `Kode "${newCode}" sudah dipakai. Gunakan nama lain.`);
+                        return;
+                    }
+                }
+
+                // Cari index kode yang diedit
+                const index = currentReferralCodes.findIndex(c => c.code === editingCodeOriginalName);
+                if (index !== -1) {
+                    currentReferralCodes[index] = { code: newCode, phone: newPhone };
+                }
+            }
+
+            // Sort by Code alphabet
+            currentReferralCodes.sort((a, b) => a.code.localeCompare(b.code));
+
+            // Simpan ke server
+            await updateBinData(currentData, false); // false = jangan tutup modal input
+            
+            cancelEditReferralCode(); // Reset form & mode
+            renderReferralCodeManager();
+        }
+
+        async function deleteReferralCode(codeToDelete) {
+            if(!confirm(`Hapus kode "${codeToDelete}"? (Data user yang sudah pakai kode ini TIDAK akan terhapus)`)) return;
+
+            currentReferralCodes = currentReferralCodes.filter(item => item.code !== codeToDelete);
+            
+            // Jika yang dihapus adalah yang sedang diedit, cancel edit
+            if(editingCodeOriginalName === codeToDelete) {
+                cancelEditReferralCode();
+            }
+
+            await updateBinData(currentData, false);
+            renderReferralCodeManager();
+        }
+
+        function populateReferralDropdown(selectedCode = null) {
+            const select = document.getElementById('referral-field');
+            select.innerHTML = '<option value="" disabled selected>-- Pilih Kode --</option>';
+
+            currentReferralCodes.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.code;
+                option.textContent = item.code;
+                if (item.code === selectedCode) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+            
+            // Jika sedang edit dan kode lama tidak ada di list (legacy), tambahkan sementara
+            const codeExists = currentReferralCodes.some(c => c.code === selectedCode);
+            if (selectedCode && !codeExists) {
+                 const option = document.createElement('option');
+                option.value = selectedCode;
+                option.textContent = `${selectedCode} (Legacy)`;
+                option.selected = true;
+                select.appendChild(option);
+            }
+        }
+
+
+        // --- BULK DELETE FUNCTIONS ---
+        function toggleSelectAll() {
+            const mainCheckbox = document.getElementById('select-all-checkbox');
+            const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+            
+            itemCheckboxes.forEach(cb => {
+                cb.checked = mainCheckbox.checked;
+            });
+            updateBulkDeleteButton();
+        }
+
+        function updateBulkDeleteButton() {
+            const checkedBoxes = document.querySelectorAll('.item-checkbox:checked');
+            const btn = document.getElementById('bulk-delete-btn');
+            const btnText = document.getElementById('bulk-delete-text');
+            const count = checkedBoxes.length;
+
+            if (count > 0) {
+                btn.disabled = false;
+                btn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                btn.classList.add('bg-red-600', 'text-white', 'hover:bg-red-700', 'cursor-pointer');
+                btnText.textContent = `Hapus (${count}) Data Terpilih`;
+            } else {
+                btn.disabled = true;
+                btn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                btn.classList.remove('bg-red-600', 'text-white', 'hover:bg-red-700', 'cursor-pointer');
+                btnText.textContent = 'Pilih data untuk dihapus';
+            }
+        }
+
+        function openBulkDeleteModal() {
+            const count = document.querySelectorAll('.item-checkbox:checked').length;
+            if(count === 0) return;
+
+            document.getElementById('bulk-count-confirm').textContent = count;
+            document.getElementById('bulk-delete-modal').classList.remove('hidden');
+            document.getElementById('bulk-delete-modal').classList.add('flex');
+        }
+
+        function closeBulkDeleteModal() {
+            document.getElementById('bulk-delete-modal').classList.add('hidden');
+            document.getElementById('bulk-delete-modal').classList.remove('flex');
+        }
+
+        async function confirmBulkDelete() {
+            closeBulkDeleteModal();
+            
+            // Ambil ID yang dicentang
+            const checkedBoxes = document.querySelectorAll('.item-checkbox:checked');
+            const idsToDelete = Array.from(checkedBoxes).map(cb => cb.value);
+
+            // Filter data yang TIDAK ada di list delete
+            const newData = currentData.filter(item => !idsToDelete.includes(item.id));
+            
+            await updateBinData(newData);
+            
+            // Reset UI state
+            document.getElementById('select-all-checkbox').checked = false;
+            updateBulkDeleteButton();
+        }
+
+        // --- MASS EMAIL CHECK FUNCTION ---
+        function checkMassEmails() {
+            const rawInput = document.getElementById('mass-email-input').value;
+            if (!rawInput.trim()) return;
+
+            const emailsToCheck = rawInput.split(/[\n, ]+/).map(e => e.trim().toLowerCase()).filter(e => e);
+            const uniqueInputEmails = [...new Set(emailsToCheck)]; 
+            let foundCount = 0;
+            let notFoundCount = 0;
+            let foundHtml = '';
+            let notFoundHtml = '';
+
+            uniqueInputEmails.forEach(inputEmail => {
+                const match = currentData.find(d => d.email.toLowerCase() === inputEmail);
+                if (match) {
+                    foundCount++;
+                    foundHtml += `
+                        <li class="flex justify-between items-center bg-green-50 p-1.5 rounded border border-green-100 text-[10px]">
+                            <span class="font-bold text-gray-700 truncate mr-2">${match.email}</span>
+                            <span class="bg-green-200 text-green-800 px-1.5 rounded font-bold flex-shrink-0">${match.referral_code}</span>
+                        </li>`;
+                } else {
+                    notFoundCount++;
+                    notFoundHtml += `
+                        <li class="bg-red-50 p-1.5 rounded border border-red-100 text-[10px] text-red-700 font-medium">
+                            ${inputEmail}
+                        </li>`;
+                }
+            });
+
+            const resultContainer = document.getElementById('mass-result-container');
+            let finalHtml = '';
+
+            if (foundCount > 0) {
+                finalHtml += `
+                    <div class="mb-2">
+                        <p class="text-xs font-bold text-green-700 mb-1">✅ Ditemukan (${foundCount})</p>
+                        <ul class="space-y-1 max-h-32 overflow-y-auto custom-scroll border rounded p-1">${foundHtml}</ul>
+                    </div>`;
+            }
+            if (notFoundCount > 0) {
+                finalHtml += `
+                    <div>
+                        <p class="text-xs font-bold text-red-700 mb-1">❌ Tidak Ditemukan (${notFoundCount})</p>
+                        <ul class="space-y-1 max-h-32 overflow-y-auto custom-scroll border rounded p-1">${notFoundHtml}</ul>
+                    </div>`;
+            }
+            if (foundCount === 0 && notFoundCount === 0) {
+                finalHtml = '<p class="text-xs text-gray-500 text-center">Tidak ada input valid.</p>';
+            }
+
+            resultContainer.innerHTML = finalHtml;
+        }
+
+        // --- GLOBAL MODAL FUNCTIONS ---
+        function showModal(title, body, isHtml = false) {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            const titleElem = document.getElementById('modal-title');
+            
+            if(title === "Form Pendaftaran") {
+                 titleElem.classList.add('hidden');
+            } else {
+                 titleElem.classList.remove('hidden');
+                 titleElem.textContent = title;
+            }
+
+            if (isHtml) {
+                document.getElementById('modal-body').innerHTML = body;
+            } else {
+                document.getElementById('modal-body').textContent = body;
+            }
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            setTimeout(() => {
+                content.classList.remove('modal-close');
+                content.classList.add('modal-content');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            
+            content.classList.add('modal-close');
+            content.classList.remove('modal-content');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // --- AUTH FUNCTIONS ---
+        function promptAdminPassword(action, targetId = null) {
+            document.getElementById('auth-action-type').value = action;
+            document.getElementById('auth-target-id').value = targetId || '';
+            document.getElementById('auth-password-input').value = '';
+            document.getElementById('auth-modal').classList.remove('hidden');
+            document.getElementById('auth-modal').classList.add('flex');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+            document.getElementById('auth-modal').classList.remove('flex');
+        }
+
+        function checkAdminPasswordAndExecute() {
+            const password = document.getElementById('auth-password-input').value;
+            const action = document.getElementById('auth-action-type').value;
+            const targetId = document.getElementById('auth-target-id').value;
+
+            if (password === ADMIN_CODE) {
+                closeAuthModal();
+                executeAdminAction(action, targetId);
+            } else {
+                document.getElementById('auth-password-input').value = '';
+                showModal('Akses Ditolak', 'Kode admin salah. Aksi dibatalkan.');
+            }
+        }
+
+        function executeAdminAction(action, targetId) {
+            if (action === 'open_input') {
+                openInputModal();
+            } else if (action === 'open_dashboard') {
+                openDashboardModal();
+            } else if (action === 'edit') {
+                editData(targetId);
+            } else if (action === 'delete') {
+                deleteData(targetId);
+            } else if (action === 'bulkDelete') {
+                openBulkDeleteModal();
+            } 
+        }
+
+        function handleSaveClick() {
+            const idField = document.getElementById('data-id-field');
+            // Ambil semua input email
+            const emailInputs = document.querySelectorAll('.email-input-dynamic');
+            const referralCode = document.getElementById('referral-field').value.trim();
+
+            let hasOneValidEmail = false;
+            emailInputs.forEach(input => {
+                if(input.value.trim() !== '') hasOneValidEmail = true;
+            });
+
+            if (!hasOneValidEmail || !referralCode) {
+                showModal('Input Kurang', 'Minimal satu Email dan Kode Referal wajib dipilih.');
+                return;
+            }
+
+            performSave(); 
+        }
+
+        // --- CRUD OPERATIONS ---
+        function generateUniqueId() {
+            return Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
+        }
+
+        function showLoading(isVisible) {
+            document.getElementById('loading-indicator').classList.toggle('hidden', !isVisible);
+            document.getElementById('error-message').classList.add('hidden');
+        }
+
+        function showError(message) {
+            document.getElementById('error-details').textContent = message;
+            document.getElementById('error-message').classList.remove('hidden');
+        }
+
+        function updateWithdrawToggleState() {
+            const toggle = document.getElementById('withdraw-toggle');
+            const circle = document.getElementById('withdraw-toggle-circle');
+            const text = document.getElementById('withdraw-status-text');
+
+            if (isWithdrawEnabled) {
+                toggle.classList.remove('bg-gray-400');
+                toggle.classList.add('bg-green-500');
+                circle.classList.remove('translate-x-0');
+                circle.classList.add('translate-x-6');
+                text.textContent = 'AKTIF';
+                text.classList.remove('text-red-600');
+                text.classList.add('text-green-600');
+            } else {
+                toggle.classList.remove('bg-green-500');
+                toggle.classList.add('bg-gray-400');
+                circle.classList.remove('translate-x-6');
+                circle.classList.add('translate-x-0');
+                text.textContent = 'TUTUP';
+                text.classList.remove('text-green-600');
+                text.classList.add('text-red-600');
+            }
+        }
+
+        async function toggleWithdrawStatus(confirmed = false) {
+            const newStatus = !isWithdrawEnabled;
+            await updateWithdrawControl(newStatus);
+        }
+
+        async function updateWithdrawControl(newStatus) {
+            showLoading(true);
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY,
+                        'X-Bin-Versioning': false
+                    },
+                    body: JSON.stringify({
+                        users: currentData.map(item => { const { id, ...rest } = item; return rest; }),
+                        referralCodes: currentReferralCodes, // PERSIST CODES
+                        isWithdrawEnabled: newStatus
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Gagal update kontrol');
+                }
+
+                isWithdrawEnabled = newStatus;
+                updateWithdrawToggleState();
+            } catch (error) {
+                console.error("Update Control Error:", error);
+                showError(`Admin Error (Control): ${error.message}`);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function fetchData() {
+            showLoading(true);
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Gagal mengambil data: ${response.statusText}`);
+                }
+
+                const json = await response.json();
+                let usersFromBin = Array.isArray(json.record.users) ? json.record.users : [];
+                
+                // --- MIGRATION LOGIC FOR REFERRAL CODES ---
+                // Cek apakah format lama (array string) atau format baru (array object)
+                let rawCodes = json.record.referralCodes || [];
+                
+                // Konversi string ke object jika format lama
+                currentReferralCodes = rawCodes.map(item => {
+                    if (typeof item === 'string') {
+                        return { code: item, phone: '' }; // Default empty phone
+                    }
+                    return item;
+                });
+
+                currentData = usersFromBin.map(item => {
+                    if (!item.id) item.id = generateUniqueId();
+                    return item;
+                });
+
+                isWithdrawEnabled = json.record.isWithdrawEnabled !== false; 
+                renderData();
+                if(!document.getElementById('dashboard-modal').classList.contains('hidden')){
+                    renderAdminList();
+                    renderReferralCodeManager();
+                }
+                updateWithdrawToggleState();
+            } catch (error) {
+                console.error("Fetch Data Error:", error);
+                showError(error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function updateBinData(newData, shouldCloseInputModal = true) {
+            showLoading(true);
+            try {
+                const payload = {
+                    users: newData.map(item => {
+                        const { id, ...rest } = item;
+                        return rest;
+                    }),
+                    referralCodes: currentReferralCodes, // SEND CODES BACK
+                    isWithdrawEnabled: isWithdrawEnabled
+                };
+
+                const response = await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY,
+                        'X-Bin-Versioning': false
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Gagal menyimpan data');
+                }
+
+                await response.json();
+                await fetchData();
+                
+                if (shouldCloseInputModal) {
+                    showModal('Sukses!', 'Data berhasil disimpan dan diperbarui.');
+                    closeInputModal(); 
+                }
+            } catch (error) {
+                console.error("Update Data Error:", error);
+                showError(`Admin Error: ${error.message}`);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function performSave() {
+            const idField = document.getElementById('data-id-field');
+            const existingId = idField.value;
+            const referralCode = document.getElementById('referral-field').value.trim();
+            const status = 'Normal'; 
+            
+            // Ambil semua nilai dari input email yang ada
+            const emailInputs = document.querySelectorAll('.email-input-dynamic');
+            let emailsToProcess = [];
+
+            // Kumpulkan email bersih
+            emailInputs.forEach(input => {
+                const val = input.value.trim();
+                if(val) emailsToProcess.push(val);
+            });
+
+            if (emailsToProcess.length === 0 || !referralCode) {
+                showModal('Input Kosong', 'Email dan Kode Referal tidak boleh kosong.');
+                return;
+            }
+
+            // --- VALIDASI DUPLIKAT (Batch Check) ---
+            let duplicateFound = null;
+
+            // 1. Cek duplikat dalam inputan sendiri (user input kembar dalam satu batch)
+            const uniqueInputEmails = new Set();
+            for (let e of emailsToProcess) {
+                const lowerE = e.toLowerCase();
+                if (uniqueInputEmails.has(lowerE)) {
+                    showModal('Duplikat Input', `Email ${e} dimasukkan lebih dari sekali.`);
+                    return;
+                }
+                uniqueInputEmails.add(lowerE);
+            }
+
+            // 2. Cek duplikat dengan database
+            for (let email of emailsToProcess) {
+                const emailToCheck = email.toLowerCase();
+                const isDuplicate = currentData.some(item => {
+                    // Jika Edit Mode, abaikan ID diri sendiri
+                    if (existingId && String(item.id) === existingId) {
+                        return false;
+                    }
+                    return item.email.toLowerCase() === emailToCheck;
+                });
+
+                if (isDuplicate) {
+                    duplicateFound = email;
+                    break;
+                }
+            }
+
+            if (duplicateFound) {
+                showModal('Gagal Simpan', `Email "${duplicateFound}" sudah terdaftar di sistem.`);
+                return;
+            }
+            // --- END VALIDASI ---
+
+            let updatedData;
+
+            if (existingId) {
+                // MODE EDIT: Hanya update 1 data (data pertama di input)
+                // Kita abaikan input ke-2 dst jika user nakal nambah input via inspect element di mode edit
+                const email = emailsToProcess[0]; 
+                const newItemOrUpdate = { email, referral_code: referralCode, status };
+
+                updatedData = currentData.map(item => {
+                    if (String(item.id) === existingId) {
+                        return { id: item.id, ...newItemOrUpdate };
+                    }
+                    return item;
+                });
+            } else {
+                // MODE CREATE: Buat object untuk SETIAP email
+                const newItems = emailsToProcess.map(email => {
+                    return {
+                        id: generateUniqueId(), // ID unik untuk setiap email
+                        email: email,
+                        referral_code: referralCode,
+                        status: status
+                    };
+                });
+                updatedData = [...currentData, ...newItems];
+            }
+
+            await updateBinData(updatedData);
+            resetForm();
+        }
+
+        function deleteData(id) {
+            dataToDeleteId = id;
+            document.getElementById('delete-modal').classList.remove('hidden');
+            document.getElementById('delete-modal').classList.add('flex');
+        }
+
+        async function confirmDeleteData() {
+            if (dataToDeleteId === null) return;
+            const idToDelete = dataToDeleteId;
+            dataToDeleteId = null;
+            closeDeleteModal();
+
+            const updatedData = currentData.filter(item => String(item.id) !== String(idToDelete));
+            await updateBinData(updatedData);
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('delete-modal').classList.add('hidden');
+            document.getElementById('delete-modal').classList.remove('flex');
+            dataToDeleteId = null;
+        }
+
+        function editData(id) {
+            const itemToEdit = currentData.find(item => String(item.id) === String(id));
+            if (!itemToEdit) return;
+
+            closeDashboardModal();
+            openInputModal();
+
+            document.getElementById('form-title').textContent = 'Edit Data Agen (ID: ' + itemToEdit.id + ')';
+            document.getElementById('data-id-field').value = itemToEdit.id;
+            
+            // Set nilai ke input pertama
+            const firstInput = document.querySelector('.email-input-dynamic');
+            if(firstInput) firstInput.value = itemToEdit.email;
+
+            // Sembunyikan tombol tambah email saat mode edit untuk keamanan data ID
+            const addBtn = document.getElementById('add-email-btn');
+            if(addBtn) addBtn.style.display = 'none';
+
+            // Hapus input dinamis lain jika ada sisa
+            const dynamicRows = document.querySelectorAll('.dynamic-row');
+            dynamicRows.forEach(row => row.remove());
+
+            // Populate Dropdown and Select Value
+            populateReferralDropdown(itemToEdit.referral_code);
+
+            document.getElementById('save-button').textContent = 'Perbarui Data';
+        }
+
+        function resetForm() {
+            document.getElementById('form-title').textContent = 'Input Data Agen Baru';
+            document.getElementById('data-id-field').value = '';
+            
+            // Reset input email: Hapus semua baris tambahan, kosongkan yang pertama
+            const container = document.getElementById('email-inputs-container');
+            const dynamicRows = document.querySelectorAll('.dynamic-row');
+            dynamicRows.forEach(row => row.remove());
+            
+            const firstInput = document.querySelector('.email-input-dynamic');
+            if(firstInput) firstInput.value = '';
+
+            // Munculkan kembali tombol tambah (jika disembunyikan oleh editData)
+            const addBtn = document.getElementById('add-email-btn');
+            if(addBtn) addBtn.style.display = 'block';
+
+            document.getElementById('referral-field').value = '';
+            document.getElementById('save-button').textContent = 'Simpan Data';
+        }
+
+        function renderAdminList() {
+            const container = document.getElementById('admin-data-list');
+            const filterSelect = document.getElementById('admin-filter-reff');
+            const selectedFilter = filterSelect ? filterSelect.value : 'ALL';
+            const totalCountBadge = document.getElementById('total-count-badge');
+            
+            container.innerHTML = '';
+
+            const uniqueCodes = [...new Set(currentData.map(item => item.referral_code))].filter(code => code).sort();
+            
+            let optionsHtml = '<option value="ALL">📂 Tampilkan Semua Data</option>';
+            uniqueCodes.forEach(code => {
+                const isSelected = code === selectedFilter ? 'selected' : '';
+                optionsHtml += `<option value="${code}" ${isSelected}>${code}</option>`;
+            });
+            
+            if(filterSelect) {
+                filterSelect.innerHTML = optionsHtml;
+                if(!uniqueCodes.includes(selectedFilter) && selectedFilter !== 'ALL') {
+                     filterSelect.value = 'ALL'; 
+                } else {
+                     filterSelect.value = selectedFilter;
+                }
+            }
+
+            let filteredData = currentData;
+            if (filterSelect && filterSelect.value !== 'ALL') {
+                filteredData = currentData.filter(item => item.referral_code === filterSelect.value);
+            }
+
+            // Update Total Count
+            if(totalCountBadge) {
+                totalCountBadge.textContent = filteredData.length;
+            }
+
+            if (filteredData.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 text-sm py-4">Tidak ada data ditemukan.</p>';
+                const mainCheckbox = document.getElementById('select-all-checkbox');
+                if(mainCheckbox) { mainCheckbox.checked = false; mainCheckbox.disabled = true; }
+                return;
+            } else {
+                const mainCheckbox = document.getElementById('select-all-checkbox');
+                if(mainCheckbox) { mainCheckbox.disabled = false; }
+            }
+
+            filteredData.forEach(item => {
+                const listItem = `
+                    <div class="flex items-center p-3 bg-white border border-gray-200 rounded-xl shadow-sm">
+                        <input type="checkbox" class="item-checkbox w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-3" value="${item.id}" onchange="updateBulkDeleteButton()">
+                        
+                        <div class="min-w-0 flex-1 mr-3">
+                            <p class="font-semibold text-gray-800 truncate text-sm">${item.email}</p>
+                            <span class="text-[10px] text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded border">Ref: ${item.referral_code || '-'}</span>
+                        </div>
+                        <div class="flex gap-1.5 flex-shrink-0">
+                            <button onclick="executeAdminAction('edit', '${item.id}')" class="text-[10px] text-blue-600 hover:bg-blue-50 px-2 py-1 rounded-lg font-bold border border-blue-200">Edit</button>
+                            <button onclick="executeAdminAction('delete', '${item.id}')" class="text-[10px] text-red-600 hover:bg-red-50 px-2 py-1 rounded-lg font-bold border border-red-200">Hapus</button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += listItem;
+            });
+            
+            // Reset bulk button state
+            updateBulkDeleteButton();
+        }
+
+        function renderData() {
+            const container = document.getElementById('data-container');
+            container.innerHTML = '';
+
+            if (currentData.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 col-span-full text-sm py-4">Belum ada Kode Referal yang tersedia.</p>';
+                return;
+            }
+
+            const referralStats = currentData.reduce((acc, item) => {
+                const refCode = item.referral_code;
+                if (refCode && refCode !== 'TIDAK ADA') {
+                    acc[refCode] = (acc[refCode] || 0) + 1;
+                }
+                return acc;
+            }, {});
+
+            const sortedRefCodes = Object.keys(referralStats).sort((a, b) => {
+                return referralStats[b] - referralStats[a];
+            });
+
+            if (sortedRefCodes.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 col-span-full text-sm py-4">Tidak ada Kode Referal yang unik (selain \'TIDAK ADA\').</p>';
+                return;
+            }
+
+            sortedRefCodes.forEach((refCode, index) => {
+                const totalEmails = referralStats[refCode];
+                const isTopReferer = totalEmails >= 10;
+                
+                const isNumberOne = index === 0; 
+                const fireBadgeHtml = isNumberOne ? `<span class="fire-badge text-xl" title="Top Referrer">🔥</span>` : '';
+
+                let cardClasses = 'card-aesthetic p-5 flex flex-col justify-between transition duration-300';
+                let refCodeClasses = 'font-extrabold text-3xl text-blue-800 bg-blue-100 py-1.5 px-3 rounded-xl inline-block';
+                let textColor = 'text-gray-700';
+                let totalColor = 'text-green-600';
+
+                if (isTopReferer) {
+                    cardClasses = 'card-aesthetic p-6 flex flex-col justify-between top-referer-card transition duration-300';
+                    refCodeClasses = 'font-extrabold text-4xl text-yellow-300 bg-gray-900 py-1.5 px-3 rounded-xl inline-block';
+                    textColor = 'text-gray-200';
+                    totalColor = 'text-yellow-400';
+                }
+                
+                const dataRow = document.createElement('div');
+                dataRow.className = cardClasses;
+
+                // --- LOGIKA PROGRESS BAR ---
+                const targetBonus = 20;
+                const currentProgress = Math.min(totalEmails, targetBonus);
+                const progressPercent = (currentProgress / targetBonus) * 100;
+                
+                let progressColor = 'bg-blue-500';
+                let progressText = `Target Bonus: ${totalEmails}/${targetBonus}`;
+                let bgBarColor = 'bg-gray-200';
+
+                if(isTopReferer) {
+                     bgBarColor = 'bg-gray-600'; // Darker bg for dark card
+                }
+
+                // Jika target 20 tercapai
+                if(totalEmails >= targetBonus) {
+                    progressColor = 'bg-yellow-400';
+                    progressText = '🎉 Bonus $15 Unlocked!';
+                }
+
+                // GABUNGAN EFEK 4 (ELASTIS) & EFEK 2 (STRIPED)
+                let progressHtml = `
+                    <div class="mt-3 pt-2 border-t ${isTopReferer ? 'border-gray-600' : 'border-gray-100'}">
+                        <div class="flex justify-between text-[10px] font-bold ${isTopReferer ? 'text-gray-400' : 'text-gray-500'} mb-1">
+                            <span>${progressText}</span>
+                            <span>${Math.round(progressPercent)}%</span>
+                        </div>
+                        <div class="w-full ${bgBarColor} rounded-full h-2.5">
+                            <div class="${progressColor} h-2.5 rounded-full progress-elastic progress-striped" style="width: ${progressPercent}%"></div>
+                        </div>
+                    </div>
+                `;
+
+                const refCodeContent = `
+                    <div class="flex flex-col mb-4">
+                        <div class="flex items-center mb-1">
+                            ${fireBadgeHtml}
+                            <span class="text-xs font-medium ${textColor}">${isTopReferer ? '✨ TOP REFERER CODE' : 'Kode Referal:'}</span>
+                        </div>
+                        <div class="${refCodeClasses}">${refCode}</div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm ${textColor} font-semibold">Total Undang: <span class="font-bold text-xl ${totalColor}">${totalEmails}</span></p>
+                        <button onclick="showReferralDetails('${refCode}')" class="p-3 rounded-full ${isTopReferer ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-500' : 'bg-blue-600 text-white hover:bg-blue-700'} transition duration-150 shadow-md" title="Lihat Detail Referal">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    ${progressHtml}
+                `;
+                
+                dataRow.innerHTML = refCodeContent;
+                container.appendChild(dataRow);
+            });
+        }
+
+        // Helper function to censor email
+        function censorEmail(email) {
+            if (!email || !email.includes('@')) return email;
+            let [name, domain] = email.split('@');
+            
+            if (name.length > 3) {
+                // Hapus 3 huruf terakhir dari nama, ganti ***
+                name = name.substring(0, name.length - 3) + '***';
+            } else {
+                // Jika nama pendek, biarkan 1 huruf awal aja
+                name = name.substring(0, 1) + '***';
+            }
+            return name + '@' + domain;
+        }
+
+        function animateCounter(element, finalValue, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const randomVal = Math.floor(Math.random() * finalValue);
+                const currentVal = progress === 1 ? finalValue : randomVal; 
+                
+                element.textContent = formatIDR(currentVal);
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // --- NEW: VERIFICATION MODAL LOGIC ---
+        function showVerificationModal(refCode, totalEarnings) {
+            // Close Detail Modal first
+            closeModal();
+            
+            // Perbaiki data yang disimpan: Sertakan jumlah referral (count)
+            const referralCount = currentData.filter(item => item.referral_code === refCode).length;
+            
+            pendingWithdrawData.code = refCode;
+            pendingWithdrawData.earnings = totalEarnings;
+            pendingWithdrawData.count = referralCount;
+
+            document.getElementById('verify-code-target').textContent = refCode;
+            document.getElementById('verification-phone-input').value = '';
+            document.getElementById('verification-error').classList.add('hidden');
+            
+            const modal = document.getElementById('verification-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Focus on input
+            setTimeout(() => document.getElementById('verification-phone-input').focus(), 100);
+        }
+
+        function closeVerificationModal() {
+            document.getElementById('verification-modal').classList.add('hidden');
+            document.getElementById('verification-modal').classList.remove('flex');
+            pendingWithdrawData = { code: null, earnings: 0, count: 0 };
+        }
+
+        function submitVerification() {
+            const inputPhone = document.getElementById('verification-phone-input').value.trim();
+            const refCode = pendingWithdrawData.code;
+            
+            // Cari data kode di sistem
+            const codeData = currentReferralCodes.find(c => c.code === refCode);
+            
+            if (!codeData || !codeData.phone) {
+                 alert('Kode ini belum memiliki kunci keamanan WhatsApp. Hubungi admin.');
+                 return;
+            }
+
+            const cleanInput = inputPhone.replace(/[\s-]/g, '');
+            const cleanStored = codeData.phone.replace(/[\s-]/g, '');
+
+            if (cleanInput === cleanStored) {
+                // SUCCESS
+                // Simpan data ke variabel lokal sebelum di-reset oleh closeVerificationModal
+                const codeToPass = pendingWithdrawData.code;
+                const earningsToPass = pendingWithdrawData.earnings;
+                const countToPass = pendingWithdrawData.count;
+
+                closeVerificationModal(); 
+                
+                // PANGGIL FORM DENGAN DATA YANG SUDAH DIAMANKAN
+                showWithdrawForm(codeToPass, earningsToPass, cleanInput, countToPass);
+            } else {
+                // FAILED
+                const errorMsg = document.getElementById('verification-error');
+                errorMsg.classList.remove('hidden');
+                
+                // Add shake animation
+                const modalBox = document.querySelector('#verification-modal > div');
+                modalBox.classList.add('shake-anim');
+                setTimeout(() => modalBox.classList.remove('shake-anim'), 500);
+            }
+        }
+
+        function showReferralDetails(refCode) {
+            const referrals = currentData.filter(item => item.referral_code === refCode);
+            let totalEarningsIDR = 0;
+            let detailListHtml = '';
+
+            if (referrals.length === 0) {
+                showModal("Detail Referal", `Tidak ada data referal yang ditemukan untuk kode: ${refCode}.`);
+                return;
+            }
+
+            // LOGIKA BARU: CEK JUMLAH UNDANGAN
+            const inviteCount = referrals.length;
+            const isPremium = inviteCount >= TARGET_RATE_UP; // >= 10
+            const currentRate = isPremium ? RATE_PREMIUM : RATE_NORMAL;
+            
+            // Badge for list items
+            const rateBadge = isPremium ? 
+                '<span class="bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded-full border border-yellow-300 font-bold ml-1">SUPER ($3)</span>' : 
+                '<span class="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded-full border border-gray-200">Normal ($2)</span>';
+
+            referrals.forEach(ref => {
+                totalEarningsIDR += currentRate;
+                const censoredEmailStr = censorEmail(ref.email);
+
+                detailListHtml += `
+                    <li class="p-3 rounded-xl bg-white shadow-sm border border-gray-100 mb-2">
+                        <div class="flex items-center mb-2">
+                            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-2 text-gray-500 flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            </div>
+                            <span class="text-sm font-semibold text-gray-800 truncate">${censoredEmailStr}</span>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-2 border-gray-50">
+                            ${rateBadge}
+                            <span class="text-sm font-extrabold text-green-700">${formatIDR(currentRate)}</span>
+                        </div>
+                    </li>
+                `;
+            });
+
+            // TAMBAHAN: LOGIKA BONUS MINGGUAN (DI WITHDRAWAL)
+            let bonusSectionHtml = '';
+            if (inviteCount >= TARGET_BONUS) {
+                totalEarningsIDR += BONUS_IDR;
+                bonusSectionHtml = `
+                    <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-xl mb-3 flex items-center justify-between">
+                        <span class="text-xs font-bold text-yellow-800">🎉 Bonus Target ($15)</span>
+                        <span class="text-sm font-extrabold text-yellow-700">+${formatIDR(BONUS_IDR)}</span>
+                    </div>
+                `;
+            }
+            
+            let withdrawButton;
+            if (isWithdrawEnabled) {
+                withdrawButton = `<button onclick="showVerificationModal('${refCode}', ${totalEarningsIDR})" class="w-full mt-4 bg-yellow-500 text-gray-900 py-2 rounded-xl hover:bg-yellow-600 text-sm font-semibold transition duration-150">Ajukan Withdraw</button>`;
+            } else {
+                withdrawButton = `<div class="w-full mt-4 p-2 text-center bg-gray-100 text-red-600 rounded-xl text-sm font-semibold border-2 border-red-300">Pencairan sedang di tutup</div>`;
+            }
+
+            const bodyContent = `
+                <div class="space-y-4">
+                    <div class="text-center pb-3 border-b border-gray-200 mb-4">
+                        <h4 class="text-xl font-bold text-gray-800 flex flex-col items-center">
+                            <span>Detail Kode <span class="text-blue-600">${refCode}</span></span>
+                        </h4>
+                        <p class="text-xs text-gray-500 mt-1">Analisis Perolehan Referal</p>
+                    </div>
+                    <div class="p-4 bg-green-100 rounded-xl border border-green-300 text-center shadow-lg">
+                        <p class="text-sm font-medium text-green-800">Total Penghasilan (Estimasi):</p>
+                        <p id="earnings-counter" class="text-3xl font-extrabold text-green-700 mt-1">Rp 0</p>
+                    </div>
+                    
+                    ${bonusSectionHtml}
+                    
+                    <h5 class="font-semibold text-gray-700 border-b pb-1 text-sm mt-4">Daftar Agen (${referrals.length} Orang):</h5>
+                    <ul class="space-y-1 bg-gray-50 p-2 rounded-xl max-h-48 overflow-y-auto">
+                        ${detailListHtml}
+                    </ul>
+                    <p class="text-[10px] text-gray-500 pt-2 border-t mt-3 text-center">
+                        Rate Aktif: <span class="font-bold text-gray-800">${formatIDR(currentRate)}</span> / invite.
+                    </p>
+                </div>
+                ${withdrawButton}
+            `;
+            
+            showModal("Detail Referal", bodyContent, true);
+
+            const counterElement = document.getElementById('earnings-counter');
+            if (counterElement) {
+                animateCounter(counterElement, totalEarningsIDR, 1000);
+            }
+        }
+
+        function showTermsModal() {
+            const termsContent = `
+                <div class="space-y-4 text-gray-700">
+                    <h4 class="text-base font-bold text-gray-800 border-b pb-1 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Syarat & Kriteria Utama
+                    </h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            <span class="text-gray-700">Orang yang kamu undang harus berhasil menyewakan akunya ke agent bule.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-gray-700">Kamu harus konfirmasi ke admin jika ingin menjadi pengundang.</span>
+                        </li>
+                    </ul>
+
+                    <h4 class="text-base font-bold text-gray-800 border-b pb-1 mt-4 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
+                        Skema Komisi Baru
+                    </h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="bg-gray-100 p-3 rounded-xl border border-gray-200">
+                             <p class="font-bold text-gray-700 mb-1">🐣 Rate Standar</p>
+                             <div class="flex justify-between items-center">
+                                <span>Dibawah 10 Invite</span>
+                                <span class="font-extrabold text-gray-800">${formatIDR(RATE_NORMAL)} / orang</span>
+                             </div>
+                        </div>
+                        <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-300 relative overflow-hidden">
+                             <div class="absolute top-0 right-0 bg-yellow-400 text-xs font-bold px-2 py-1 rounded-bl-lg text-yellow-900">SUPER BONUS</div>
+                             <p class="font-bold text-yellow-800 mb-1">🔥 Rate Sultan</p>
+                             <div class="flex justify-between items-center">
+                                <span>10 Invite atau Lebih</span>
+                                <span class="font-extrabold text-red-600 text-lg">${formatIDR(RATE_PREMIUM)} / orang</span>
+                             </div>
+                             <p class="text-[10px] text-yellow-700 mt-1">Otomatis berlaku untuk SEMUA invite jika total mencapai 10.</p>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-3 rounded-xl border border-blue-200">
+                             <p class="font-bold text-blue-800 mb-1">🎁 Bonus Mingguan</p>
+                             <div class="flex justify-between items-center">
+                                <span>Capai 20 Invite</span>
+                                <span class="font-extrabold text-green-600">+${formatIDR(BONUS_IDR)} ($15)</span>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            showModal("Syarat & Ketentuan Program", termsContent, true);
+        }
+
+        function showJoinFormModal() {
+            const formHtml = `
+                <div class="space-y-4">
+                    <div class="text-center p-5 rounded-t-2xl bg-gradient-to-r from-blue-600 to-blue-800 mb-4 -mx-5 -mt-5 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-full bg-white opacity-10 transform -skew-x-12"></div>
+                        <div class="relative z-10">
+                            <div class="w-12 h-12 mx-auto bg-white rounded-full flex items-center justify-center shadow-lg mb-2">
+                                <svg class="w-7 h-7 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <h4 class="text-xl font-extrabold text-white tracking-wide">Form Agen Partner</h4>
+                            <p class="text-xs text-blue-100 mt-1">Gabung Zen x 8800 & Mulai Hasilkan $</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="join-name" class="block text-xs font-bold text-gray-700 mb-1">Request Kode Refferal Mu</label>
+                        <input type="text" id="join-name" placeholder="Cth: SULTAN / KING / NAMA KAMU" class="uppercase w-full p-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 bg-gray-50 focus:bg-white">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="join-phone" class="block text-xs font-bold text-gray-700 mb-1">Nomor WhatsApp Aktif</label>
+                        <input type="tel" id="join-phone" placeholder="Cth: 08123xxxx" class="w-full p-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 bg-gray-50 focus:bg-white">
+                    </div>
+
+                    <div class="p-3 bg-blue-50 rounded-xl border border-blue-100 mb-3">
+                        <label for="join-estimate" class="block text-xs font-bold text-blue-800 mb-1">Target Invite Minggu Ini?</label>
+                        <input type="number" id="join-estimate" placeholder="0" min="1" 
+                            oninput="calculatePotential(this.value)"
+                            class="w-full p-2.5 border border-blue-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mb-2 font-bold text-gray-700">
+                        
+                        <div class="flex items-center justify-between text-xs mt-1">
+                            <span class="text-gray-500">Estimasi Pendapatan:</span>
+                            <span id="potential-result" class="font-extrabold text-green-600 text-sm">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start mt-2 mb-2">
+                        <div class="flex items-center h-5">
+                            <input id="join-agreement" type="checkbox" onchange="toggleJoinButton()" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        </div>
+                        <div class="ml-2 text-xs">
+                            <label for="join-agreement" class="font-medium text-gray-600">Saya siap mengikuti aturan & target Zen x 8800.</label>
+                        </div>
+                    </div>
+
+                    <button id="btn-join-submit" onclick="submitJoinForm()" disabled class="w-full bg-gray-400 text-white py-3 rounded-xl text-sm font-bold shadow-none transition duration-150 cursor-not-allowed mt-2 flex justify-center items-center gap-2">
+                        <span>Lanjut ke WhatsApp</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            `;
+            showModal("Form Pendaftaran", formHtml, true);
+        }
+
+        function calculatePotential(val) {
+            const amount = parseInt(val) || 0;
+            const rate = amount >= 10 ? RATE_PREMIUM : RATE_NORMAL;
+            let total = amount * rate;
+            
+            // Tambah bonus di kalkulator jika >= 20
+            if (amount >= 20) {
+                total += BONUS_IDR;
+            }
+            
+            let bonusText = amount >= 10 ? "🔥 (Rate 48k)" : "";
+            if (amount >= 20) bonusText += ` + Bonus ${formatIDR(BONUS_IDR)}!`;
+            
+            document.getElementById('potential-result').textContent = `${formatIDR(total)} ${bonusText}`;
+        }
+
+        function toggleJoinButton() {
+            const checkbox = document.getElementById('join-agreement');
+            const btn = document.getElementById('btn-join-submit');
+
+            if(checkbox.checked) {
+                btn.disabled = false;
+                btn.classList.remove('bg-gray-400', 'cursor-not-allowed', 'shadow-none');
+                btn.classList.add('bg-blue-600', 'hover:bg-blue-700', 'shadow-blue-glow', 'cursor-pointer');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('bg-gray-400', 'cursor-not-allowed', 'shadow-none');
+                btn.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'shadow-blue-glow', 'cursor-pointer');
+            }
+        }
+
+        function submitJoinForm() {
+            const reqCode = document.getElementById('join-name').value.trim().toUpperCase();
+            const phone = document.getElementById('join-phone').value.trim();
+            const estimate = document.getElementById('join-estimate').value.trim();
+
+            if (!reqCode || !phone || !estimate) {
+                showModal("Input Kurang", "Semua kolom wajib diisi untuk mengajukan pendaftaran.");
+                return;
+            }
+
+            const message = `*PENDAFTARAN PENGUNDANG ZEN*\n\n*Request Kode Reff:* ${reqCode}\n*Nomor HP:* ${phone}\n*Estimasi Undang/Minggu:* ${estimate} orang.\n\nMohon diproses untuk menjadi pengundang. Terima kasih.`;
+            const waUrl = `https://wa.me/${WA_NUMBER_JOIN}?text=${encodeURIComponent(message)}`;
+            
+            closeModal();
+            window.open(waUrl, '_blank');
+        }
+
+        // --- WITHDRAWAL FUNCTIONS ---
+        function setBank(name) {
+            document.getElementById('bank-name-field').value = name;
+            const otherBankInput = document.getElementById('other-bank-input');
+            if (name === 'Lainnya') {
+                otherBankInput.classList.remove('hidden');
+                document.getElementById('other-bank-name').focus();
+            } else {
+                otherBankInput.classList.add('hidden');
+            }
+        }
+
+        function showWithdrawForm(refCode, totalEarningsIDR, verifiedPhone, referralCount) {
+            const bankOptions = [
+                {name: 'DANA', color: 'bg-blue-600', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2h-1v2H9v-2h-.5c-1.657 0-3-.895-3-2s1.343-2 3-2h1V6h3v2zm-2 0h1m-1 4h1m-1 0h.5c1.105 0 2-.895 2-2s-.895-2-2-2h-1.5z"></path></svg>'},
+                {name: 'Seabank', color: 'bg-orange-500', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>'},
+                {name: 'BRI', color: 'bg-blue-900', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>'},
+                {name: 'BNI', color: 'bg-orange-700', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>'},
+                {name: 'Mandiri', color: 'bg-blue-800', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2m4 0h2m4 0h2M7 18h.01M17 18h.01M17 14h.01M3 21h18a2 2 0 002-2V5a2 2 0 00-2-2H3a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>'},
+                {name: 'Lainnya', color: 'bg-gray-400', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>'}
+            ];
+
+            let bankOptionsHtml = '<div class="grid grid-cols-3 gap-2">';
+            bankOptions.forEach(bank => {
+                bankOptionsHtml += `
+                    <button type="button" onclick="setBank('${bank.name}'); Array.from(document.querySelectorAll('.bank-option')).forEach(btn => btn.classList.remove('border-blue-500')); this.classList.add('border-blue-500');" 
+                        class="bank-option flex flex-col items-center justify-center p-3 rounded-xl border-2 border-transparent hover:border-blue-500 transition duration-150 ${bank.color} text-white shadow-md">
+                        <span class="mb-1">${bank.icon}</span>
+                        <span class="text-xs font-semibold">${bank.name}</span>
+                    </button>
+                `;
+            });
+            bankOptionsHtml += '</div>';
+            
+            // --- LOGIKA TOGGLE SATUKAN PAYMENT (UNLOCK/LOCK) ---
+            let combinePaymentHtml = '';
+            if (referralCount > 5) {
+                // --- UNLOCKED (Invite > 5) ---
+                combinePaymentHtml = `
+                <div class="flex items-center justify-between bg-blue-50 p-3 rounded-xl border border-blue-100 mb-3">
+                    <div class="flex flex-col">
+                         <span class="text-xs font-bold text-blue-800">Satukan Payment (Reff + Akun)?</span>
+                         <span class="text-[10px] text-blue-500">Tambah reward Rp 189.500/email</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="combine-payment-toggle" class="sr-only peer" onchange="handleCombinePaymentToggle(this)">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                </div>`;
+            } else {
+                // --- LOCKED (Invite <= 5) ---
+                combinePaymentHtml = `
+                <div class="flex items-center justify-between bg-gray-100 p-3 rounded-xl border border-gray-200 mb-3 opacity-70">
+                    <div class="flex flex-col">
+                         <span class="text-xs font-bold text-gray-500 flex items-center">Satukan Payment <span class="ml-1">🔒</span></span>
+                         <span class="text-[10px] text-red-500 font-medium">Butuh > 5 Invite untuk buka fitur ini.</span>
+                    </div>
+                    <div class="w-11 h-6 bg-gray-300 rounded-full relative cursor-not-allowed">
+                        <div class="absolute top-[2px] left-[2px] bg-white border-gray-400 border rounded-full h-5 w-5"></div>
+                    </div>
+                </div>`;
+            }
+
+            const withdrawFormHtml = `
+                <div class="space-y-4">
+                    <div class="text-center pb-3 border-b border-gray-200 mb-4">
+                        <div class="inline-flex items-center bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mb-1">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Verifikasi Sukses
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800">Formulir Withdraw</h4>
+                        <p class="text-xs text-gray-500">Ajukan penarikan dana untuk Kode <span class="font-bold text-blue-600">${refCode}</span></p>
+                    </div>
+                    
+                    ${combinePaymentHtml}
+
+                    <div class="mb-3 p-3 bg-yellow-50 rounded-xl border border-yellow-200 shadow-sm">
+                        <p class="text-sm font-semibold text-yellow-800">Estimasi Dana Total: <span id="withdraw-total-display" class="font-extrabold text-lg text-yellow-700">${formatIDR(totalEarningsIDR)}</span></p>
+                        <input type="hidden" id="base-earnings-value" value="${totalEarningsIDR}">
+                        <input type="hidden" id="referral-count-value" value="${referralCount}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="withdraw-name" class="block text-xs font-medium text-gray-700 mb-1">Nama Penerima (Atas Nama)</label>
+                        <input type="text" id="withdraw-name" placeholder="Nama Lengkap" class="w-full p-2 border border-gray-300 rounded-xl text-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="withdraw-phone" class="block text-xs font-medium text-gray-700 mb-1">Nomor Rekening / E-Wallet (Tujuan)</label>
+                        <input type="tel" id="withdraw-phone" placeholder="Contoh: 1234567890" class="w-full p-2 border border-gray-300 rounded-xl text-sm focus:ring-blue-500 focus:border-blue-500">
+                        <div class="text-[10px] text-green-600 flex items-center mt-1">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Terverifikasi oleh Owner: ${verifiedPhone}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-xs font-medium text-gray-700 mb-2">Pilih Metode Pencairan</label>
+                        ${bankOptionsHtml}
+                        <input type="hidden" id="bank-name-field" value="">
+                    </div>
+                    
+                    <div id="other-bank-input" class="mb-4 hidden">
+                        <label for="other-bank-name" class="block text-xs font-medium text-gray-700 mb-1">Nama Bank Custom</label>
+                        <input type="text" id="other-bank-name" placeholder="Masukkan Nama Bank (cth: BCA)" class="w-full p-2 border border-gray-300 rounded-xl text-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="withdraw-ref-code" class="block text-xs font-medium text-gray-700 mb-1">Kode Referal</label>
+                        <input type="text" id="withdraw-ref-code" value="${refCode}" class="w-full p-2 border border-gray-300 rounded-xl text-sm bg-gray-100 font-bold" readonly>
+                    </div>
+
+                    <button onclick="submitWithdraw('${refCode}')" class="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 text-sm font-semibold shadow-md transition duration-150">Ajukan Withdraw ke Admin</button>
+                    <p class="mt-4 text-xs text-gray-500 text-center border-t pt-2">Pengajuan akan dikirim ke Admin via WhatsApp.</p>
+                </div>
+            `;
+            showModal("Pengajuan Withdraw", withdrawFormHtml, true);
+        }
+        
+        // FUNGSI BARU UNTUK HANDLE KONFIRMASI TOGGLE
+        window.handleCombinePaymentToggle = function(toggle) {
+            if(toggle.checked) {
+                const msg = "⚠️ PERINGATAN KERAS ⚠️\n\nAnda akan bertanggung jawab setiap email yang disewakan.\n\nJika tidak amanah membayarnya kepada member anda, Admin akan BLACKLIST dan FREEZE REKENING Anda.\n\nApakah Anda setuju?";
+                if(!confirm(msg)) {
+                    toggle.checked = false;
+                }
+            }
+            updateWithdrawTotalDisplay();
+        }
+
+        // Helper untuk update display total secara real-time di UI
+        window.updateWithdrawTotalDisplay = function() {
+            const toggleEl = document.getElementById('combine-payment-toggle');
+            const isCombined = toggleEl ? toggleEl.checked : false;
+            
+            const baseEarnings = parseInt(document.getElementById('base-earnings-value').value);
+            const count = parseInt(document.getElementById('referral-count-value').value);
+            
+            let total = baseEarnings;
+            if(isCombined) {
+                total += (count * ACCOUNT_REWARD_IDR);
+            }
+            
+            document.getElementById('withdraw-total-display').textContent = formatIDR(total);
+        }
+
+        function submitWithdraw(refCode) {
+            // Ambil Data dari Hidden Input karena DOM sudah tersedia
+            const baseEarnings = parseInt(document.getElementById('base-earnings-value').value);
+            const count = parseInt(document.getElementById('referral-count-value').value);
+            
+            const toggleEl = document.getElementById('combine-payment-toggle');
+            const isCombined = toggleEl ? toggleEl.checked : false;
+            
+            // Hitung Total Final
+            let totalEarnings = baseEarnings;
+            let combinedNote = "";
+            
+            if (isCombined) {
+                const accountTotal = count * ACCOUNT_REWARD_IDR;
+                totalEarnings += accountTotal;
+                combinedNote = `\n*(Termasuk Reward Akun: ${count} x ${formatIDR(ACCOUNT_REWARD_IDR)})*`;
+            }
+
+            let bank = document.getElementById('bank-name-field').value.trim();
+            const name = document.getElementById('withdraw-name').value.trim();
+            const phone = document.getElementById('withdraw-phone').value.trim();
+
+            if (bank === 'Lainnya') {
+                const customBank = document.getElementById('other-bank-name').value.trim();
+                if (!customBank) {
+                    showModal("Input Kurang", "Nama bank custom harus diisi.");
+                    return;
+                }
+                bank = customBank;
+            }
+
+            if (!name || !phone || !bank) {
+                showModal("Input Kurang", "Semua kolom wajib diisi dan metode pencairan harus dipilih.");
+                return;
+            }
+
+            // Ubah format list email menjadi polos (tanpa strip/angka)
+            const emails = currentData.filter(item => item.referral_code === refCode)
+                                      .map(item => `${item.email}`) // Hapus "- " dan status
+                                      .join('\n');
+            
+            // Mengirimkan Format IDR ke WhatsApp
+            const message = `*PENGAJUAN WITHDRAW ZEN*\n\n*Kode Referal:* ${refCode}\n*Dana Ditarik:* ${formatIDR(totalEarnings)}${combinedNote}\n\n*DATA PENCERAIAN:*\n*Atas Nama:* ${name}\n*No. Rek/E-Wallet:* ${phone}\n*Metode:* ${bank}\n\n*DAFTAR EMAIL (${count} Email):*\n${emails}\n\nMohon diproses. Terima kasih.`;
+            
+            const waUrl = `https://wa.me/${WA_NUMBER_WITHDRAW}?text=${encodeURIComponent(message)}`;
+            
+            closeModal();
+            window.open(waUrl, '_blank');
+        }
+
+        window.onload = () => {
+            fetchData();
+        };
+    </script>
+</body>
+</html>
