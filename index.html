@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zen x 8800 - Secure</title>
+    <title>Zen x 8800 - Secure & Beautiful</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -254,12 +254,10 @@
 
     <script>
         // --- SECURE CONFIGURATION ---
-        // ID & API Key disamarkan
         const _sec_cfg = {
             id: '68c9791f43b1c97be945093d',
             key: '$2a$10$CyEgkHrw6xtwHt.RE3ZqEulgvcK5yzSmlYJmn.aRA23csA9a8u/.2',
-            // PASSWORD "0858" di-enkripsi Base64
-            pass_hash: 'MDg1OA==' 
+            pass_hash: 'MDg1OA==' // 0858
         };
         const API_URL = `https://api.jsonbin.io/v3/b/${_sec_cfg.id}`;
         
@@ -287,7 +285,6 @@
         }
 
         // --- CORE DATA FUNCTIONS (RACE CONDITION FIX) ---
-        // Fungsi SAKTI: Mengambil data terbaru DETIK INI JUGA dari server
         async function fetchFreshData() {
             const response = await fetch(API_URL, {
                 method: 'GET',
@@ -296,7 +293,6 @@
             if (!response.ok) throw new Error('Gagal sync data server');
             const json = await response.json();
             
-            // Parsing Reff Codes
             let rawCodes = json.record.referralCodes || [];
             const freshReferralCodes = rawCodes.map(item => {
                 if (typeof item === 'string') return { code: item, phone: '' };
@@ -310,7 +306,6 @@
             };
         }
 
-        // Fungsi Simpan Universal (Dipanggil oleh Save, Delete, Update Setting)
         async function updateBinData(newData, newCodes, newStatus, shouldCloseInputModal = true) {
             showLoading(true);
             try {
@@ -331,8 +326,6 @@
                 });
 
                 if (!response.ok) throw new Error('Gagal menyimpan ke server');
-                
-                // Update tampilan lokal setelah sukses simpan
                 await fetchData(); 
                 
                 if (shouldCloseInputModal) {
@@ -368,11 +361,9 @@
             showLoading(true);
 
             try {
-                // 1. AMBIL DATA TERBARU DULU (JANGAN PAKAI DATA LAMA)
                 const freshData = await fetchFreshData();
                 let freshUsers = freshData.users;
 
-                // 2. Cek Duplikat di Data Terbaru
                 let duplicateFound = null;
                 for (let email of emailsToProcess) {
                     const emailToCheck = email.toLowerCase();
@@ -385,10 +376,8 @@
 
                 if (duplicateFound) throw new Error(`Email "${duplicateFound}" sudah ada di server.`);
 
-                // 3. Gabungkan Inputan Baru ke Data Terbaru
                 let finalUsers;
                 if (existingId) {
-                    // Edit Mode
                     const email = emailsToProcess[0];
                     finalUsers = freshUsers.map(item => {
                         if (String(item.id) === existingId) {
@@ -397,7 +386,6 @@
                         return item;
                     });
                 } else {
-                    // Create Mode
                     const newItems = emailsToProcess.map(email => ({
                         id: Date.now().toString(36) + Math.random().toString(36).substring(2, 5),
                         email: email,
@@ -407,7 +395,6 @@
                     finalUsers = [...freshUsers, ...newItems];
                 }
 
-                // 4. Simpan Semuanya (Users Baru + Kode Reff Terbaru + Status Terbaru)
                 await updateBinData(finalUsers, freshData.referralCodes, freshData.isWithdrawEnabled);
                 resetForm();
 
@@ -465,7 +452,6 @@
 
             showLoading(true);
             try {
-                // Fetch data terbaru dulu supaya gak nimpah kode yang baru ditambah admin lain
                 const freshData = await fetchFreshData();
                 let freshCodes = freshData.referralCodes;
 
@@ -538,7 +524,6 @@
         // --- AUTH & SECURITY ---
         function checkAdminPasswordAndExecute() {
             const inputPass = document.getElementById('auth-password-input').value;
-            // Decode Base64 'MDg1OA==' -> '0858'
             try {
                 if (btoa(inputPass) === _sec_cfg.pass_hash) {
                     closeAuthModal();
@@ -851,7 +836,6 @@
             const filter = document.getElementById('admin-filter-reff').value;
             const sel = document.getElementById('admin-filter-reff');
             
-            // Re-populate filter options only if generic
             if(sel.options.length === 1) {
                 const codes = [...new Set(currentData.map(i=>i.referral_code))].sort();
                 codes.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
@@ -887,15 +871,109 @@
             circ.className = isWithdrawEnabled ? 'inline-block w-4 h-4 transform bg-white rounded-full toggle-switch-circle translate-x-6' : 'inline-block w-4 h-4 transform bg-white rounded-full toggle-switch-circle translate-x-0';
         }
 
-        function showTermsModal() { showModal('Syarat', '<div>1. Akun Valid.<br>2. No Spam.</div>', true); }
-        function showJoinFormModal() {
-            showModal('Gabung', `
-            <input id="j-code" class="w-full p-2 border rounded mb-2" placeholder="REQ KODE REFF">
-            <input id="j-wa" class="w-full p-2 border rounded mb-2" placeholder="NOMOR WA">
-            <input id="j-est" class="w-full p-2 border rounded mb-2" placeholder="ESTIMASI INVITE">
-            <button onclick="let c=document.getElementById('j-code').value, w=document.getElementById('j-wa').value, e=document.getElementById('j-est').value; if(c&&w) window.open('https://wa.me/${WA_NUMBER_JOIN}?text=REQ:${c}%20WA:${w}%20EST:${e}', '_blank');" class="w-full bg-blue-600 text-white py-2 rounded font-bold">Kirim WA</button>
-            `, true);
+        // --- RESTORED: BEAUTIFUL S&K ---
+        function showTermsModal() {
+            const termsContent = `
+                <div class="space-y-4 text-gray-700">
+                    <h4 class="text-base font-bold text-gray-800 border-b pb-1 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Syarat & Kriteria Utama
+                    </h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            <span>Orang yang kamu undang harus berhasil menyewakan akunya ke agent bule.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-blue-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>Kamu harus konfirmasi ke admin jika ingin menjadi pengundang.</span>
+                        </li>
+                    </ul>
+                    <h4 class="text-base font-bold text-gray-800 border-b pb-1 mt-4 flex items-center">Skema Komisi Baru</h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="bg-gray-100 p-3 rounded-xl border border-gray-200">
+                             <p class="font-bold text-gray-700 mb-1">🐣 Rate Standar</p>
+                             <div class="flex justify-between items-center"><span>< 10 Invite</span><span class="font-extrabold text-gray-800">${formatIDR(RATE_NORMAL)} / orang</span></div>
+                        </div>
+                        <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-300 relative overflow-hidden">
+                             <div class="absolute top-0 right-0 bg-yellow-400 text-xs font-bold px-2 py-1 rounded-bl-lg text-yellow-900">SUPER BONUS</div>
+                             <p class="font-bold text-yellow-800 mb-1">🔥 Rate Sultan (>= 10 Invite)</p>
+                             <div class="flex justify-between items-center"><span class="font-extrabold text-red-600 text-lg">${formatIDR(RATE_PREMIUM)} / orang</span></div>
+                        </div>
+                        <div class="bg-blue-50 p-3 rounded-xl border border-blue-200">
+                             <p class="font-bold text-blue-800 mb-1">🎁 Bonus Mingguan</p>
+                             <div class="flex justify-between items-center"><span>Capai 20 Invite</span><span class="font-extrabold text-green-600">+${formatIDR(BONUS_IDR)} ($15)</span></div>
+                        </div>
+                    </div>
+                </div>`;
+            showModal("Syarat & Ketentuan Program", termsContent, true);
         }
+
+        // --- RESTORED: BEAUTIFUL JOIN FORM ---
+        function showJoinFormModal() {
+            const formHtml = `
+                <div class="space-y-4">
+                    <div class="text-center p-5 rounded-t-2xl bg-gradient-to-r from-blue-600 to-blue-800 mb-4 -mx-5 -mt-5 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-full bg-white opacity-10 transform -skew-x-12"></div>
+                        <div class="relative z-10 text-white">
+                            <h4 class="text-xl font-extrabold">Form Agen Partner</h4>
+                            <p class="text-xs text-blue-100 mt-1">Gabung Zen x 8800 & Mulai Hasilkan $</p>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Request Kode Refferal Mu</label>
+                        <input type="text" id="join-name" placeholder="Cth: SULTAN / KING" class="uppercase w-full p-2.5 border rounded-xl text-sm">
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-xs font-bold text-gray-700 mb-1">WhatsApp Aktif</label>
+                        <input type="tel" id="join-phone" placeholder="0812xxxx" class="w-full p-2.5 border rounded-xl text-sm">
+                    </div>
+                    <div class="p-3 bg-blue-50 rounded-xl border border-blue-100 mb-3">
+                        <label class="block text-xs font-bold text-blue-800 mb-1">Target Invite?</label>
+                        <input type="number" id="join-estimate" placeholder="0" min="1" oninput="calculatePotential(this.value)" class="w-full p-2.5 border rounded-xl text-sm font-bold">
+                        <div class="flex justify-between text-xs mt-1"><span class="text-gray-500">Estimasi:</span><span id="potential-result" class="font-extrabold text-green-600">$0</span></div>
+                    </div>
+                    <div class="flex items-start mt-2 mb-2">
+                        <input id="join-agreement" type="checkbox" onchange="toggleJoinButton()" class="w-4 h-4 mr-2">
+                        <label for="join-agreement" class="text-xs text-gray-600">Saya siap mengikuti aturan.</label>
+                    </div>
+                    <button id="btn-join-submit" onclick="submitJoinForm()" disabled class="w-full bg-gray-400 text-white py-3 rounded-xl text-sm font-bold cursor-not-allowed">Lanjut ke WhatsApp</button>
+                </div>`;
+            showModal("Form Pendaftaran", formHtml, true);
+        }
+
+        function calculatePotential(val) {
+            const amount = parseInt(val) || 0;
+            const rate = amount >= 10 ? RATE_PREMIUM : RATE_NORMAL;
+            let total = amount * rate;
+            if (amount >= 20) total += BONUS_IDR;
+            let txt = amount >= 10 ? "🔥 (Rate 48k)" : "";
+            if (amount >= 20) txt += ` + Bonus!`;
+            document.getElementById('potential-result').textContent = `${formatIDR(total)} ${txt}`;
+        }
+
+        function toggleJoinButton() {
+            const chk = document.getElementById('join-agreement');
+            const btn = document.getElementById('btn-join-submit');
+            if(chk.checked) {
+                btn.disabled = false;
+                btn.className = 'w-full bg-blue-600 text-white py-3 rounded-xl text-sm font-bold shadow-blue-glow cursor-pointer hover:bg-blue-700';
+            } else {
+                btn.disabled = true;
+                btn.className = 'w-full bg-gray-400 text-white py-3 rounded-xl text-sm font-bold cursor-not-allowed';
+            }
+        }
+
+        function submitJoinForm() {
+            const c = document.getElementById('join-name').value.trim().toUpperCase();
+            const p = document.getElementById('join-phone').value.trim();
+            const e = document.getElementById('join-estimate').value.trim();
+            if (!c || !p || !e) return alert("Isi semua data!");
+            const msg = `*PENDAFTARAN*\nKode: ${c}\nWA: ${p}\nEst: ${e}`;
+            window.open(`https://wa.me/${WA_NUMBER_JOIN}?text=${encodeURIComponent(msg)}`, '_blank');
+            closeModal();
+        }
+
         function editData(id) {
             const item = currentData.find(i=>i.id===id);
             if(!item) return;
