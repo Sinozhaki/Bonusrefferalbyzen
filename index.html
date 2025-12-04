@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zen x 8800 - Secure & Beautiful</title>
+    <title>Zen x 8800 - List Email WD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -736,8 +736,14 @@
 
             if(!n || !b || !r) return alert('Isi semua data!');
 
+            // --- FITUR BARU: GENERATE LIST EMAIL ---
+            const emailList = currentData
+                .filter(i => i.referral_code === code)
+                .map((i, idx) => `${idx+1}. ${i.email}`)
+                .join('\n');
+
             const note = isCombined ? `\n*(Gabung Reward Akun: ${count} x ${formatIDR(ACCOUNT_REWARD_IDR)})*` : '';
-            const msg = `*WITHDRAW ZEN*\nKode: ${code}\nTotal: ${formatIDR(total)}${note}\n\n*Bank:* ${b}\n*Rek:* ${r}\n*Nama:* ${n}`;
+            const msg = `*WITHDRAW ZEN*\nKode: ${code}\nTotal: ${formatIDR(total)}${note}\n\n*Bank:* ${b}\n*Rek:* ${r}\n*Nama:* ${n}\n\n*LIST UNDANGAN (${count}):*\n${emailList}`;
             window.open(`https://wa.me/${WA_NUMBER_WITHDRAW}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
