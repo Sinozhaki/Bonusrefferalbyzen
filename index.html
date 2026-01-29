@@ -3,1062 +3,683 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>8800 Referral - Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Refferal by Zen</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CSS RESET & STYLE UTAMA --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        /* --- 1. RESET & BASIC THEME --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Comfortaa', cursive; }
+        
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0e24; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00c6ff; }
 
-        :root {
-            --bg-color: #f0f2f5;       
-            --card-bg: #ffffff;        
-            --linkedin-blue: #0a66c2;  
-            --linkedin-dark: #004182;
-            --linkedin-light: #e8f4f9;
-            --whatsapp-green: #25d366; 
-            --whatsapp-dark: #1da851;
-            --gold-reward: #d97706;    
-            --danger-red: #ef4444;     
-            --dark-red: #b91c1c;       
-            --warning-orange: #f59e0b; 
-            --text-dark: #1f2937;
-            --text-gray: #6b7280;
-            --radius: 12px;
-            --grid-color: rgba(10, 102, 194, 0.07);
-        }
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            display: flex;
-            justify-content: center;
+            background-color: #000;
+            background: radial-gradient(circle at 50% 10%, #101652 0%, #000000 80%);
+            color: #ffffff;
             min-height: 100vh;
-            padding: 20px;
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             overflow-x: hidden;
         }
 
-        /* --- BACKGROUND --- */
-        .animated-grid-bg {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1; perspective: 1000px; overflow: hidden;
+        body::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+                radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 2px);
+            background-size: 550px 550px, 350px 350px; background-position: 0 0, 40px 60px; opacity: 0.3; z-index: -1;
         }
-        .grid-plane {
-            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            transform-style: preserve-3d; transform: rotateX(70deg);
-            background-image: repeating-linear-gradient(0deg, var(--grid-color) 0px, var(--grid-color) 1px, transparent 1px, transparent 50px),
-                              repeating-linear-gradient(90deg, var(--grid-color) 0px, var(--grid-color) 1px, transparent 1px, transparent 50px);
-            background-size: 50px 50px; animation: gridMove 20s linear infinite;
-        }
-        @keyframes gridMove { from { background-position: 0 0; } to { background-position: 0 50px; } }
 
-        .container { width: 100%; max-width: 600px; padding-bottom: 80px; position: relative; z-index: 1; }
+        /* --- 2. HEADER --- */
+        header { margin-top: 50px; text-align: center; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 30px; position: relative; width: 100%; max-width: 800px; }
+        h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; text-shadow: 0 0 25px rgba(0, 140, 255, 0.6); background: linear-gradient(180deg, #ffffff, #00bfff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* HEADER */
-        header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding: 0 5px; gap: 15px; }
-        .header-info h1 { font-size: 1.6rem; color: var(--linkedin-blue); font-weight: 700; margin-bottom: 5px; }
-        .header-info p { font-size: 0.9rem; color: var(--text-gray); line-height: 1.4; max-width: 95%; }
-        .header-actions { display: flex; gap: 10px; }
-        .btn-icon { width: 40px; height: 40px; border-radius: 50%; background: white; border: 1px solid #e5e7eb; color: var(--linkedin-blue); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
-        .btn-icon:hover { background: var(--linkedin-blue); color: white; border-color: var(--linkedin-blue); }
+        .toggle-capsule { display: flex; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); padding: 6px; border-radius: 100px; width: 380px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); cursor: pointer; }
+        .toggle-btn { flex: 1; padding: 12px 0; text-align: center; border-radius: 100px; font-weight: 700; font-size: 0.9rem; transition: all 0.4s ease; color: #8892b0; }
+        .toggle-btn.active { color: #fff; background: linear-gradient(90deg, #00c6ff, #0072ff); box-shadow: 0 0 20px rgba(0, 114, 255, 0.4); border: 1px solid rgba(255,255,255,0.2); }
 
-        /* BUTTONS */
-        .header-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-        .btn-reward, .btn-join, .btn-calc { font-size: 0.85rem; font-weight: 600; padding: 8px 16px; border-radius: 30px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.3s ease; text-decoration: none; border: none; }
-        .btn-reward { color: white; background: var(--linkedin-blue); box-shadow: 0 4px 10px rgba(10, 102, 194, 0.2); }
-        .btn-reward:hover { background: var(--linkedin-dark); transform: translateY(-2px); }
-        .btn-join { color: var(--linkedin-blue); background: white; border: 2px solid var(--linkedin-blue); }
-        .btn-join:hover { background: var(--linkedin-blue); color: white; }
-        .btn-calc { color: #fff; background: var(--warning-orange); box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); }
-        .btn-calc:hover { background: #d97706; transform: translateY(-2px); }
-        svg { width: 16px; height: 16px; }
+        .admin-trigger { position: absolute; top: 5px; right: 10px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #8892b0; opacity: 0.7; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); }
+        .admin-trigger:hover { color: #00c6ff; border-color: #00c6ff; opacity: 1; box-shadow: 0 0 15px rgba(0,198,255,0.3); }
 
-        /* SEARCH BAR */
-        .search-container { margin-bottom: 20px; position: relative; }
-        .search-input { width: 100%; padding: 15px 15px 15px 45px; border: 1px solid #e5e7eb; border-radius: var(--radius); font-size: 1rem; outline: none; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: all 0.3s; }
-        .search-input:focus { border-color: var(--linkedin-blue); box-shadow: 0 4px 10px rgba(10, 102, 194, 0.1); }
-        .search-icon-overlay { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
+        /* --- 3. MAIN CONTENT --- */
+        .main-content { flex: 1; width: 90%; max-width: 800px; margin: 40px 0; padding: 30px; border-radius: 30px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); min-height: 400px; position: relative; }
+        .tab-view { display: none; animation: fadeIn 0.5s ease; }
+        .tab-view.active-view { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* FAB BUTTON */
-        .fab-container { position: fixed; bottom: 30px; right: 30px; z-index: 900; }
-        .fab-btn { width: 60px; height: 60px; border-radius: 50%; background-color: var(--whatsapp-green); color: white; border: none; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
-        .fab-btn:hover { transform: scale(1.1); background-color: var(--whatsapp-dark); }
-        .fab-btn svg { width: 30px; height: 30px; }
-
-        /* CARD GROUP STYLE */
-        .group-container { display: flex; flex-direction: column; gap: 16px; }
-        .referral-card { background: var(--card-bg); border-radius: var(--radius); box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; transition: transform 0.2s; border: 1px solid #e5e7eb; }
-        .card-header { padding: 15px 20px; background: #f8fafc; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
-        .code-title { font-size: 1.1rem; font-weight: 700; color: var(--linkedin-blue); letter-spacing: 0.5px; }
-        .reward-badge { background: var(--whatsapp-green); color: white; padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; }
-        .reward-badge.high-tier { background: var(--gold-reward); }
-        .card-stats { padding: 12px 20px; display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-gray); border-bottom: 1px solid #f1f5f9; }
-        .stat-item strong { color: var(--text-dark); }
-
-        /* MILESTONE AREA */
-        .milestone-area { padding: 20px 20px 25px; background: linear-gradient(to right, #ffffff, #fcfcfc); border-bottom: 1px solid #f1f5f9; }
-        .milestone-header { display: flex; justify-content: space-between; align-items: flex-end; }
-        .milestone-info { margin-bottom: 5px; } 
-        .milestone-title { font-size: 0.8rem; font-weight: 600; color: var(--text-gray); display: block; margin-bottom: 2px; }
-        
-        .progress-track { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; position: relative; margin-top: 25px; margin-bottom: 5px; overflow: visible; }
-        .progress-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000); background-size: 200% 100%; animation: rgbFlow 2s linear infinite; position: relative; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1; }
-        .progress-fill.completed { box-shadow: 0 0 15px rgba(255, 0, 200, 0.5), 0 0 5px rgba(0, 255, 213, 0.5); }
-
-        .checkpoint-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background-color: #cbd5e1; border: 2px solid white; border-radius: 50%; z-index: 2; transition: all 0.3s ease; }
-        .checkpoint-dot.active { background-color: var(--gold-reward); box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.2); transform: translate(-50%, -50%) scale(1.2); }
-        .checkpoint-label { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; font-weight: 700; color: #94a3b8; white-space: nowrap; transition: color 0.3s ease; }
-        .progress-track .checkpoint-dot:last-child .checkpoint-label { transform: translateX(-85%); }
-        .checkpoint-label.active { color: var(--gold-reward); }
-
-        @keyframes rgbFlow { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
-        .milestone-footer { display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.7rem; color: #94a3b8; font-weight: 500; }
-        .gift-container { position: relative; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; }
-        .gift-icon { width: 28px; height: 28px; stroke: #cbd5e1; fill: none; transition: all 0.4s ease; }
-        .gift-icon.active { stroke: var(--gold-reward); fill: rgba(245, 158, 11, 0.15); filter: drop-shadow(0 4px 6px rgba(217, 119, 6, 0.3)); transform: scale(1.1); animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: scale(1.1) translateY(0); } 50% { transform: scale(1.1) translateY(-4px); } }
-
-        /* DROPDOWN EMAIL LIST */
-        .email-dropdown-container { border-top: 1px solid #f1f5f9; }
-        .btn-toggle-emails { width: 100%; background: white; border: none; padding: 12px; font-size: 0.85rem; font-weight: 600; color: var(--linkedin-blue); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s; }
-        .btn-toggle-emails:hover { background: #f8fafc; }
-        .btn-toggle-emails svg { transition: transform 0.3s ease; }
-        .btn-toggle-emails.open svg { transform: rotate(180deg); }
-        .email-list { list-style: none; padding: 0; max-height: 250px; overflow-y: auto; display: none; background-color: #fcfcfc; border-top: 1px dashed #e2e8f0; }
-        .email-list.show { display: block; animation: slideDown 0.3s ease; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .email-item { padding: 10px 20px; font-size: 0.85rem; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 10px; color: var(--text-dark); }
+        /* --- 4. LEADERBOARD --- */
+        .leaderboard-container { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
+        .group-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden; transition: 0.3s; }
+        .group-card:hover { border-color: rgba(0, 198, 255, 0.4); background: rgba(255,255,255,0.05); }
+        .group-header { display: flex; align-items: center; padding: 20px; cursor: pointer; justify-content: space-between; }
+        .rank-badge { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; color: #8892b0; margin-right: 15px; }
+        .group-card.top-1 .rank-badge { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+        .group-card.top-2 .rank-badge { background: linear-gradient(135deg, #e0e0e0, #b0b0b0); color: #000; }
+        .group-card.top-3 .rank-badge { background: linear-gradient(135deg, #cd7f32, #a05a2c); color: #000; }
+        .group-info { flex: 1; }
+        .group-code { font-size: 1.2rem; font-weight: 800; color: #fff; letter-spacing: 1px; text-shadow: 0 0 10px rgba(0, 198, 255, 0.5); display: block; }
+        .group-label { font-size: 0.75rem; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px;}
+        .count-pill { background: rgba(0, 198, 255, 0.1); color: #00c6ff; padding: 5px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; border: 1px solid rgba(0, 198, 255, 0.2); margin-right: 10px; }
+        .slide-icon { transition: transform 0.3s; width: 24px; color: #555; }
+        .group-card.open .slide-icon { transform: rotate(180deg); color: #fff; }
+        .email-list-container { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.05); }
+        .email-list-inner { padding: 20px; }
+        .revenue-summary-box { background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, rgba(0, 0, 0, 0.2) 100%); border: 1px solid rgba(0, 255, 136, 0.2); border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .rev-label { font-size: 0.8rem; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; }
+        .rev-amount { font-size: 1.8rem; font-weight: 800; color: #00ff88; margin: 5px 0; text-shadow: 0 0 20px rgba(0, 255, 136, 0.3); }
+        .rev-note { font-size: 0.8rem; color: #ffd700; font-weight: 600; display: flex; align-items: center; gap: 5px;}
+        .email-item { padding: 10px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); color: #ccc; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
         .email-item:last-child { border-bottom: none; }
-        .email-item::before { content: ""; width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%; }
+        .email-item::before { content: "•"; color: #00c6ff; font-size: 1.5rem; line-height: 0; }
+
+        /* --- 5. PROGRESS & RULES --- */
+        .level-wrapper { position: relative; padding: 20px 0; margin-bottom: 20px; }
+        .level-track { position: absolute; top: 50%; left: 10px; right: 10px; height: 4px; background: rgba(255,255,255,0.1); transform: translateY(-50%); z-index: 0; border-radius: 10px; }
+        .level-fill { position: absolute; top: 0; left: 0; height: 100%; width: 100%; background: linear-gradient(90deg, #00c6ff 0%, #ffd700 100%); border-radius: 10px; opacity: 0.8; }
+        .level-nodes { position: relative; z-index: 1; display: flex; justify-content: space-between; }
+        .level-node { display: flex; flex-direction: column; align-items: center; text-align: center; width: 33%; position: relative; }
+        .node-dot { width: 20px; height: 20px; border-radius: 50%; background: #000; border: 2px solid #555; margin-bottom: 15px; transition: 0.3s; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .level-node.active .node-dot { background: #00c6ff; border-color: #fff; box-shadow: 0 0 15px #00c6ff; }
+        .level-node.gold .node-dot { background: #ffd700; border-color: #fff; box-shadow: 0 0 20px #ffd700; width: 26px; height: 26px; }
+        .node-card { background: rgba(16, 22, 50, 0.9); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; width: 100%; max-width: 140px; transition: transform 0.3s; }
+        .node-card:hover { transform: translateY(-5px); border-color: rgba(0,198,255,0.5); }
+        .level-node.gold .node-card { border-color: rgba(255, 215, 0, 0.4); background: linear-gradient(145deg, rgba(255,215,0,0.05), rgba(0,0,0,0.8)); }
+        .node-title { font-size: 0.75rem; color: #8892b0; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .node-reward { font-size: 1.1rem; font-weight: 800; color: #fff; }
+        .node-desc { font-size: 0.7rem; color: #00c6ff; margin-top: 4px; }
+        .level-node.gold .node-reward { color: #ffd700; text-shadow: 0 0 10px rgba(255,215,0,0.3); }
+        .level-node.gold .node-desc { color: #ffd700; }
+        .rate-info-box { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 40px; }
+        .rate-card { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; text-align: center; }
+        .rate-cond { display: block; font-size: 0.75rem; color: #8892b0; margin-bottom: 5px; }
+        .rate-val { font-size: 1.1rem; font-weight: 700; }
+        .quest-log { display: flex; flex-direction: column; gap: 12px; }
+        .quest-item { background: rgba(255,255,255,0.03); border-left: 3px solid #555; padding: 15px; border-radius: 0 10px 10px 0; display: flex; gap: 15px; align-items: start; }
+        .quest-item.active { border-left-color: #00c6ff; background: linear-gradient(90deg, rgba(0,198,255,0.05), transparent); }
+        .quest-item.gold { border-left-color: #ffd700; background: linear-gradient(90deg, rgba(255, 215, 0, 0.05), transparent); }
+        .quest-item.danger { border-left-color: #ff6b6b; background: linear-gradient(90deg, rgba(255,107,107,0.05), transparent); }
+        .quest-icon { width: 24px; color: #8892b0; flex-shrink: 0; margin-top: 2px; }
+        .quest-item.active .quest-icon { color: #00c6ff; }
+        .quest-item.gold .quest-icon { color: #ffd700; }
+        .quest-item.danger .quest-icon { color: #ff6b6b; }
+        .quest-text { font-size: 0.9rem; color: #ccc; line-height: 1.5; }
+        .quest-text strong { color: #fff; }
+        .spec-list { margin-top: 5px; padding-left: 15px; list-style: disc; color: #aaa; font-size: 0.85rem; }
+        .spec-list li { margin-bottom: 3px; }
+        .code-box { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 6px; font-family: monospace; color: #fff; border: 1px solid rgba(255,255,255,0.2); display: inline-block; margin-top: 5px; font-size: 0.9em; }
+
+        /* --- 6. FORM & CALCULATOR --- */
+        .form-group { margin-bottom: 25px; }
+        .form-label { display: block; color: #00c6ff; margin-bottom: 10px; font-weight: 700; font-size: 0.9rem; }
+        .input-wrapper { position: relative; }
+        .input-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #8892b0; width: 20px; pointer-events: none; }
+        .form-input { width: 100%; padding: 15px 15px 15px 45px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; color: #fff; font-size: 1rem; transition: all 0.3s; }
+        .form-input:focus { outline: none; border-color: #00c6ff; box-shadow: 0 0 15px rgba(0, 198, 255, 0.2); background: rgba(0, 0, 0, 0.6); }
+
+        .calc-result-box { background: linear-gradient(135deg, #151932 0%, #0a0e24 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; margin-top: 30px; position: relative; overflow: hidden; }
+        .calc-rate-badge { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.1); color: #8892b0; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .calc-rate-badge.active-gold { background: rgba(255, 215, 0, 0.15); color: #ffd700; border-color: #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+        .calc-header { font-size: 0.85rem; color: #8892b0; margin-bottom: 5px; }
+        .result-amount { font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 15px; letter-spacing: -1px; }
+        .calc-progress-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; position: relative; overflow: hidden; margin-bottom: 10px; }
+        .calc-progress-fill { height: 100%; width: 0%; background: #00c6ff; border-radius: 10px; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .calc-progress-fill.full { background: #ffd700; box-shadow: 0 0 10px #ffd700; }
+        .calc-breakdown { font-size: 0.8rem; color: #666; display: flex; justify-content: space-between; }
+        .calc-breakdown span.highlight { color: #00c6ff; }
+        .result-bonus { display: none; margin-top: 5px; font-weight: 700; font-size: 0.8rem; color: #ffd700; }
+        .result-bonus.active { display: block; animation: pulse 1.5s infinite; }
+
+        .btn-submit { display: block; width: 100%; padding: 15px; margin-top: 20px; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; border-radius: 15px; color: #fff; font-weight: 700; font-size: 1rem; cursor: pointer; text-align: center; text-decoration: none; box-shadow: 0 5px 20px rgba(0, 114, 255, 0.3); transition: transform 0.2s; }
+        .btn-submit:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        /* VIRTUAL CARD */
+        .card-preview-container { perspective: 1000px; margin-bottom: 30px; display: flex; justify-content: center; }
+        .virtual-card { width: 100%; max-width: 380px; height: 220px; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); border-radius: 20px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 15px 35px rgba(0,0,0,0.5); transition: transform 0.5s; }
+        .virtual-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(60deg, transparent, rgba(255,255,255,0.1), transparent); transform: rotate(25deg); pointer-events: none; }
+        .v-card-top { display: flex; justify-content: space-between; padding: 20px; align-items: center; }
+        .v-brand { font-size: 0.9rem; font-weight: 700; color: #00c6ff; letter-spacing: 1px; text-transform: uppercase; }
+        .v-chip { width: 45px; height: 35px; background: linear-gradient(135deg, #d4af37, #f9d976); border-radius: 6px; position: relative; overflow: hidden; border: 1px solid rgba(0,0,0,0.2); }
+        .v-chip::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid rgba(0,0,0,0.3); border-radius: 6px; background-image: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 11px); }
+        .v-card-body { padding: 0 20px; margin-top: 10px; }
+        .v-label { font-size: 0.7rem; color: #8892b0; text-transform: uppercase; letter-spacing: 2px; }
+        .v-code { font-family: 'Share Tech Mono', monospace; font-size: 2rem; color: #fff; text-shadow: 0 0 10px rgba(0, 198, 255, 0.8); letter-spacing: 2px; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
+        .v-card-footer { position: absolute; bottom: 0; width: 100%; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); backdrop-filter: blur(5px); border-top: 1px solid rgba(255,255,255,0.05); }
+        .v-status { color: #ffd700; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .v-logo-icon { width: 30px; opacity: 0.8; }
+
+        /* --- 7. OVERLAYS --- */
+        .fab-lapor { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #00c6ff, #0072ff); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: 0 10px 30px rgba(0, 114, 255, 0.5); cursor: pointer; z-index: 90; transition: transform 0.3s, box-shadow 0.3s; }
+        .fab-lapor:hover { transform: scale(1.1) rotate(90deg); box-shadow: 0 15px 40px rgba(0, 114, 255, 0.7); }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .overlay.open { display: flex; animation: fadeIn 0.3s; }
+        .modal-box { background: linear-gradient(145deg, #1a1f3c, #0a0e24); border: 1px solid rgba(0, 198, 255, 0.3); border-radius: 25px; padding: 30px; width: 100%; max-width: 500px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .close-btn { position: absolute; top: 15px; right: 15px; color: #ff6b6b; cursor: pointer; font-size: 1.2rem; font-weight: bold; background: rgba(255,255,255,0.05); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        /* --- 8. ADMIN PANEL STYLES --- */
+        .admin-modal { width: 95%; max-width: 900px; height: 85vh; background: rgba(20, 20, 30, 0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; position: relative; display: flex; flex-direction: column; overflow: hidden; }
+        .admin-table-container { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
+        .admin-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .admin-table th { position: sticky; top: 0; background: rgba(20, 20, 30, 0.95); z-index: 2; padding: 15px; text-align: left; color: #00c6ff; text-transform: uppercase; font-size: 0.8rem; border-bottom: 2px solid rgba(255,255,255,0.1); }
+        .admin-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #ccc; }
+        .admin-table tr:hover { background: rgba(255,255,255,0.03); }
+        .admin-dock { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; padding: 10px 20px; background: rgba(20, 20, 30, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10; }
+        .dock-item { width: 45px; height: 45px; border-radius: 50%; border: none; background: rgba(255,255,255,0.05); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
+        .dock-item:hover { transform: translateY(-5px) scale(1.1); background: rgba(255,255,255,0.15); }
+        .dock-item.add { background: #00c6ff; color: #000; }
+        .dock-item.codes { background: #d400ff; color: #fff; } 
+        .dock-item.delete { background: #ff6b6b; color: #fff; opacity: 0.5; pointer-events: none; }
+        .dock-item.delete.active { opacity: 1; pointer-events: auto; }
+        .dock-item::after { content: attr(data-tooltip); position: absolute; bottom: 55px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; opacity: 0; pointer-events: none; transition: 0.2s; white-space: nowrap; }
+        .dock-item:hover::after { opacity: 1; bottom: 60px; }
+        .action-dialog { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #151520; border: 1px solid rgba(0, 198, 255, 0.4); padding: 25px; border-radius: 20px; width: 320px; display: none; flex-direction: column; gap: 15px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); z-index: 20; }
+        .action-dialog.show { display: flex; animation: fadeIn 0.2s; }
+        .admin-input-wrapper { position: relative; width: 100%; margin-bottom:10px; }
+        .admin-input-icon { position: absolute; left: 12px; top: 12px; width: 18px; color: #8892b0; pointer-events: none; }
+        .admin-input-clean { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 12px 12px 40px; border-radius: 10px; color: #fff; outline: none; width: 100%; }
+        .admin-textarea { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 12px 12px 40px; border-radius: 10px; color: #fff; outline: none; width: 100%; height: 120px; resize: vertical; font-family: 'Comfortaa', cursive; font-size: 0.9rem; }
+        .admin-select { background: #1a1f3c; border: 1px solid rgba(255,255,255,0.1); padding: 12px 12px 12px 40px; border-radius: 10px; color: #fff; outline: none; width: 100%; cursor: pointer; }
+        .admin-input-clean:focus, .admin-select:focus, .admin-textarea:focus { border-color: #00c6ff; }
+        .code-list { max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
+        .code-item { background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+        .code-del-btn { color: #ff6b6b; cursor: pointer; font-weight: bold; }
+        .btn-action { background: none; border: none; cursor: pointer; padding: 5px; opacity: 0.7; }
+        .btn-action:hover { opacity: 1; transform: scale(1.1); }
         
-        /* ADMIN & FORM styles (CONSISTENT) */
-        .admin-wrapper { background: white; padding: 25px; border-radius: var(--radius); box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-gray); }
-        
-        /* Apply to ALL inputs */
-        .form-group input, 
-        .input-group input {
-            width: 100%;
-            padding: 12px; 
-            border: 1px solid #d1d5db; 
-            border-radius: 8px;
-            outline: none;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-        }
-        .form-group input:focus, 
-        .input-group input:focus {
-            border-color: var(--linkedin-blue);
-            box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.1);
-        }
+        /* SEARCH BAR */
+        .search-container { padding: 15px 20px 0; display:flex; align-items:center; }
 
-        .input-group { display: flex; gap: 8px; align-items: center; width: 100%; }
-        .input-group input { flex: 1; width: auto; }
-        
-        .btn-mini-action { padding: 10px 14px; background: #e5e7eb; color: var(--text-dark); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 1rem; }
-        .btn-mini-action.save-code { background: var(--linkedin-light); color: var(--linkedin-blue); border: 1px solid #bfdbfe; }
-        .btn-mini-action.save-code:hover { background: var(--linkedin-blue); color: white; }
-        .btn-mini-action.add-email { background: var(--whatsapp-green); color: white; }
-        .btn-mini-action.add-email:hover { background: var(--whatsapp-dark); }
-        .btn-mini-action.remove-email { background: #fee2e2; color: var(--dark-red); padding: 10px 12px; }
-        .btn-mini-action.remove-email:hover { background: #fecaca; }
-
-        .copy-group-wrapper { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
-        .copy-group-title { color: var(--linkedin-blue); font-weight: 700; margin-bottom: 10px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
-        .btn-copy-group { background: var(--linkedin-blue); color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; transition: 0.2s; }
-        .btn-copy-group:hover { background: var(--linkedin-dark); }
-
-        .delete-group-wrapper { background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
-        .delete-group-title { color: var(--dark-red); font-weight: 700; margin-bottom: 10px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
-        .btn-delete-group { background: var(--dark-red); color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; transition: 0.2s; }
-        .btn-delete-group:hover { background: #991b1b; }
-
-        .email-rows-container { display: flex; flex-direction: column; gap: 10px; }
-        .btn-submit { flex: 1; padding: 12px; background: var(--linkedin-blue); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .btn-submit:hover { background: #004182; }
-        .btn-submit:disabled { background: #9ca3af; cursor: not-allowed; }
-        .btn-cancel { flex: 1; padding: 12px; background: #e5e7eb; color: var(--text-dark); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-left: 10px; transition: 0.2s; }
-        .btn-cancel:hover { background: #d1d5db; }
-        
-        .admin-list-container { background: white; border-radius: var(--radius); padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .admin-list-header { font-weight: 700; color: var(--linkedin-blue); margin-bottom: 15px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .btn-delete-all { background-color: var(--dark-red); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .btn-delete-all:hover { background-color: #991b1b; }
-        .btn-delete-all:disabled { background-color: #ccc; cursor: not-allowed; }
-
-        .admin-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f3f4f6; }
-        .admin-item:last-child { border-bottom: none; }
-        .admin-info { flex: 1; overflow: hidden; padding-right: 10px; }
-        .admin-info strong { display: block; font-size: 0.9rem; color: var(--text-dark); text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-        .admin-info span { font-size: 0.8rem; color: var(--text-gray); }
-        .admin-actions { display: flex; gap: 8px; flex-shrink: 0; }
-        .btn-edit, .btn-delete { padding: 6px 10px; border-radius: 6px; border: none; cursor: pointer; color: white; font-size: 0.75rem; font-weight: 600; }
-        .btn-edit { background: var(--warning-orange); }
-        .btn-delete { background: var(--danger-red); }
-        .btn-delete:disabled { background: #fca5a5; cursor: not-allowed; }
-
-        .admin-stats-container { display: flex; gap: 15px; margin-bottom: 20px; }
-        .stat-card { flex: 1; padding: 15px; border-radius: 12px; color: white; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .stat-card.blue { background: linear-gradient(135deg, var(--linkedin-blue), #0077b5); }
-        .stat-card.green { background: linear-gradient(135deg, var(--whatsapp-green), #128c7e); }
-        .stat-card h3 { font-size: 0.85rem; font-weight: 500; opacity: 0.9; margin-bottom: 5px; }
-        .stat-card span { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.5px; }
-
-        /* JOIN HERO STYLES */
-        .join-hero {
-            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
-            padding: 30px 20px;
-            text-align: center;
-            border-radius: 16px 16px 0 0;
-            border-bottom: 1px solid #bae6fd;
-            margin: -20px -20px 20px -20px; 
-        }
-        .join-hero svg {
-            width: 64px; height: 64px;
-            color: var(--linkedin-blue);
-            filter: drop-shadow(0 4px 6px rgba(14, 165, 233, 0.2));
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        
-        .est-revenue {
-            margin-top: 8px;
-            font-size: 0.85rem;
-            color: var(--text-dark);
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            opacity: 0; transition: opacity 0.3s;
-        }
-        .est-revenue.show { opacity: 1; }
-
-        .btn-wa-join {
-            width: 100%;
-            padding: 14px;
-            background: #25d366;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-            transition: all 0.2s;
-            margin-top: 15px;
-        }
-        .btn-wa-join:hover {
-            background: #1da851;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-        }
-        .btn-wa-join svg { width: 24px; height: 24px; fill: currentColor; }
-
-        /* MODAL */
-        .hidden { display: none !important; }
-        .no-result { text-align: center; color: var(--text-gray); font-style: italic; margin-top: 20px; display: none; }
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px; }
-        .modal-content { background: white; width: 100%; max-width: 500px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto; position: relative; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .modal-header { padding: 20px; border-bottom: 1px solid #f0f2f5; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white; z-index: 10; }
-        .modal-header h2 { font-size: 1.2rem; color: var(--linkedin-blue); }
-        .close-modal { font-size: 1.5rem; cursor: pointer; color: #999; }
-        .modal-body { padding: 20px; }
-        .styled-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9rem; }
-        .styled-table thead { background-color: var(--linkedin-light); color: var(--linkedin-blue); }
-        .styled-table th, .styled-table td { padding: 12px 15px; border: 1px solid #e5e7eb; }
-        .styled-table .cell-icon { display: flex; align-items: center; gap: 8px; }
-        .price-text { color: var(--whatsapp-green); font-weight: 700; }
-        .highlight-box { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; }
-        .rules-list { padding-left: 20px; margin-bottom: 20px; }
-        .rules-list li { margin-bottom: 10px; font-size: 0.85rem; color: var(--text-dark); line-height: 1.5; }
-        .special-rules { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 15px; }
-        .special-rules h3 { font-size: 0.9rem; color: #92400e; margin-bottom: 8px; }
-        .special-rules p { font-size: 0.85rem; color: #b45309; line-height: 1.4; }
-        .btn-wa-submit { width: 100%; padding: 14px; background: var(--whatsapp-green); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1rem; margin-top: 10px; }
-        .btn-wa-submit:hover { background: var(--whatsapp-dark); }
-        .btn-wa-submit:disabled { background: #ccc; cursor: not-allowed; }
-        .calc-result-box { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; text-align: center; margin-top: 15px; }
-        .calc-result-box.active { border-color: var(--warning-orange); background: #fffbeb; }
-        .calc-label { font-size: 0.85rem; color: var(--text-gray); display: block; margin-bottom: 5px; }
-        .calc-main { font-size: 2rem; font-weight: 700; color: var(--linkedin-blue); display: block; }
-        .calc-sub { font-size: 1.2rem; color: var(--whatsapp-green); font-weight: 600; }
-        .rate-badge-calc { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; background: #e5e7eb; color: #666; margin-top: 10px; }
-        .rate-badge-calc.active { background: var(--gold-reward); color: white; }
+        h2.section-title { font-size: 1.1rem; color: #00c6ff; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 10px; }
+        .icon { width: 24px; height: 24px; stroke-width: 2; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+        .text-cyan { color: #00c6ff; } .text-gold { color: #ffd700; } .text-red { color: #ff6b6b; }
 
     </style>
 </head>
 <body>
 
-    <div class="animated-grid-bg">
-        <div class="grid-plane"></div>
+    <header>
+        <div class="admin-trigger" onclick="checkAdminAccess()">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+        </div>
+        <h1>Refferal by Zen</h1>
+        <div class="toggle-capsule">
+            <div id="tab-database" class="toggle-btn active" onclick="switchTab('database')">Database</div>
+            <div id="tab-detail" class="toggle-btn" onclick="switchTab('detail')">Detail</div>
+            <div id="tab-gabung" class="toggle-btn" onclick="switchTab('gabung')">Gabung</div>
+        </div>
+    </header>
+
+    <div class="fab-lapor" onclick="toggleOverlay('lapor-modal')">
+        <svg class="icon" viewBox="0 0 24 24" style="width:32px; height:32px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
     </div>
 
-    <div class="container">
-        
-        <div id="viewDashboard">
-            <header>
-                <div class="header-info">
-                    <h1>8800 Referral</h1>
-                    <p>Invite teman untuk disewakan di agent Zen dan dapatkan Bonus 32rb / invite</p>
-                    
-                    <div class="header-buttons">
-                        <button class="btn-reward" onclick="openModal('rewardModal')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                            Detail
-                        </button>
-                        <button class="btn-join" onclick="openModal('joinModal')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                            Gabung
-                        </button>
-                        <button class="btn-calc" onclick="openModal('calcModal')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="14"></line><line x1="8" y1="14" x2="8" y2="14"></line><line x1="12" y1="14" x2="12" y2="14"></line><line x1="16" y1="18" x2="16" y2="18"></line><line x1="8" y1="18" x2="8" y2="18"></line><line x1="12" y1="18" x2="12" y2="18"></line></svg>
-                            Hitung Cuan
-                        </button>
-                    </div>
+    <div class="main-content">
+        <div id="view-detail" class="tab-view">
+            <h2 class="section-title"><svg class="icon text-cyan" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Progress Roadmap</h2>
+            <div class="level-wrapper">
+                <div class="level-track"><div class="level-fill"></div></div>
+                <div class="level-nodes">
+                    <div class="level-node active"><div class="node-dot"></div><div class="node-card"><div class="node-title">Level 0</div><div class="node-reward">Start</div></div></div>
+                    <div class="level-node active"><div class="node-dot"></div><div class="node-card"><div class="node-title">Level 1</div><div class="node-reward">480rb</div><div class="node-desc">10 Users</div></div></div>
+                    <div class="level-node gold"><div class="node-dot"></div><div class="node-card"><div class="node-title">Level MAX</div><div class="node-reward">1.15jt</div><div class="node-desc">20 Users + Bonus</div></div></div>
                 </div>
-                
-                <div class="header-actions">
-                    <button class="btn-icon" onclick="switchView('admin')" title="Admin Login">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
-                    </button>
-                </div>
-            </header>
+            </div>
+            <div class="rate-info-box">
+                <div class="rate-card"><span class="rate-cond">&lt; 10 Orang</span><span class="rate-val text-cyan">32rb / user</span></div>
+                <div class="rate-card" style="border-color: rgba(255, 215, 0, 0.2);"><span class="rate-cond">&gt; 10 Orang</span><span class="rate-val text-gold">48rb / user</span></div>
+            </div>
+            <h2 class="section-title" style="margin-top:40px;"><svg class="icon text-cyan" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Syarat dan Ketentuan</h2>
+            <div class="quest-log">
+                <div class="quest-item active"><svg class="quest-icon icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg><div class="quest-text"><strong>Edukasi User:</strong> Pengundang wajib menjelaskan detail sewa & pembayaran kepada calon user.</div></div>
+                <div class="quest-item gold"><svg class="quest-icon icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg><div class="quest-text"><strong>Spesifikasi Akun:</strong><ul class="spec-list"><li>Wajib Akun Indonesia 🇮🇩</li><li>Min. 30 Koneksi & Pembuatan Min. Des 2024</li><li>Dilarang mengaktifkan 2FA 🚫</li></ul></div></div>
+                <div class="quest-item active"><svg class="quest-icon icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><div class="quest-text"><strong>Lapor Misi:</strong> Setelah sukses rental, wajib lapor admin. Format: <span class="code-box">[ bang aku di undang kode nice099 ya ]</span></div></div>
+                <div class="quest-item danger"><svg class="quest-icon icon" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><div class="quest-text"><strong>Dilarang Nuyul:</strong> Curang = Cut Off Tanpa Pemberitahuan</div></div>
+            </div>
+        </div>
 
+        <div id="view-database" class="tab-view active-view">
+            <h2 class="section-title" style="margin-bottom:20px">Leaderboard</h2>
+            <div id="leaderboardList" class="leaderboard-container"><div style="text-align:center; padding:30px; color:#888;">Memuat data...</div></div>
+            <div style="text-align:center; margin-top:30px; font-size:0.85rem; color:#888;">Gunakan tombol <strong style="color:#00c6ff">+</strong> di kanan bawah untuk melapor.</div>
+        </div>
+
+        <div id="view-gabung" class="tab-view">
+            <h2 class="section-title"><svg class="icon text-cyan" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg> Bergabung Sekarang</h2>
+            <div class="card-preview-container">
+                <div class="virtual-card">
+                    <div class="v-card-top"><div class="v-brand">REFFERAL BY ZEN</div><div class="v-chip"></div></div>
+                    <div class="v-card-body"><div class="v-label">Unique Code</div><div class="v-code" id="displayCardCode">ZEN-MEMBER</div></div>
+                    <div class="v-card-footer"><div class="v-status">OFFICIAL PARTNER</div><svg class="v-logo-icon" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"></circle><path d="M8 12l2 2 4-4" stroke="black" stroke-width="2" fill="none"></path></svg></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Request Kode Unik</label>
+                <div class="input-wrapper">
+                    <svg class="icon input-icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                    <input type="text" id="reqCode" class="form-input" placeholder="Contoh: nice099" oninput="updateCard()">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Target Undangan (Mingguan)</label>
+                <div class="input-wrapper">
+                    <svg class="icon input-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+                    <input type="number" id="reqTarget" class="form-input" placeholder="0" oninput="calc()">
+                </div>
+            </div>
+
+            <div class="calc-result-box">
+                <div id="calcRateBadge" class="calc-rate-badge">Rate: 32rb</div>
+                <div class="calc-header">Estimasi Profit</div>
+                <div class="result-amount" id="calcTotal">IDR 0</div>
+                <div class="calc-progress-bg"><div id="calcProgress" class="calc-progress-fill"></div></div>
+                <div class="calc-breakdown">
+                    <span id="calcBreakdownText">0 User x 32.000</span>
+                    <span id="calcNextTarget">Next: 20 User</span>
+                </div>
+                <div id="calcBonus" class="result-bonus">✨ BONUS TARGET +190.000 DIAKTIFKAN!</div>
+            </div>
+
+            <button class="btn-submit" onclick="joinWa()">Kirim Request Kode</button>
+        </div>
+    </div>
+
+    <div id="lapor-modal" class="overlay">
+        <div class="modal-box">
+            <div class="close-btn" onclick="toggleOverlay('lapor-modal')">x</div>
+            <h2 class="section-title" style="justify-content:center;">Lapor Referral</h2>
+            <div class="form-group">
+                <label class="form-label">Kode Referral</label>
+                <div class="input-wrapper">
+                    <svg class="icon input-icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                    <input type="text" id="lapKode" class="form-input" placeholder="Contoh: nice099">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email User</label>
+                <div class="input-wrapper">
+                    <svg class="icon input-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <input type="email" id="lapEmail" class="form-input" placeholder="user@gmail.com">
+                </div>
+            </div>
+            <button class="btn-submit" onclick="laporWa()">Kirim WA</button>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="overlay">
+        <div class="admin-modal">
+            
             <div class="search-container">
-                <svg class="search-icon-overlay" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" class="search-input" placeholder="Cari kode referral..." onkeyup="filterReferral()">
-            </div>
-
-            <div id="groupContainer" class="group-container">
-                <div style="text-align:center; color:#999; margin-top:20px;">Memuat data...</div>
-            </div>
-            <div id="noResult" class="no-result">Data tidak ditemukan.</div>
-        </div>
-
-        <div class="fab-container">
-            <button class="fab-btn" onclick="openModal('waModal')" title="Lapor Referral Baru">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            </button>
-        </div>
-
-        <div id="viewAdmin" class="hidden">
-            <header>
-                <div class="header-info">
-                    <h1>Kelola Data</h1>
-                    <p>Input, Edit, atau Hapus data referral</p>
-                </div>
-                <button class="btn-icon" onclick="switchView('dashboard')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                </button>
-            </header>
-
-            <div class="admin-stats-container">
-                <div class="stat-card blue">
-                    <h3>Total Email</h3>
-                    <span id="adminTotalEmail">0</span>
-                </div>
-                <div class="stat-card green">
-                    <h3>Est. Payout ($)</h3>
-                    <span id="adminTotalUSD">$0</span>
+                <div class="admin-input-wrapper" style="margin-bottom:0">
+                    <svg class="admin-input-icon icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="adminSearch" class="admin-input-clean" placeholder="Cari Email / Kode..." onkeyup="renderAdminTable()">
                 </div>
             </div>
 
-            <div class="admin-wrapper">
-                <h3 id="formTitle" style="color:var(--linkedin-blue); margin-bottom:15px; font-size:1rem;">Tambah Data Baru</h3>
-                <form id="addForm">
-                    <input type="hidden" id="editIndex" value="-1">
-                    
-                    <div class="form-group">
-                        <label>Kode Referral</label>
-                        <div class="input-group">
-                            <input type="text" id="inputCode" list="savedCodesList" placeholder="Masukan/Pilih Kode..." required autocomplete="off">
-                            <datalist id="savedCodesList"></datalist>
-                            <button type="button" class="btn-mini-action save-code" onclick="saveNewCode()" title="Simpan Kode ke Database">💾</button>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Email User</label>
-                        <div id="emailContainer" class="email-rows-container">
-                            <div class="input-group">
-                                <input type="email" class="email-input-field" placeholder="user@gmail.com" required>
-                                <button type="button" class="btn-mini-action add-email" onclick="addEmailField()" title="Tambah kolom email">+</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="display: flex;">
-                        <button type="submit" id="submitBtn" class="btn-submit">Simpan</button>
-                        <button type="button" id="cancelBtn" class="btn-cancel hidden" onclick="resetForm()">Batal</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="copy-group-wrapper">
-                <div class="copy-group-title">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    Salin Email Masal
-                </div>
-                <div class="input-group">
-                    <input type="text" id="copyCodeInput" list="savedCodesList" placeholder="Pilih kode referral...">
-                    <button class="btn-copy-group" onclick="copyEmailsByCode(this)">Salin</button>
-                </div>
-                <small style="color:var(--linkedin-blue); font-size:0.75rem; margin-top:5px; display:block;">*Menyalin semua email di kode ini ke clipboard.</small>
-            </div>
-
-            <div class="delete-group-wrapper">
-                <div class="delete-group-title">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    Hapus Masal per Kode
-                </div>
-                <div class="input-group">
-                    <input type="text" id="deleteCodeInput" list="savedCodesList" placeholder="Pilih kode yang ingin direset...">
-                    <button class="btn-delete-group" onclick="deleteByCode()">Hapus Group</button>
-                </div>
-                <small style="color:#b91c1c; font-size:0.75rem; margin-top:5px; display:block;">*Menghapus semua email yang memakai kode ini.</small>
-            </div>
-
-            <div class="admin-list-container">
-                <div class="admin-list-header">
-                    <span>Daftar Data Tersimpan</span>
-                    <button class="btn-delete-all" id="btnDeleteAll" onclick="deleteAllData()">Hapus Semua</button>
-                </div>
-                <div id="adminDataList">
-                    <div style="text-align:center; color:#999;">Sedang memuat list...</div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div id="rewardModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Detail Reward</h2><span class="close-modal" onclick="closeModal('rewardModal')">&times;</span></div>
-            <div class="modal-body">
-                <table class="styled-table">
-                    <thead><tr><th>Level Invite</th><th style="text-align: right;">Reward</th></tr></thead>
-                    <tbody>
-                        <tr><td><div class="cell-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Invite 1</span></div></td><td style="text-align: right;"><span class="price-text">$2</span></td></tr>
-                        <tr><td><div class="cell-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span>Invite 2</span></div></td><td style="text-align: right;"><span class="price-text">$4</span></td></tr>
-                        <tr><td><div class="cell-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span>Invite 3</span></div></td><td style="text-align: right;"><span class="price-text">$6</span></td></tr>
-                    </tbody>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead><tr><th style="width:40px; text-align:center;"><input type="checkbox" id="checkAll" onchange="toggleAll(this)"></th><th>Kode Referral</th><th>Email User</th><th style="text-align:right">Action</th></tr></thead>
+                    <tbody id="adminTableBody"></tbody>
                 </table>
-                <div class="highlight-box">
-                    <p style="display: flex; gap:10px; align-items:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.6-3.3.7 1.8 1.8 3 2.9 3.8z"></path></svg> Invite > 10 rate menjadi <strong>$3 / invite</strong></p>
-                    <p style="margin-top:10px; display: flex; gap:10px; align-items:flex-start;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span><strong>Bonus Weekly:</strong> +$12 jika berhasil invite 20 penyewa dalam 1 minggu.</span></p>
+            </div>
+            <div class="admin-dock">
+                <button class="dock-item add" onclick="openAction('add')" data-tooltip="Tambah Data User"><svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+                <button class="dock-item codes" onclick="openAction('codes')" data-tooltip="Manage Kode Reff"><svg class="icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></button>
+                <button class="dock-item" onclick="openAction('filter')" data-tooltip="Filter & Hapus Massal"><svg class="icon" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg></button>
+                <button class="dock-item" onclick="fetchAdminData()" data-tooltip="Refresh"><svg class="icon" viewBox="0 0 24 24"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></button>
+                <button class="dock-item delete" id="dockDelete" onclick="massDelete()" data-tooltip="Hapus Terpilih"><svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+                <div style="width:1px; height:30px; background:rgba(255,255,255,0.2); margin:0 5px;"></div>
+                <button class="dock-item" onclick="toggleOverlay('admin-panel')" data-tooltip="Tutup" style="background:rgba(255,100,100,0.2); color:#ff6b6b;"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
+            <div id="dialog-add" class="action-dialog">
+                <h4 style="text-align:center; color:#fff;">Input Data User</h4>
+                <div style="margin-bottom:10px;">
+                    <label style="font-size:0.8rem; color:#aaa; display:block; margin-bottom:5px; margin-left:5px;">Pilih Kode Referral</label>
+                    <div class="admin-input-wrapper">
+                        <svg class="admin-input-icon icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                        <select id="admKode" class="admin-select"><option value="">-- Pilih Kode --</option></select>
+                    </div>
                 </div>
-                <h3 style="font-size:1rem; margin-bottom:10px;">Syarat & Ketentuan</h3>
-                <ul class="rules-list">
-                    <li>Pengundang harus edukasi membernya tentang mekanisme sewa (jadwal, cara setor, kapan gajian, dll).</li>
-                    <li>Penyewa wajib mengirim laporan succes rental ke admin Zen dan konfirmasi Kode Referral.</li>
-                </ul>
-                <div class="special-rules"><h3>👑 Special Rules</h3><p>Khusus untuk refferer yang undang lebih dari 5 akun. Bisa <strong>1 Payment</strong>.</p></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="waModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Lapor Referral Baru</h2><span class="close-modal" onclick="closeModal('waModal')">&times;</span></div>
-            <div class="modal-body">
-                <form onsubmit="sendToWa(event)">
-                    <div class="form-group">
-                        <label>Email yang diundang</label>
-                        <div id="waEmailContainer" class="email-rows-container">
-                            <div class="input-group">
-                                <input type="email" class="wa-email-input" placeholder="contoh@gmail.com" required>
-                                <button type="button" class="btn-mini-action add-email" onclick="addWaEmailField()">+</button>
-                            </div>
-                        </div>
+                <div style="margin-bottom:10px;">
+                    <label style="font-size:0.8rem; color:#aaa; display:block; margin-bottom:5px; margin-left:5px;">Paste Chat / Text</label>
+                    <div class="admin-input-wrapper">
+                        <svg class="admin-input-icon icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        <textarea id="admEmail" class="admin-textarea" placeholder="Paste teks panjang di sini..."></textarea>
                     </div>
-                    <div class="form-group"><label>Kode Referral Anda</label><input type="text" id="waCode" placeholder="Masukan kode..." required></div>
-                    <button type="submit" class="btn-wa-submit">Kirim Laporan</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div id="joinModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-body" style="padding-top: 0;">
-                
-                <div class="join-hero">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>
-                    <h3 style="margin-top:10px; color:var(--linkedin-dark);">Mulai Hasilkan Cuan!</h3>
-                    <p style="font-size:0.85rem; color:#64748b;">Gabung jadi pengundang & dapatkan income tambahan.</p>
                 </div>
-
-                <form onsubmit="sendJoinRequest(event)">
-                    <div class="form-group">
-                        <label>Request Kode Referral</label>
-                        <input type="text" id="reqCode" placeholder="Contoh: AGEN-01" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Nomor WhatsApp</label>
-                        <input type="number" id="reqPhone" placeholder="08xx..." required>
-                    </div>
-                    <div class="form-group">
-                        <label>Target Invite (Estimasi)</label>
-                        <input type="number" id="reqTarget" placeholder="Misal: 50" required oninput="updateJoinEstimation()">
-                        
-                        <div id="joinEstResult" class="est-revenue"></div>
-                    </div>
-                    
-                    <button type="submit" class="btn-wa-join">
-                        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-                        Kirim Request ke Admin ➜
-                    </button>
-                    
-                    <button type="button" class="btn-cancel" onclick="closeModal('joinModal')" style="width:100%; margin:10px 0 0 0; background:transparent;">Batal</button>
-                </form>
+                <input type="hidden" id="admEditIndex" value="-1">
+                <div style="display:flex; gap:10px;"><button class="btn-submit" onclick="saveData()" style="margin-top:0; font-size:0.9rem;">Simpan</button><button class="btn-submit" onclick="closeAction('add')" style="margin-top:0; background:#444; font-size:0.9rem;">Batal</button></div>
             </div>
-        </div>
-    </div>
-
-    <div id="calcModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Kalkulator Cuan</h2><span class="close-modal" onclick="closeModal('calcModal')">&times;</span></div>
-            <div class="modal-body">
-                <div class="form-group"><label>Berapa invite yang kamu targetkan?</label><input type="number" id="calcInput" placeholder="0" oninput="calculateReward()" style="font-size:1.5rem; text-align:center;"></div>
-                <div id="calcResultBox" class="calc-result-box">
-                    <span class="calc-label">Total Estimasi Pendapatan:</span><span class="calc-main" id="totalIdr">Rp 0</span><span class="calc-sub" id="totalUsd">($0)</span><span class="rate-badge-calc" id="rateBadge">Rate: $2 (32.000) / invite</span>
+            <div id="dialog-codes" class="action-dialog">
+                <h4 style="text-align:center; color:#fff;">Master Kode Referral</h4>
+                <div style="display:flex; gap:5px;">
+                    <div class="admin-input-wrapper">
+                        <svg class="admin-input-icon icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                        <input type="text" id="newCodeInput" class="admin-input-clean" placeholder="Tambah Kode Baru...">
+                    </div>
+                    <button onclick="addNewCode()" style="background:#d400ff; border:none; border-radius:8px; width:40px; color:#fff; cursor:pointer;">+</button>
+                </div>
+                <div id="codeListContainer" class="code-list"></div>
+                <button class="btn-submit" onclick="closeAction('codes')" style="margin-top:10px; background:#444; font-size:0.9rem;">Tutup</button>
+            </div>
+            <div id="dialog-filter" class="action-dialog">
+                <h4 style="text-align:center; color:#fff;">Manage by Code</h4>
+                <div class="admin-input-wrapper">
+                    <svg class="admin-input-icon icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="filterKode" class="admin-input-clean" placeholder="Masukkan Kode (ex: nice099)">
+                </div>
+                <div style="display:flex; gap:10px; flex-direction:column;">
+                    <button class="btn-submit" onclick="copyFilteredEmails()" style="margin-top:0; font-size:0.9rem; background:#ffd700; color:#000;">Salin Email</button>
+                    <button class="btn-submit" onclick="massDeleteByCode()" style="margin-top:0; font-size:0.9rem; background:#ff6b6b; color:#fff;">Hapus Massal</button>
+                    <button class="btn-submit" onclick="closeAction('filter')" style="margin-top:0; background:#444; font-size:0.9rem;">Tutup</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const BIN_ID = '6943a872ae596e708fa24048';
-        const API_KEY = '$2a$10$Ro/Yy/lqN5YK0KsJrzVO2ep.vjMn209R3gojt.4Ksq4XUrhjdX1UO';
-        // Add timestamp to prevent caching
-        const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        const BIN_ID = "6967465dd0ea881f406adee4";
+        const API_KEY = "$2a$10$4v5UzmjJBEf7T6RUlR7CfeJERCrf/waXNcO7pxUk3OYGOzBNLJ7Fy";
+        let localUsers = [], localCodes = []; 
 
-        const viewDashboard = document.getElementById('viewDashboard');
-        const viewAdmin = document.getElementById('viewAdmin');
-        const groupContainer = document.getElementById('groupContainer');
-        const adminDataList = document.getElementById('adminDataList');
-        const noResult = document.getElementById('noResult');
-        
-        const addForm = document.getElementById('addForm');
-        const inputCode = document.getElementById('inputCode');
-        const submitBtn = document.getElementById('submitBtn');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const editIndexInput = document.getElementById('editIndex');
-        const formTitle = document.getElementById('formTitle');
-        const btnDeleteAll = document.getElementById('btnDeleteAll');
-        const savedCodesList = document.getElementById('savedCodesList');
-        const emailContainer = document.getElementById('emailContainer');
+        function switchTab(name) {
+            ['detail', 'database', 'gabung'].forEach(t => {
+                document.getElementById('tab-'+t).classList.remove('active');
+                document.getElementById('view-'+t).classList.remove('active-view');
+            });
+            document.getElementById('tab-'+name).classList.add('active');
+            document.getElementById('view-'+name).classList.add('active-view');
+            if(name === 'database') fetchPublicData();
+        }
 
-        let globalUsers = [];
-        let globalSavedCodes = []; 
-        let isDataLoaded = false;
+        // --- PASSWORD CHECK & OVERLAY ---
+        function checkAdminAccess() {
+            let pass = prompt("Masukkan Sandi Admin:");
+            if(pass === "2003") {
+                toggleOverlay('admin-panel');
+            } else if(pass !== null) {
+                alert("Sandi Salah!");
+            }
+        }
 
-        function switchView(target) {
-            if (target === 'admin') {
-                let sandi = prompt("Masukkan Sandi Admin:");
-                if (sandi === "0858") {
-                    viewDashboard.classList.add('hidden');
-                    viewAdmin.classList.remove('hidden');
-                    document.querySelector('.fab-container').style.display = 'none';
-                    renderAdminList();
-                    // Load saved codes from localStorage
-                    const saved = localStorage.getItem('mySavedCodes');
-                    if(saved) globalSavedCodes = JSON.parse(saved);
-                    updateCodeDatalist(); 
-                } else { 
-                    if (sandi !== null) alert("Sandi Salah!"); 
-                }
+        function toggleOverlay(id) {
+            const el = document.getElementById(id);
+            if(el.style.display === 'flex') {
+                el.style.display = 'none';
+                if(id === 'admin-panel') { closeAction('add'); closeAction('codes'); closeAction('filter'); }
             } else {
-                viewAdmin.classList.add('hidden');
-                viewDashboard.classList.remove('hidden');
-                document.querySelector('.fab-container').style.display = 'block';
-                document.getElementById('searchInput').value = "";
-                filterReferral(); fetchData();
+                el.style.display = 'flex';
+                if(id === 'admin-panel') fetchAdminData();
             }
         }
 
-        function isEmailDuplicate(email, excludeIndex = -1) {
-            return globalUsers.some((user, index) => {
-                if (index === excludeIndex) return false;
-                return user.email.toLowerCase().trim() === email.toLowerCase().trim();
-            });
-        }
-
-        function filterReferral() {
-            const input = document.getElementById('searchInput');
-            const filter = input.value.toUpperCase();
-            const cards = groupContainer.getElementsByClassName('referral-card');
-            let visibleCount = 0;
-            for (let i = 0; i < cards.length; i++) {
-                const title = cards[i].getElementsByClassName('code-title')[0];
-                if (title) {
-                    const txtValue = title.textContent || title.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        cards[i].style.display = ""; visibleCount++;
-                    } else { cards[i].style.display = "none"; }
-                }
-            }
-            if (visibleCount === 0 && cards.length > 0) noResult.style.display = "block";
-            else noResult.style.display = "none";
-        }
-
-        function openModal(modalId) { document.getElementById(modalId).style.display = "flex"; }
-        function closeModal(modalId) { document.getElementById(modalId).style.display = "none"; }
-        window.onclick = function(event) { if (event.target.classList.contains('modal')) event.target.style.display = "none"; }
-
-        function calculateReward() {
-            const count = parseInt(document.getElementById('calcInput').value) || 0;
-            const box = document.getElementById('calcResultBox');
-            const rateBadge = document.getElementById('rateBadge');
-            let rate = 2; let rateText = "Rate: $2 (32.000) / invite"; let activeClass = false;
-            if (count >= 10) { rate = 3; rateText = "🔥 Rate: $3 (48.000) / invite"; activeClass = true; }
-            const totalUsd = count * rate; const totalIdr = totalUsd * 16000;
-            document.getElementById('totalUsd').innerText = `($${totalUsd})`;
-            document.getElementById('totalIdr').innerText = "Rp " + totalIdr.toLocaleString('id-ID');
-            rateBadge.innerText = rateText;
-            if(activeClass) { box.classList.add('active'); rateBadge.classList.add('active'); } 
-            else { box.classList.remove('active'); rateBadge.classList.remove('active'); }
-        }
-
-        function sendToWa(e) {
-            e.preventDefault();
-            const code = document.getElementById('waCode').value.trim();
-            const emailInputs = document.querySelectorAll('.wa-email-input');
-            let emails = [];
-
-            emailInputs.forEach(input => {
-                if(input.value.trim()) emails.push(input.value.trim());
-            });
-
-            if(emails.length === 0) return alert("Masukan minimal 1 email.");
-
-            // Check duplicates against global database
-            let duplicateFound = false;
-            emails.forEach(email => {
-                if(isEmailDuplicate(email)) {
-                    alert(`Email ${email} sudah terdaftar VALID. Tidak perlu lapor.`);
-                    duplicateFound = true;
-                }
-            });
-            if(duplicateFound) return;
-
-            // Format message with list
-            const emailListString = emails.join('%0A'); // %0A is newline for WA URL
-            const text = `*Lapor Referral Baru*%0A%0AKode Referral: ${code}%0A%0ADaftar Email:%0A${emailListString}`;
-
-            window.open(`https://wa.me/6289513304878?text=${text}`, '_blank');
-            closeModal('waModal');
-            
-            // Reset form
-            document.getElementById('waCode').value = "";
-            document.getElementById('waEmailContainer').innerHTML = `
-                <div class="input-group">
-                    <input type="email" class="wa-email-input" placeholder="contoh@gmail.com" required>
-                    <button type="button" class="btn-mini-action add-email" onclick="addWaEmailField()">+</button>
-                </div>
-            `;
-        }
-
-        function addWaEmailField() {
-            const container = document.getElementById('waEmailContainer');
-            const div = document.createElement('div');
-            div.className = 'input-group';
-            div.innerHTML = `
-                <input type="email" class="wa-email-input" placeholder="Email tambahan..." required>
-                <button type="button" class="btn-mini-action remove-email" onclick="removeEmailField(this)">Hapus</button>
-            `;
-            container.appendChild(div);
-        }
-
-        // --- UPDATE ESTIMASI PENDAPATAN DI FORM JOIN ---
-        function updateJoinEstimation() {
-            const input = document.getElementById('reqTarget');
-            const resultEl = document.getElementById('joinEstResult');
-            const count = parseInt(input.value) || 0;
-
-            if(count === 0) {
-                resultEl.classList.remove('show');
-                return;
-            }
-
-            let rate = count >= 10 ? 3 : 2;
-            let totalUsd = count * rate;
-            let totalIdr = totalUsd * 16000;
-
-            resultEl.innerHTML = `🔥 Potensi Cuan: <span style="color:#166534; font-weight:700">Rp ${totalIdr.toLocaleString('id-ID')}</span> ($${totalUsd})`;
-            resultEl.classList.add('show');
-        }
-
-        function sendJoinRequest(e) {
-            e.preventDefault();
-            const code = document.getElementById('reqCode').value;
-            const phone = document.getElementById('reqPhone').value;
-            const target = document.getElementById('reqTarget').value;
-            const text = `*Request Gabung Pengundang*%0A%0AReq Kode: ${code}%0ANo HP: ${phone}%0ATarget Invite: ${target}`;
-            window.open(`https://wa.me/6289513304878?text=${text}`, '_blank');
-            closeModal('joinModal');
-        }
-
-        function toggleEmails(id, btn) {
-            const list = document.getElementById(id);
-            if (list.classList.contains('show')) {
-                list.classList.remove('show');
-                btn.classList.remove('open');
-                // Hitung jumlah anak li untuk teks tombol
-                btn.innerHTML = `Lihat ${list.children.length} Email <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
-            } else {
-                list.classList.add('show');
-                btn.classList.add('open');
-                btn.innerHTML = `Tutup Email <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
-            }
-        }
-
-        async function fetchData() {
+        // --- FETCH PUBLIC ---
+        async function fetchPublicData() {
+            const listContainer = document.getElementById('leaderboardList');
+            listContainer.innerHTML = '<div style="text-align:center; padding:30px; color:#888;">Memuat data terbaru...</div>';
             try {
-                // Anti-cache param
-                const response = await fetch(BASE_URL + '/latest?t=' + Date.now(), { method: 'GET', headers: { 'X-Master-Key': API_KEY } });
-                const result = await response.json();
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': API_KEY } });
+                const data = await res.json();
+                localUsers = data.record.users || [];
                 
-                // Robust parsing
-                const data = result.record || result;
+                listContainer.innerHTML = '';
+                if(localUsers.length === 0) { listContainer.innerHTML = '<div style="text-align:center; padding:30px; color:#888;">Belum ada data partner.</div>'; return; }
 
-                globalUsers = data.users || [];
-                // globalSavedCodes tidak diambil dari server lagi, tapi dari localStorage
-                
-                isDataLoaded = true;
-                
-                renderGroupedData(globalUsers); 
-                renderAdminList();
-                updateAdminStats(); 
-            } catch (error) { 
-                console.error(error); 
-                groupContainer.innerHTML = `<div style="text-align:center; color:red; margin-top:20px;">Gagal memuat data. <br><button class="btn-reward" style="margin-top:10px" onclick="fetchData()">Coba Lagi</button></div>`; 
-            }
-        }
+                const groups = {};
+                localUsers.forEach(u => { if(!groups[u.code]) groups[u.code] = []; groups[u.code].push(u.email); });
+                const sortedCodes = Object.keys(groups).sort((a,b) => groups[b].length - groups[a].length);
 
-        // --- MANAJEMEN KODE & EMAIL ---
-
-        function updateCodeDatalist() {
-            savedCodesList.innerHTML = '';
-            globalSavedCodes.forEach(code => {
-                const option = document.createElement('option');
-                option.value = code;
-                savedCodesList.appendChild(option);
-            });
-        }
-
-        // FUNGSI SAVE CODE (LOCALSTORAGE)
-        function saveNewCode() {
-            const newCode = inputCode.value.trim().toUpperCase();
-            if (!newCode) return alert("Ketik kode referral dulu.");
-            
-            // Cek duplikat
-            if (globalSavedCodes.includes(newCode)) return alert("Kode sudah ada di database HP ini.");
-
-            const confirmSave = confirm(`Simpan kode "${newCode}" ke HP ini agar muncul otomatis nanti?`);
-            if (confirmSave) {
-                globalSavedCodes.push(newCode);
-                localStorage.setItem('mySavedCodes', JSON.stringify(globalSavedCodes));
-                updateCodeDatalist();
-                alert(`Kode "${newCode}" berhasil disimpan di HP ini!`);
-            }
-        }
-
-        function addEmailField() {
-            const div = document.createElement('div');
-            div.className = 'input-group';
-            div.innerHTML = `
-                <input type="email" class="email-input-field" placeholder="Email tambahan..." required>
-                <button type="button" class="btn-mini-action remove-email" onclick="removeEmailField(this)">Hapus</button>
-            `;
-            emailContainer.appendChild(div);
-        }
-
-        function removeEmailField(btn) {
-            btn.parentElement.remove();
-        }
-
-        // --- UPDATE STATS ---
-        function updateAdminStats() {
-            const totalEmail = globalUsers.length;
-            const groups = {};
-            globalUsers.forEach(u => {
-                const code = u.referral_code ? u.referral_code.toUpperCase().trim() : "UNKNOWN";
-                if(!groups[code]) groups[code] = 0;
-                groups[code]++;
-            });
-
-            let totalUSD = 0;
-            Object.values(groups).forEach(count => {
-                const rate = count >= 10 ? 3 : 2;
-                totalUSD += count * rate;
-            });
-
-            document.getElementById('adminTotalEmail').innerText = totalEmail;
-            document.getElementById('adminTotalUSD').innerText = "$" + totalUSD.toLocaleString();
-        }
-
-        // --- COPY EMAILS BY CODE ---
-        function copyEmailsByCode(btn) {
-            const input = document.getElementById('copyCodeInput');
-            const code = input.value.trim().toUpperCase();
-            if(!code) return alert("Pilih kode dulu.");
-
-            const emails = globalUsers
-                .filter(u => u.referral_code === code)
-                .map(u => u.email);
-
-            if(emails.length === 0) return alert("Tidak ada email untuk kode ini.");
-
-            const textToCopy = emails.join('\n'); 
-
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const originalText = btn.innerText;
-                btn.innerText = "Tersalin! ✅";
-                setTimeout(() => btn.innerText = originalText, 2000);
-            }).catch(err => {
-                alert("Gagal menyalin: " + err);
-            });
-        }
-
-        // --- DELETE BY CODE GROUP ---
-        async function deleteByCode() {
-            const codeInput = document.getElementById('deleteCodeInput');
-            const codeToDelete = codeInput.value.trim().toUpperCase();
-            if (!codeToDelete) return alert("Pilih atau ketik kode yang ingin dihapus datanya.");
-
-            const affectedUsers = globalUsers.filter(u => u.referral_code === codeToDelete);
-            const count = affectedUsers.length;
-            if (count === 0) return alert(`Tidak ditemukan data email dengan kode "${codeToDelete}".`);
-
-            const confirmAction = confirm(`⚠️ PERINGATAN ⚠️\n\nAnda akan menghapus ${count} email yang terdaftar dengan kode "${codeToDelete}".\n\nApakah Anda yakin?`);
-            if (confirmAction) {
-                globalUsers = globalUsers.filter(u => u.referral_code !== codeToDelete);
-                const btn = document.querySelector('.btn-delete-group');
-                const originalText = btn.innerText;
-                btn.innerText = "Menghapus...";
-                btn.disabled = true;
-
-                try {
-                    await saveToCloud(true); 
-                    alert(`Berhasil menghapus data group "${codeToDelete}".`);
-                    codeInput.value = ""; 
-                } catch (e) {
-                    alert("Gagal menghapus.");
-                    fetchData();
-                } finally {
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                    renderAdminList();
-                }
-            }
-        }
-
-        function renderGroupedData(users) {
-            groupContainer.innerHTML = '';
-            if (!users || users.length === 0) { groupContainer.innerHTML = `<div style="text-align:center; color:#999; margin-top:20px;">Belum ada data referral.</div>`; return; }
-
-            const groups = {};
-            users.forEach(user => {
-                const code = user.referral_code ? user.referral_code.toUpperCase().trim() : "UNKNOWN"; 
-                if (!groups[code]) groups[code] = [];
-                groups[code].push(user.email);
-            });
-
-            const sortedCodes = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length);
-
-            sortedCodes.forEach((code) => {
-                const emails = groups[code];
-                const count = emails.length;
-                const rate = count >= 10 ? 3 : 2;
-                const idrText = count >= 10 ? "48.000" : "32.000"; 
-                const totalReward = count * rate;
-                const badgeClass = count >= 10 ? 'reward-badge high-tier' : 'reward-badge';
-
-                const weeklyTarget = 20;
-                let percentage = (count / weeklyTarget) * 100;
-                if (percentage > 100) percentage = 100;
-                const isCompleted = count >= weeklyTarget;
-                const barClass = isCompleted ? 'progress-fill completed' : 'progress-fill';
-                const iconClass = isCompleted ? 'gift-icon active' : 'gift-icon';
-                const statusText = isCompleted ? 'Weekly Bonus Unlocked!' : `${count} / 20 Menuju Bonus`;
-
-                const is10Reached = count >= 10 ? 'active' : '';
-                const is20Reached = count >= 20 ? 'active' : '';
-
-                const card = document.createElement('div');
-                card.className = 'referral-card';
-                let emailListHTML = '';
-                emails.forEach(email => { emailListHTML += `<li class="email-item">${email}</li>`; });
-
-                const listId = `email-list-${code.replace(/[^a-zA-Z0-9]/g, '')}`;
-
-                card.innerHTML = `
-                    <div class="card-header"><span class="code-title">${code}</span><span class="${badgeClass}">Total: $${totalReward}</span></div>
-                    <div class="card-stats"><span class="stat-item">Invite : <strong>${count} Email</strong></span><span class="stat-item">Rate : <strong>$${rate} ( ${idrText} )</strong></span></div>
-                    <div class="milestone-area">
-                        <div class="milestone-header">
-                            <div class="milestone-info"><span class="milestone-title">Weekly Bonus (+$12)</span><div class="milestone-footer"><span style="color: ${isCompleted ? '#d97706' : '#94a3b8'}; font-weight: 500;">${statusText}</span></div></div>
-                            <div class="gift-container"><svg class="${iconClass}" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="8" width="18" height="4" rx="1" /><line x1="12" y1="8" x2="12" y2="21" /><path d="M19 12v7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-7" /><path d="M7.5 8a2.5 2.5 0 0 1 0 -5a4.8 8 0 0 1 4.5 5a4.8 8 0 0 1 4.5 -5a2.5 2.5 0 0 1 0 5" /></svg></div>
-                        </div>
-                        
-                        <div class="progress-track">
-                            <div class="${barClass}" style="width: ${percentage}%"></div>
-                            <div class="checkpoint-dot ${is10Reached}" style="left: 50%;"><span class="checkpoint-label ${is10Reached}">Rate Up</span></div>
-                            <div class="checkpoint-dot ${is20Reached}" style="left: 100%;"><span class="checkpoint-label ${is20Reached}">Bonus +$12</span></div>
-                        </div>
-                    </div>
+                sortedCodes.forEach((code, i) => {
+                    let rankClass = i===0?'top-1':(i===1?'top-2':(i===2?'top-3':''));
+                    const emails = groups[code];
+                    const count = emails.length;
                     
-                    <div class="email-dropdown-container">
-                        <button class="btn-toggle-emails" onclick="toggleEmails('${listId}', this)">
-                            Lihat ${count} Email <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                        </button>
-                        <ul id="${listId}" class="email-list">
-                            ${emailListHTML}
-                        </ul>
-                    </div>
-                `;
-                groupContainer.appendChild(card);
-            });
-            filterReferral();
+                    let rate = count < 10 ? 32000 : 48000;
+                    let revenue = count * rate;
+                    if(count >= 20) revenue += 190000;
+                    let revFmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(revenue);
+
+                    const emailListHTML = emails.map(e => `<div class="email-item">${e}</div>`).join('');
+                    const uid = `group-${i}`;
+
+                    listContainer.innerHTML += `
+                        <div class="group-card ${rankClass}" id="card-${uid}">
+                            <div class="group-header" onclick="toggleEmails('${uid}')">
+                                <div style="display:flex; align-items:center;">
+                                    <div class="rank-badge">#${i+1}</div>
+                                    <div class="group-info"><div class="group-code">${code}</div><div class="group-label">Referral Code</div></div>
+                                </div>
+                                <div style="display:flex; align-items:center;"><div class="count-pill">${count} User</div><svg class="icon slide-icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                            </div>
+                            <div id="${uid}" class="email-list-container">
+                                <div class="email-list-inner">
+                                    <div class="revenue-summary-box">
+                                        <div class="rev-label">Total Pendapatan</div><div class="rev-amount">${revFmt}</div>
+                                        ${count >= 20 ? '<div class="rev-note">✨ Termasuk Bonus Target +190rb</div>' : '<div style="font-size:0.75rem; color:#666">Target Bonus: 20 User</div>'}
+                                    </div>
+                                    <div style="margin-top:10px;">${emailListHTML}</div>
+                                </div>
+                            </div>
+                        </div>`;
+                });
+            } catch(e) { listContainer.innerHTML = `<div style="text-align:center; padding:30px; color:#ff6b6b;">Gagal memuat data.</div>`; }
         }
 
-        function renderAdminList() {
-            adminDataList.innerHTML = '';
-            if (!globalUsers || globalUsers.length === 0) { adminDataList.innerHTML = `<div style="text-align:center; color:#999; padding:20px;">Belum ada data.</div>`; btnDeleteAll.disabled = true; return; }
-            btnDeleteAll.disabled = false;
-            
-            globalUsers.map((user, index) => ({ user, index })).reverse().forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'admin-item';
-                div.innerHTML = `
-                    <div class="admin-info"><strong>${item.user.email}</strong><span>Kode: ${item.user.referral_code}</span></div>
-                    <div class="admin-actions">
-                        <button class="btn-edit" type="button" onclick="startEdit(${item.index})">Edit</button>
-                        <button class="btn-delete" type="button" onclick="deleteUser(${item.index}, this)">Hapus</button>
-                    </div>`;
-                adminDataList.appendChild(div);
-            });
-            updateAdminStats(); 
+        function toggleEmails(id) {
+            const el = document.getElementById(id), card = document.getElementById('card-' + id);
+            if (el.style.maxHeight) { el.style.maxHeight = null; card.classList.remove('open'); }
+            else { el.style.maxHeight = el.scrollHeight + "px"; card.classList.add('open'); }
         }
 
-        function startEdit(index) {
-            const user = globalUsers[index]; 
-            inputCode.value = user.referral_code; 
-            emailContainer.innerHTML = '';
-            const div = document.createElement('div');
-            div.className = 'input-group';
-            div.innerHTML = `<input type="email" class="email-input-field" value="${user.email}" required> <button type="button" class="btn-mini-action add-email" onclick="addEmailField()">+</button>`;
-            emailContainer.appendChild(div);
+        // --- ADMIN LOGIC ---
+        function openAction(type) {
+            document.querySelectorAll('.action-dialog').forEach(el => el.classList.remove('show'));
+            document.getElementById('dialog-' + type).classList.add('show');
+            if(type === 'add') updateSelectOptions();
+            if(type === 'codes') renderCodeList();
+        }
+        function closeAction(type) { document.getElementById('dialog-' + type).classList.remove('show'); }
 
-            editIndexInput.value = index;
-            formTitle.innerText = "Edit Data (Mode Single)"; 
-            submitBtn.innerText = "Update"; 
-            submitBtn.style.background = "var(--warning-orange)"; 
-            cancelBtn.classList.remove('hidden'); 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function updateSelectOptions() {
+            const sel = document.getElementById('admKode'); sel.innerHTML = '<option value="">-- Pilih Kode --</option>';
+            localCodes.forEach(c => { const opt = document.createElement('option'); opt.value = c; opt.innerText = c; sel.appendChild(opt); });
         }
 
-        function resetForm() {
-            addForm.reset(); 
-            emailContainer.innerHTML = `
-                <div class="input-group">
-                    <input type="email" class="email-input-field" placeholder="user@gmail.com" required>
-                    <button type="button" class="btn-mini-action add-email" onclick="addEmailField()">+</button>
-                </div>
-            `;
-            editIndexInput.value = "-1"; 
-            formTitle.innerText = "Tambah Data Baru"; 
-            submitBtn.innerText = "Simpan"; 
-            submitBtn.style.background = "var(--linkedin-blue)"; 
-            cancelBtn.classList.add('hidden');
-        }
-
-        async function deleteUser(index, btnElement) { 
-            if(!confirm("Yakin ingin menghapus data ini?")) return; 
-            btnElement.innerText = "Hapus..."; btnElement.disabled = true;
-            globalUsers.splice(index, 1); 
-            try { await saveToCloud(); } catch(e) { alert("Gagal menghapus."); fetchData(); }
-        }
-
-        async function deleteAllData() {
-            if (globalUsers.length === 0) return alert("Data sudah kosong.");
-            if (!confirm("⚠️ PERINGATAN ⚠️\n\nApakah Anda yakin ingin MENGHAPUS SEMUA DATA?")) return;
-            const verify = prompt("Ketik 'HAPUS' untuk mengonfirmasi:");
-            if (verify !== "HAPUS") return alert("Penghapusan dibatalkan.");
-            btnDeleteAll.innerText = "Memproses..."; btnDeleteAll.disabled = true;
-            globalUsers = []; await saveToCloud(); 
-            btnDeleteAll.innerText = "Hapus Semua"; alert("Semua data berhasil dihapus.");
-        }
-
-        addForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const code = inputCode.value.trim().toUpperCase();
-            const editIndex = parseInt(editIndexInput.value);
-            
-            const emailInputs = document.querySelectorAll('.email-input-field');
-            let emailsToAdd = [];
-            let duplicateFound = false;
-
-            emailInputs.forEach(input => {
-                const email = input.value.trim();
-                if(email) {
-                    if (isEmailDuplicate(email, editIndex)) {
-                        alert(`Email ${email} sudah terdaftar! Hapus atau ganti email tersebut.`);
-                        duplicateFound = true;
-                    } else {
-                        emailsToAdd.push(email);
-                    }
-                }
-            });
-
-            if (duplicateFound || emailsToAdd.length === 0) return;
-
-            submitBtn.innerText = "Memproses..."; submitBtn.disabled = true;
-            
+        async function fetchAdminData() {
+            const tbody = document.getElementById('adminTableBody'); tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Syncing...</td></tr>';
             try {
-                if (editIndex === -1) { 
-                    emailsToAdd.forEach(email => { globalUsers.push({ email, referral_code: code }); });
-                } else { 
-                    globalUsers[editIndex] = { email: emailsToAdd[0], referral_code: code }; 
-                }
-                await saveToCloud(); 
-                resetForm();
-            } catch (err) { 
-                alert("Gagal menyimpan: " + err.message); 
-                submitBtn.innerText = (editIndex === -1) ? "Simpan" : "Update"; 
-                submitBtn.disabled = false; 
-            }
-        });
-
-        async function saveToCloud(silent = false) {
-            renderAdminList(); 
-            await fetch(BASE_URL, { 
-                method: 'PUT', 
-                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY }, 
-                body: JSON.stringify({ 
-                    users: globalUsers
-                    // Removed saved_codes from cloud save
-                }) 
-            });
-            
-            if(!silent && submitBtn.innerText === "Memproses...") {
-                 submitBtn.innerText = "Simpan"; 
-                 submitBtn.style.background = "var(--linkedin-blue)"; 
-                 submitBtn.disabled = false; 
-                 alert("Data berhasil disimpan!");
-            }
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': API_KEY } });
+                const data = await res.json();
+                localUsers = data.record.users || []; localCodes = data.record.codes || [];
+                renderAdminTable();
+            } catch (e) { alert("Error: " + e.message); }
         }
 
-        fetchData();
+        // --- NEW SEARCH LOGIC ---
+        function renderAdminTable() {
+            const tbody = document.getElementById('adminTableBody'); 
+            tbody.innerHTML = '';
+            
+            const searchTerm = document.getElementById('adminSearch').value.toLowerCase();
+            
+            // Filter Data for Search, but keep original Index for Editing/Deleting
+            let filteredData = localUsers.map((u, i) => ({ ...u, originalIndex: i }))
+                                         .filter(u => u.email.toLowerCase().includes(searchTerm) || u.code.toLowerCase().includes(searchTerm));
+
+            if(filteredData.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:50px; color:#555;">Data tidak ditemukan</td></tr>'; 
+                return; 
+            }
+
+            filteredData.forEach((u) => {
+                // Use originalIndex for checkboxes and actions
+                tbody.innerHTML += `<tr>
+                    <td style="text-align:center"><input type="checkbox" class="row-check" value="${u.originalIndex}" onchange="checkMassDeleteState()"></td>
+                    <td><span style="color:#00c6ff; font-family:monospace">${u.code}</span></td><td>${u.email}</td>
+                    <td style="text-align:right"><button class="btn-action" style="color:#ffd700" onclick="editData(${u.originalIndex})"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="btn-action" style="color:#ff6b6b" onclick="deleteData(${u.originalIndex})"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button></td>
+                </tr>`;
+            });
+            checkMassDeleteState();
+        }
+
+        function renderCodeList() {
+            const cont = document.getElementById('codeListContainer'); cont.innerHTML = '';
+            if(localCodes.length === 0) cont.innerHTML = '<div style="text-align:center; color:#555; font-size:0.8rem;">Belum ada kode master.</div>';
+            localCodes.forEach((c, i) => { cont.innerHTML += `<div class="code-item"><span style="color:#00c6ff;">${c}</span><span class="code-del-btn" onclick="deleteCode(${i})">x</span></div>`; });
+        }
+
+        async function addNewCode() {
+            const inp = document.getElementById('newCodeInput'), val = inp.value.trim();
+            if(!val || localCodes.includes(val)) return alert("Kode tidak valid atau sudah ada");
+            localCodes.push(val); inp.value = ''; renderCodeList(); await pushToBinAll();
+        }
+        async function deleteCode(i) { if(!confirm("Hapus kode?")) return; localCodes.splice(i, 1); renderCodeList(); await pushToBinAll(); }
+
+        async function saveData() {
+            const c = document.getElementById('admKode').value, raw = document.getElementById('admEmail').value, idx = parseInt(document.getElementById('admEditIndex').value);
+            if(!c || !raw.trim()) return alert("Data tidak lengkap");
+            const emails = raw.match(/[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}/g) || [];
+            if(!emails.length) return alert("Email tidak valid");
+
+            const dups = emails.filter(ne => localUsers.some((ex, i) => (idx !== -1 && i === idx ? false : ex.email.toLowerCase() === ne.toLowerCase())));
+            if(dups.length) return alert(`Email duplikat:\n${dups.join('\n')}`);
+
+            const btns = document.querySelectorAll('.btn-submit'); btns.forEach(b => b.innerText = 'Saving...');
+            if(idx !== -1) localUsers[idx] = { code: c, email: emails[0] };
+            else emails.forEach(e => localUsers.push({ code: c, email: e }));
+
+            await pushToBinAll();
+            btns.forEach(b => b.innerText = 'Simpan');
+            document.getElementById('admEmail').value = ''; document.getElementById('admEditIndex').value = -1;
+            closeAction('add'); renderAdminTable(); alert(`Berhasil: ${emails.length} data.`);
+        }
+
+        function editData(i) {
+            document.getElementById('admEditIndex').value = i;
+            document.getElementById('admEmail').value = localUsers[i].email;
+            updateSelectOptions();
+            document.getElementById('admKode').value = localUsers[i].code;
+            openAction('add');
+        }
+
+        async function deleteData(i) { if(confirm("Hapus?")) { localUsers.splice(i, 1); renderAdminTable(); await pushToBinAll(); } }
+        
+        function toggleAll(src) { document.querySelectorAll('.row-check').forEach(c => c.checked = src.checked); checkMassDeleteState(); }
+        function checkMassDeleteState() {
+            const n = document.querySelectorAll('.row-check:checked').length, btn = document.getElementById('dockDelete');
+            if(n > 0) btn.classList.add('active'); else btn.classList.remove('active');
+        }
+        async function massDelete() {
+            const chk = document.querySelectorAll('.row-check:checked');
+            if(!chk.length || !confirm("Hapus terpilih?")) return;
+            const idxs = Array.from(chk).map(c => parseInt(c.value)).sort((a,b)=>b-a);
+            idxs.forEach(i => localUsers.splice(i, 1));
+            renderAdminTable(); document.getElementById('checkAll').checked = false; await pushToBinAll();
+        }
+
+        // --- NEW MASS DELETE BY CODE ---
+        async function massDeleteByCode() {
+            const codeToDelete = document.getElementById('filterKode').value.trim();
+            if(!codeToDelete) return alert("Masukkan Kode Referral yang mau dihapus!");
+            
+            // Check count
+            const count = localUsers.filter(u => u.code.toLowerCase() === codeToDelete.toLowerCase()).length;
+            if(count === 0) return alert("Tidak ada data dengan kode ini.");
+
+            if(!confirm(`⚠️ PERINGATAN: Anda akan menghapus ${count} data dengan kode '${codeToDelete}'.\n\nTindakan ini tidak bisa dibatalkan. Yakin?`)) return;
+
+            // Remove items with matching code
+            localUsers = localUsers.filter(u => u.code.toLowerCase() !== codeToDelete.toLowerCase());
+            
+            renderAdminTable();
+            closeAction('filter');
+            await pushToBinAll();
+            alert(`Berhasil menghapus ${count} data.`);
+        }
+
+        async function pushToBinAll() {
+            await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY }, body: JSON.stringify({ users: localUsers, codes: localCodes }) });
+        }
+
+        function copyFilteredEmails() {
+            const filter = document.getElementById('filterKode').value.toLowerCase();
+            const emails = localUsers.filter(u => u.code.toLowerCase() === filter).map(u => u.email).join(', ');
+            if(emails) navigator.clipboard.writeText(emails).then(() => { alert("Disalin!"); closeAction('filter'); });
+            else alert("Tidak ada data");
+        }
+
+        function updateCard() {
+            const val = document.getElementById('reqCode').value;
+            document.getElementById('displayCardCode').innerText = val ? val : 'ZEN-MEMBER';
+        }
+
+        function laporWa() {
+            const k = document.getElementById('lapKode').value, e = document.getElementById('lapEmail').value.trim();
+            if(localUsers.some(u => u.email.toLowerCase() === e.toLowerCase())) return alert('Email sudah tercatat silahkan cek di menu database');
+            const text = `Berhasil Undang\n\nKode : ${k}\nEmail : ${e}`;
+            window.open(`https://wa.me/6289513304878?text=${encodeURIComponent(text)}`);
+        }
+        function joinWa() {
+            const k = document.getElementById('reqCode').value;
+            const t = document.getElementById('reqTarget').value;
+            if(!k) return alert("Isi kode unik dulu!");
+            const text = `🚀 *NEW AGENT REGISTRATION*\n\nHalo Admin Zen, saya siap bergabung jadi partner!\n\n🆔 Request Kode: *${k}*\n🎯 Target: *${t || '10'}* User / Minggu\n\nMohon aksesnya segera diaktifkan. Terima kasih!`;
+            window.open(`https://wa.me/6289513304878?text=${encodeURIComponent(text)}`);
+        }
+        function calc() {
+            let t = parseInt(document.getElementById('reqTarget').value)||0;
+            // Progress Bar
+            let pct = (t / 20) * 100;
+            if(pct > 100) pct = 100;
+            document.getElementById('calcProgress').style.width = pct + "%";
+            
+            // Calc Logic
+            let total = 0;
+            const badge = document.getElementById('calcRateBadge');
+            const breakdown = document.getElementById('calcBreakdownText');
+            const bonus = document.getElementById('calcBonus');
+            const bar = document.getElementById('calcProgress');
+
+            if (t < 10) {
+                badge.innerText = "Rate: 32rb";
+                badge.classList.remove("active-gold");
+                bar.classList.remove("full");
+                total = t * 32000;
+                breakdown.innerText = `${t} User x 32.000`;
+                breakdown.classList.remove("highlight");
+                bonus.classList.remove("active");
+            } else {
+                badge.innerText = "Rate: 48rb 🔥";
+                badge.classList.add("active-gold");
+                total = t * 48000;
+                breakdown.innerText = `${t} User x 48.000`;
+                breakdown.classList.add("highlight");
+            }
+
+            if (t >= 20) {
+                total += 190000;
+                bar.classList.add("full");
+                bonus.classList.add("active");
+            } else {
+                bonus.classList.remove("active");
+            }
+
+            document.getElementById('calcTotal').innerText = new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',minimumFractionDigits:0}).format(total);
+        }
+
+        fetchPublicData();
     </script>
 </body>
 </html>
