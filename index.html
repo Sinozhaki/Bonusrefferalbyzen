@@ -31,7 +31,7 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
-            touch-action: manipulation; /* Mencegah delay tap di HP */
+            touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -301,14 +301,16 @@
                 <div class="level-track"><div class="level-fill"></div></div>
                 <div class="level-nodes">
                     <div class="level-node active"><div class="node-dot"></div><div class="node-card"><div class="node-title">Level 0</div><div class="node-reward">Start</div></div></div>
-                    <div class="level-node active"><div class="node-dot"></div><div class="node-card"><div class="node-title">Level 1</div><div class="node-reward">480rb</div><div class="node-desc">10 Users</div></div></div>
-                    <div class="level-node gold"><div class="node-dot"></div><div class="node-card"><div class="node-title">Level MAX</div><div class="node-reward">1.15jt</div><div class="node-desc">20 Users++</div></div></div>
+                    <div class="level-node active"><div class="node-dot"></div><div class="node-card"><div class="node-title">Level 1</div><div class="node-reward">560rb</div><div class="node-desc">10 Users</div></div></div>
+                    <div class="level-node gold"><div class="node-dot"></div><div class="node-card"><div class="node-title">Level MAX</div><div class="node-reward">1.12jt</div><div class="node-desc">20 Users++</div></div></div>
                 </div>
             </div>
+            
             <div class="rate-info-box">
-                <div class="rate-card"><span class="rate-cond">&lt; 10 Orang</span><span class="rate-val text-cyan">32rb / user</span></div>
-                <div class="rate-card" style="border-color: rgba(255, 215, 0, 0.2);"><span class="rate-cond">&gt; 10 Orang</span><span class="rate-val text-gold">48rb / user</span></div>
+                <div class="rate-card"><span class="rate-cond">Ganjil (Basic)</span><span class="rate-val text-cyan">48rb / user</span></div>
+                <div class="rate-card" style="border-color: rgba(255, 215, 0, 0.2);"><span class="rate-cond">Genap (Upgrade)</span><span class="rate-val text-gold">64rb / user</span></div>
             </div>
+            
             <h2 class="section-title" style="margin-top:20px;"><svg class="icon text-cyan" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Syarat dan Ketentuan</h2>
             <div class="quest-log">
                 <div class="quest-item active"><svg class="quest-icon icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg><div class="quest-text"><strong>Edukasi User:</strong> Pengundang wajib menjelaskan detail sewa & pembayaran kepada calon user.</div></div>
@@ -351,15 +353,15 @@
             </div>
 
             <div class="calc-result-box">
-                <div id="calcRateBadge" class="calc-rate-badge">Rate: 32rb</div>
+                <div id="calcRateBadge" class="calc-rate-badge">Zigzag 48/64</div>
                 <div class="calc-header">Estimasi Profit</div>
                 <div class="result-amount" id="calcTotal">IDR 0</div>
                 <div class="calc-progress-bg"><div id="calcProgress" class="calc-progress-fill"></div></div>
                 <div class="calc-breakdown">
-                    <span id="calcBreakdownText">0 User x 32.000</span>
+                    <span id="calcBreakdownText">0 User</span>
                     <span id="calcNextTarget">Next: 20 User</span>
                 </div>
-                <div id="calcBonus" class="result-bonus">✨ BONUS TARGET +190.000 DIAKTIFKAN!</div>
+                <div id="calcBonus" class="result-bonus">✨ BONUS TARGET DIAKTIFKAN!</div>
             </div>
 
             <button class="btn-submit" onclick="joinWa()">Kirim Request Kode</button>
@@ -512,9 +514,12 @@
                     const emails = groups[code];
                     const count = emails.length;
                     
-                    let rate = count < 10 ? 32000 : 48000;
-                    let revenue = count * rate;
-                    if(count >= 20) revenue += 190000;
+                    // --- NEW LOGIC: Loop 48rb, 64rb ---
+                    let pairs = Math.floor(count / 2);
+                    let remainder = count % 2;
+                    let revenue = (pairs * (48000 + 64000)) + (remainder * 48000);
+                    // ---------------------------------
+
                     let revFmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(revenue);
 
                     const emailListHTML = emails.map(e => `<div class="email-item">${e}</div>`).join('');
@@ -533,7 +538,7 @@
                                 <div class="email-list-inner">
                                     <div class="revenue-summary-box">
                                         <div class="rev-label">Total Pendapatan</div><div class="rev-amount">${revFmt}</div>
-                                        ${count >= 20 ? '<div class="rev-note">✨ Termasuk Bonus Target +190rb</div>' : '<div style="font-size:0.75rem; color:#666">Target Bonus: 20 User</div>'}
+                                        <div style="font-size:0.75rem; color:#666">Pola: 48rb - 64rb - 48rb...</div>
                                     </div>
                                     <div style="margin-top:10px;">${emailListHTML}</div>
                                 </div>
@@ -577,7 +582,7 @@
             tbody.innerHTML = '';
             const searchTerm = document.getElementById('adminSearch').value.toLowerCase();
             let filteredData = localUsers.map((u, i) => ({ ...u, originalIndex: i }))
-                                       .filter(u => u.email.toLowerCase().includes(searchTerm) || u.code.toLowerCase().includes(searchTerm));
+                                         .filter(u => u.email.toLowerCase().includes(searchTerm) || u.code.toLowerCase().includes(searchTerm));
 
             if(filteredData.length === 0) { 
                 tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#555;">Data tidak ditemukan</td></tr>'; 
@@ -701,36 +706,24 @@
             if(pct > 100) pct = 100;
             document.getElementById('calcProgress').style.width = pct + "%";
             
-            let total = 0;
+            // --- NEW CALC LOGIC ---
+            let pairs = Math.floor(t / 2);
+            let remainder = t % 2;
+            let total = (pairs * 112000) + (remainder * 48000); // 112rb = 48 + 64
+
             const badge = document.getElementById('calcRateBadge');
             const breakdown = document.getElementById('calcBreakdownText');
             const bonus = document.getElementById('calcBonus');
             const bar = document.getElementById('calcProgress');
 
-            if (t < 10) {
-                badge.innerText = "Rate: 32rb";
-                badge.classList.remove("active-gold");
-                bar.classList.remove("full");
-                total = t * 32000;
-                breakdown.innerText = `${t} User x 32.000`;
-                breakdown.classList.remove("highlight");
-                bonus.classList.remove("active");
-            } else {
-                badge.innerText = "Rate: 48rb 🔥";
-                badge.classList.add("active-gold");
-                total = t * 48000;
-                breakdown.innerText = `${t} User x 48.000`;
-                breakdown.classList.add("highlight");
-            }
+            // Set badge active style permanen karena looping
+            badge.innerText = "Zigzag 48rb/64rb";
+            badge.classList.add("active-gold"); 
+            bar.classList.add("full");
+            bonus.style.display = 'none'; // Disable bonus fixed karena sistemnya looping
 
-            if (t >= 20) {
-                total += 190000;
-                bar.classList.add("full");
-                bonus.classList.add("active");
-            } else {
-                bonus.classList.remove("active");
-            }
-
+            breakdown.innerText = `${pairs} Pasang (112rb) + ${remainder} x 48rb`;
+            
             document.getElementById('calcTotal').innerText = new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',minimumFractionDigits:0}).format(total);
         }
 
