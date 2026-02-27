@@ -10,9 +10,566 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* --- 1. RESET & BASIC THEME --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Comfortaa', cursive; }
+
+        /* CUSTOM SCROLLBAR - Tema Hijau Gelap */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #05140c; }
+        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
+
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+        body {
+            background-color: #000;
+            /* Gradient Malam Ramadhan (Hijau Zamrud Gelap ke Hitam) */
+            background: radial-gradient(circle at 50% 10%, #0f3d24 0%, #000000 80%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Pola Bintang Emas di Latar Belakang */
+        body::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(#f8b500, rgba(248,181,0,.2) 2px, transparent 3px),
+                radial-gradient(#f8b500, rgba(248,181,0,.1) 1px, transparent 2px);
+            background-size: 550px 550px, 350px 350px; background-position: 0 0, 40px 60px; opacity: 0.35; z-index: -1;
+        }
+
+        /* --- 2. HEADER --- */
+        header { 
+            margin-top: 30px; 
+            text-align: center; 
+            z-index: 2; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 20px; 
+            position: relative; 
+            width: 100%; 
+            padding: 0 15px;
+        }
+
+        h1 { 
+            font-size: 1.8rem;
+            font-weight: 700; 
+            letter-spacing: -1px; 
+            /* Cahaya Lentera Emas */
+            text-shadow: 0 0 25px rgba(248, 181, 0, 0.6); 
+            background: linear-gradient(180deg, #ffffff, #f8b500); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+
+        .toggle-capsule { 
+            display: flex; 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(248, 181, 0, 0.2); 
+            backdrop-filter: blur(15px); 
+            padding: 4px; 
+            border-radius: 100px; 
+            width: 100%; 
+            max-width: 340px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+            cursor: pointer; 
+        }
+        /* --- CTA 3: KILAU MENGALIR --- */
+        .toggle-btn { flex: 1; padding: 10px 0; text-align: center; border-radius: 100px; font-weight: 700; font-size: 0.8rem; transition: color 0.3s ease; color: #b3c2b8; cursor: pointer; }
+        .toggle-btn.active { 
+            color: #000; font-weight: 800;
+            /* Gradient dilebarkan 200% untuk dianimasikan */
+            background: linear-gradient(90deg, #d4af37 0%, #fff6d9 50%, #d4af37 100%);
+            background-size: 200% auto;
+            box-shadow: 0 0 15px rgba(248, 181, 0, 0.5); 
+            border: 1px solid rgba(255,255,255,0.4);
+            animation: kilauEmas 2s linear infinite; 
+        }
+        @keyframes kilauEmas {
+            to { background-position: 200% center; }
+        }
+
+        .admin-trigger { 
+            position: absolute; top: 0; right: 15px; 
+            width: 40px; height: 40px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; color: #b3c2b8; opacity: 0.7; transition: 0.3s; 
+            border: 1px solid rgba(255,255,255,0.1); 
+        }
+        .admin-trigger:hover { color: #f8b500; border-color: #f8b500; opacity: 1; }
+
+        /* --- 3. MAIN CONTENT --- */
+        .main-content { 
+            flex: 1; 
+            width: 95%; 
+            max-width: 800px; 
+            margin: 20px 0; 
+            padding: 20px; 
+            border-radius: 20px; 
+            background: rgba(15, 61, 36, 0.2); 
+            border: 1px solid rgba(248, 181, 0, 0.15); 
+            backdrop-filter: blur(10px); 
+            min-height: 400px; 
+            position: relative; 
+        }
+
+        /* --- TRANSISI 2: FOKUS KABUR --- */
+        .tab-view { display: none; animation: blurFocus 0.5s ease-out; }
+        .tab-view.active-view { display: block; }
+        @keyframes blurFocus { 
+            from { opacity: 0; filter: blur(10px); transform: translateY(15px); } 
+            to { opacity: 1; filter: blur(0); transform: translateY(0); } 
+        }
+
+        /* --- 4. LEADERBOARD CARD --- */
+        .leaderboard-container { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+
+        .group-card { 
+            background: rgba(0, 0, 0, 0.4); 
+            border: 1px solid rgba(248, 181, 0, 0.15); 
+            border-radius: 16px; 
+            overflow: hidden; 
+            transition: 0.3s; 
+            position: relative;
+            display: flex;
+            flex-direction: column; 
+        }
+        .group-card:hover { border-color: rgba(248, 181, 0, 0.6); background: rgba(15, 61, 36, 0.4); box-shadow: 0 0 15px rgba(248, 181, 0, 0.1); }
+
+        .group-header { 
+            display: flex; 
+            align-items: center; 
+            padding: 15px; 
+            justify-content: space-between; 
+            border-bottom: 1px solid rgba(248, 181, 0, 0.1);
+            background: rgba(0,0,0,0.2);
+        }
+
+        .group-actions { padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+
+        .rank-badge { width: 35px; height: 35px; border-radius: 10px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: #b3c2b8; margin-right: 12px; flex-shrink: 0; }
+        .group-card.top-1 .rank-badge { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
+        .group-card.top-2 .rank-badge { background: linear-gradient(135deg, #e0e0e0, #b0b0b0); color: #000; }
+        .group-card.top-3 .rank-badge { background: linear-gradient(135deg, #cd7f32, #a05a2c); color: #000; }
+        .group-info { flex: 1; overflow: hidden; }
+        .group-code { font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .group-label { font-size: 0.65rem; color: #b3c2b8; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px;}
+        .count-pill { background: rgba(248, 181, 0, 0.15); color: #f8b500; padding: 6px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; border: 1px solid rgba(248, 181, 0, 0.3); flex-shrink: 0;}
+
+        .btn-action-full {
+            width: 100%; padding: 12px; border-radius: 12px; font-size: 0.9rem; font-weight: 700;
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center;
+            justify-content: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .btn-action-full.wd {
+            background: rgba(0, 210, 106, 0.15); color: #00d26a;
+            border: 1px solid rgba(0, 210, 106, 0.3); box-shadow: 0 0 15px rgba(0, 210, 106, 0.05);
+        }
+        .btn-action-full.wd:active { transform: scale(0.98); background: rgba(0, 210, 106, 0.25); }
+
+        /* --- CTA DETAIL 5: GELOMBANG AIR ZAMRUD --- */
+        .btn-action-full.dt { background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(0, 210, 106, 0.3); position: relative; overflow: hidden; transition: 0.3s; }
+        .btn-action-full.dt:hover { border-color: #00d26a; background: rgba(0, 210, 106, 0.05); }
+        .btn-action-full.dt:active { transform: scale(0.96); }
+        /* Animasi Gelombang Air (Ripple) */
+        .btn-action-full.dt:active::before {
+            content: ""; position: absolute; top: 50%; left: 50%; width: 100%; padding-top: 100%;
+            background: radial-gradient(circle, rgba(0, 210, 106, 0.6) 10%, transparent 10.01%);
+            transform: translate(-50%, -50%) scale(0);
+            animation: rippleEffect 0.5s ease-out forwards;
+            border-radius: 50%; z-index: 0;
+        }
+        /* Memastikan teks tetap di atas gelombang */
+        .btn-action-full.dt span, .btn-action-full.dt i { position: relative; z-index: 1; }
+
+        @keyframes rippleEffect {
+            100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+        }
+
+        /* --- 5. PROGRESS & RULES --- */
+        .level-wrapper { position: relative; padding: 20px 0; margin-bottom: 20px; }
+        .level-track { position: absolute; top: 50%; left: 5px; right: 5px; height: 4px; background: rgba(248, 181, 0, 0.2); transform: translateY(-50%); z-index: 0; border-radius: 10px; }
+        .level-fill { position: absolute; top: 0; left: 0; height: 100%; width: 100%; background: linear-gradient(90deg, #00d26a 0%, #f8b500 100%); border-radius: 10px; opacity: 0.9; }
+        .level-nodes { position: relative; z-index: 1; display: flex; justify-content: space-between; gap: 5px; }
+        .level-node { display: flex; flex-direction: column; align-items: center; text-align: center; width: 33%; position: relative; }
+        .node-dot { width: 16px; height: 16px; border-radius: 50%; background: #000; border: 2px solid #888; margin-bottom: 10px; transition: 0.3s; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .level-node.active .node-dot { background: #00d26a; border-color: #fff; box-shadow: 0 0 15px #00d26a; }
+        .level-node.gold .node-dot { background: #f8b500; border-color: #fff; box-shadow: 0 0 20px #f8b500; width: 20px; height: 20px; }
+        .node-card { background: rgba(10, 36, 21, 0.95); border: 1px solid rgba(248, 181, 0, 0.2); padding: 8px 5px; border-radius: 10px; width: 100%; max-width: 140px; transition: transform 0.3s; }
+        .level-node.gold .node-card { border-color: rgba(248, 181, 0, 0.6); background: linear-gradient(145deg, rgba(248,181,0,0.1), rgba(0,0,0,0.9)); }
+        .node-title { font-size: 0.65rem; color: #b3c2b8; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 1px; }
+        .node-reward { font-size: 0.9rem; font-weight: 800; color: #fff; }
+        .node-desc { font-size: 0.6rem; color: #00d26a; margin-top: 2px; }
+        .level-node.gold .node-reward { color: #f8b500; text-shadow: 0 0 10px rgba(248,181,0,0.4); }
+        .level-node.gold .node-desc { color: #f8b500; }
+
+        .rate-info-box { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 30px; }
+        .rate-card { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(248, 181, 0, 0.2); padding: 10px; border-radius: 10px; text-align: center; }
+        .rate-cond { display: block; font-size: 0.65rem; color: #b3c2b8; margin-bottom: 4px; }
+        .rate-val { font-size: 0.9rem; font-weight: 700; color: #f8b500; }
+
+        .quest-log { display: flex; flex-direction: column; gap: 10px; }
+        .quest-item { background: rgba(0,0,0,0.3); border-left: 3px solid #555; padding: 12px; border-radius: 0 8px 8px 0; display: flex; gap: 10px; align-items: start; }
+        .quest-item.active { border-left-color: #00d26a; background: linear-gradient(90deg, rgba(0,210,106,0.1), transparent); }
+        .quest-item.gold { border-left-color: #f8b500; background: linear-gradient(90deg, rgba(248, 181, 0, 0.1), transparent); }
+        .quest-item.danger { border-left-color: #ff4757; background: linear-gradient(90deg, rgba(255,71,87,0.1), transparent); }
+        .quest-icon { width: 20px; color: #b3c2b8; flex-shrink: 0; margin-top: 2px; }
+        .quest-item.active .quest-icon { color: #00d26a; }
+        .quest-text { font-size: 0.8rem; color: #e0e0e0; line-height: 1.4; }
+        .quest-text strong { color: #fff; }
+        .spec-list { margin-top: 5px; padding-left: 15px; list-style: disc; color: #b3c2b8; font-size: 0.75rem; }
+        .code-box { background: rgba(248,181,0,0.15); padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #f8b500; border: 1px solid rgba(248,181,0,0.3); display: inline-block; margin-top: 3px; font-size: 0.85em; word-break: break-all;}
+
+        /* --- 6. FORM & CALCULATOR --- */
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; color: #f8b500; margin-bottom: 8px; font-weight: 700; font-size: 0.85rem; }
+        .input-wrapper { position: relative; }
+        .input-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #b3c2b8; width: 18px; pointer-events: none; }
+        .form-input { width: 100%; padding: 12px 12px 12px 40px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(248, 181, 0, 0.3); border-radius: 12px; color: #fff; font-size: 1rem; transition: all 0.3s; }
+        .form-input:focus { outline: none; border-color: #f8b500; box-shadow: 0 0 15px rgba(248, 181, 0, 0.3); background: rgba(0, 0, 0, 0.7); }
+
+        .calc-result-box { background: linear-gradient(135deg, #0f3d24 0%, #05140c 100%); border: 1px solid rgba(248, 181, 0, 0.3); border-radius: 16px; padding: 20px; margin-top: 25px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .calc-rate-badge { position: absolute; top: 12px; right: 12px; background: rgba(248, 181, 0, 0.15); color: #f8b500; padding: 4px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; border: 1px solid rgba(248, 181, 0, 0.3); transition: 0.3s; }
+        .calc-rate-badge.active-gold { background: rgba(255, 215, 0, 0.25); color: #ffd700; border-color: #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+        .calc-header { font-size: 0.8rem; color: #b3c2b8; margin-bottom: 5px; }
+        .result-amount { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 12px; letter-spacing: -1px; text-shadow: 0 0 15px rgba(248, 181, 0, 0.4); }
+        .calc-progress-bg { width: 100%; height: 6px; background: rgba(0,0,0,0.5); border-radius: 10px; position: relative; overflow: hidden; margin-bottom: 10px; border: 1px solid rgba(248,181,0,0.1); }
+        .calc-progress-fill { height: 100%; width: 0%; background: #00d26a; border-radius: 10px; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .calc-progress-fill.full { background: #f8b500; box-shadow: 0 0 15px #f8b500; }
+        .calc-breakdown { font-size: 0.75rem; color: #a0a0a0; display: flex; justify-content: space-between; }
+        .calc-breakdown span.highlight { color: #f8b500; }
+        .result-bonus { display: none; margin-top: 5px; font-weight: 700; font-size: 0.75rem; color: #ffd700; }
+        .result-bonus.active { display: block; animation: pulse 1.5s infinite; }
+
+        .btn-submit { display: block; width: 100%; padding: 14px; margin-top: 20px; background: linear-gradient(90deg, #f8b500, #d4af37); border: none; border-radius: 12px; color: #000; font-weight: 800; font-size: 1rem; cursor: pointer; text-align: center; text-decoration: none; box-shadow: 0 5px 20px rgba(248, 181, 0, 0.4); transition: transform 0.2s; }
+        .btn-submit:active { transform: scale(0.98); }
+
+        /* VIRTUAL CARD - Tema Kartu Mewah Islami */
+        .card-preview-container { perspective: 1000px; margin-bottom: 25px; display: flex; justify-content: center; width: 100%; }
+        .virtual-card { width: 100%; max-width: 340px; aspect-ratio: 1.6/1; background: linear-gradient(135deg, #0a2415, #144529, #081c11); border-radius: 16px; position: relative; overflow: hidden; border: 1px solid rgba(248, 181, 0, 0.4); box-shadow: 0 15px 35px rgba(0,0,0,0.6); transition: transform 0.5s; }
+        .virtual-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(60deg, transparent, rgba(248, 181, 0, 0.15), transparent); transform: rotate(25deg); pointer-events: none; }
+        .v-card-top { display: flex; justify-content: space-between; padding: 15px; align-items: center; }
+        .v-brand { font-size: 0.8rem; font-weight: 800; color: #f8b500; letter-spacing: 1px; text-transform: uppercase; }
+        .v-chip { width: 35px; height: 25px; background: linear-gradient(135deg, #d4af37, #f9d976); border-radius: 4px; position: relative; overflow: hidden; border: 1px solid rgba(0,0,0,0.3); }
+        .v-chip::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid rgba(0,0,0,0.3); border-radius: 4px; background-image: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 11px); }
+        .v-card-body { padding: 0 15px; margin-top: 5px; }
+        .v-label { font-size: 0.6rem; color: #b3c2b8; text-transform: uppercase; letter-spacing: 2px; }
+        .v-code { font-family: 'Share Tech Mono', monospace; font-size: 1.5rem; color: #fff; text-shadow: 0 0 15px rgba(248, 181, 0, 0.6); letter-spacing: 2px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
+        .v-card-footer { position: absolute; bottom: 0; width: 100%; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); border-top: 1px solid rgba(248, 181, 0, 0.2); }
+        .v-status { color: #f8b500; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .v-logo-icon { width: 24px; opacity: 0.9; filter: drop-shadow(0 0 5px rgba(248,181,0,0.5)); }
+
+        /* --- 7. OVERLAYS --- */
+        .fab-lapor { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #f8b500, #d4af37); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; box-shadow: 0 10px 30px rgba(248, 181, 0, 0.5); cursor: pointer; z-index: 90; transition: transform 0.3s, box-shadow 0.3s; font-weight: bold;}
+        .fab-lapor:active { transform: scale(0.9); }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; display: none; justify-content: center; align-items: center; padding: 15px; }
+        .overlay.open { display: flex; animation: fadeIn 0.3s; }
+        .modal-box { background: linear-gradient(145deg, #0a2415, #05140c); border: 1px solid rgba(248, 181, 0, 0.4); border-radius: 20px; padding: 25px 20px; width: 100%; max-width: 450px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.7); }
+        .close-btn { position: absolute; top: 15px; right: 15px; color: #ff4757; cursor: pointer; font-size: 1.2rem; font-weight: bold; background: rgba(255,255,255,0.05); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        /* --- 8. ADMIN PANEL STYLES --- */
+        .admin-modal { width: 100%; height: 100vh; background: #05140c; position: relative; display: flex; flex-direction: column; overflow: hidden; border-radius: 0; }
+        .admin-table-container { flex: 1; overflow-y: auto; overflow-x: auto; padding: 10px; padding-bottom: 90px; }
+        .admin-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        .admin-table th { position: sticky; top: 0; background: rgba(5, 20, 12, 0.95); z-index: 2; padding: 10px; text-align: left; color: #f8b500; text-transform: uppercase; font-size: 0.7rem; border-bottom: 2px solid rgba(248, 181, 0, 0.3); white-space: nowrap; }
+        .admin-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #ccc; }
+        .admin-table tr:hover { background: rgba(248, 181, 0, 0.05); }
+
+        .admin-dock { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; padding: 8px 15px; background: rgba(10, 36, 21, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(248, 181, 0, 0.3); border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 10; width: max-content; }
+        .dock-item { width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(255,255,255,0.05); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; position: relative; }
+        .dock-item:active { transform: scale(0.9); }
+        .dock-item.add { background: #f8b500; color: #000; }
+        .dock-item.codes { background: #00d26a; color: #fff; } 
+        .dock-item.delete { background: #ff4757; color: #fff; opacity: 0.5; pointer-events: none; }
+        .dock-item.delete.active { opacity: 1; pointer-events: auto; }
+        .dock-item.settings { background: #444; color: #ccc; }
+
+        .action-dialog { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #081c11; border: 1px solid rgba(248, 181, 0, 0.5); padding: 20px; border-radius: 20px; width: 90%; max-width: 320px; display: none; flex-direction: column; gap: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.9); z-index: 20; }
+        .action-dialog.show { display: flex; animation: fadeIn 0.2s; }
+
+        .admin-input-wrapper { position: relative; width: 100%; margin-bottom:5px; }
+        .admin-input-icon { position: absolute; left: 12px; top: 12px; width: 16px; color: #f8b500; pointer-events: none; }
+        .admin-input-clean { background: rgba(0,0,0,0.4); border: 1px solid rgba(248, 181, 0, 0.3); padding: 10px 10px 10px 35px; border-radius: 8px; color: #fff; outline: none; width: 100%; font-size: 0.9rem; }
+        .admin-textarea { background: rgba(0,0,0,0.4); border: 1px solid rgba(248, 181, 0, 0.3); padding: 10px 10px 10px 35px; border-radius: 8px; color: #fff; outline: none; width: 100%; height: 100px; resize: vertical; font-family: 'Comfortaa', cursive; font-size: 0.9rem; }
+        .admin-select { background: #081c11; border: 1px solid rgba(248, 181, 0, 0.3); padding: 10px 10px 10px 35px; border-radius: 8px; color: #fff; outline: none; width: 100%; cursor: pointer; font-size: 0.9rem; }
+        .code-list { max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-top: 5px; }
+        .code-item { background: rgba(255,255,255,0.05); padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; border-left: 2px solid #f8b500;}
+        .code-del-btn { color: #ff4757; cursor: pointer; font-weight: bold; padding: 2px 5px; }
+        .btn-action { background: none; border: none; cursor: pointer; padding: 5px; opacity: 0.8; }
+
+        /* SEARCH BAR */
+        .search-container { padding: 15px 15px 5px; display:flex; align-items:center; }
+        .section-title { font-size: 0.95rem; color: #f8b500; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+        .icon { width: 18px; height: 18px; stroke-width: 2.5; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+        .text-cyan { color: #00d26a; } .text-gold { color: #ffd700; } .text-red { color: #ff4757; }
+
+        /* --- 9. CUSTOM ALERT KERAS STYLE --- */
+        .custom-alert-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 200;
+            display: none; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .custom-alert-box {
+            background: #1a0505; border: 2px solid #ff4757;
+            padding: 30px; border-radius: 15px; text-align: center;
+            max-width: 80%; width: 350px;
+            box-shadow: 0 0 50px rgba(255, 71, 87, 0.5);
+            transform: scale(0.8); opacity: 0; transition: 0.3s;
+        }
+        .custom-alert-overlay.active { display: flex; }
+        .custom-alert-overlay.active .custom-alert-box {
+            transform: scale(1); opacity: 1;
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        .alert-icon-big { width: 60px; height: 60px; margin-bottom: 15px; color: #ff4757; }
+        .alert-title { font-size: 1.2rem; font-weight: 800; color: #ff4757; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .alert-msg { color: #fff; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; }
+        .btn-keras { background: #ff4757; color: #fff; border: none; padding: 10px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(255,71,87,0.4); transition: 0.2s; }
+        .btn-keras:active { transform: scale(0.95); }
+
+        /* --- 10. NEW iOS STYLE DETAIL POPUP (BOTTOM SHEET) --- */
+        .ios-modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.8); z-index: 150; 
+            /* PENYAKITNYA DIHAPUS: display: none diganti jadi visibility */
+            display: flex; align-items: center; justify-content: center; 
+            visibility: hidden; pointer-events: none; 
+            backdrop-filter: blur(4px); 
+            opacity: 0; 
+            transition: opacity 0.4s ease, visibility 0.4s ease; 
+        }
+        .ios-modal-overlay.active { 
+            visibility: visible; pointer-events: auto; 
+            opacity: 1; 
+        }
+
+        .ios-sheet { 
+            width: 100%; max-width: 450px; background: #081c11; border-radius: 24px; 
+            padding: 6px; padding-bottom: 20px; max-height: 85vh; 
+            display: flex; flex-direction: column; margin: auto; position: relative; 
+            /* ANIMASI CENTER POP NYA */
+            transform: scale(0.7) translateY(30px); 
+            opacity: 0; 
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+
+        /* Border bertingkat ala karpet melingkar penuh */
+        .ios-sheet::before { 
+            content: ""; border: 1px solid rgba(248, 181, 0, 0.5); border-radius: 18px; 
+            position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px; 
+            pointer-events: none; z-index: 0; 
+        }
+
+        .ios-modal-overlay.active .ios-sheet { 
+            transform: scale(1) translateY(0); 
+            opacity: 1; 
+        }
+
+        .ios-handle { width: 40px; height: 5px; background: rgba(248, 181, 0, 0.3); border-radius: 10px; margin: 15px auto; position: relative; z-index: 1; }
+        .ios-header { display: flex; justify-content: space-between; align-items: center; margin: 0 15px 15px; padding-bottom: 15px; border-bottom: 2px dotted rgba(248, 181, 0, 0.3); position: relative; z-index: 1; }
+        .ios-title { font-size: 1.1rem; font-weight: 700; color: #f8b500; }
+        .ios-close { color: #fff; font-weight: 600; cursor: pointer; font-size: 0.9rem; background: #ff4757; padding: 2px 8px; border-radius: 4px; }
+
+        .ios-content { overflow-y: auto; flex: 1; padding: 0 15px; position: relative; z-index: 1; }
+        .revenue-summary-box { background: rgba(0,0,0,0.4); border-left: 4px solid #00d26a; border-right: 4px solid #00d26a; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .rev-label { font-size: 0.7rem; color: #b3c2b8; text-transform: uppercase; letter-spacing: 1px; }
+        .rev-amount { font-size: 1.6rem; font-weight: 800; color: #f8b500; margin: 5px 0; }
+
+        /* --- LIST EMAIL PREMIUM: CLEAN GLASSMORPHISM & RUB EL HIZB --- */
+        .email-item { 
+            padding: 15px 5px; 
+            color: #e0e0e0; 
+            font-size: 0.9rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            /* Garis bawah tipis emas pudar sebagai pemisah, hapus efek zebra */
+            border-bottom: 1px solid rgba(248, 181, 0, 0.15); 
+            transition: background 0.3s ease;
+        }
+        .email-item:last-child { border-bottom: none; } /* Hilangkan garis di item paling bawah */
+        .email-item:hover { background: rgba(248, 181, 0, 0.05); border-radius: 8px; }
+
+        /* Bingkai Angka Bintang Segi Delapan (Rub el Hizb) */
+        .email-number-frame {
+            position: relative;
+            width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .rub-el-hizb {
+            position: absolute;
+            width: 20px; height: 20px;
+            border: 1px solid rgba(248, 181, 0, 0.5);
+            background: rgba(248, 181, 0, 0.05);
+        }
+        .rub-el-hizb::before {
+            content: ''; position: absolute;
+            top: -1px; left: -1px; right: -1px; bottom: -1px;
+            border: 1px solid rgba(248, 181, 0, 0.5);
+            background: rgba(248, 181, 0, 0.05);
+            transform: rotate(45deg); /* Membentuk bintang 8 sudut */
+        }
+        .email-number {
+            position: relative; z-index: 1;
+            font-size: 0.7rem; font-weight: 800;
+            color: #f8b500;
+            font-family: 'Share Tech Mono', monospace;
+        }
+        .email-text { flex: 1; letter-spacing: 0.5px; }
+
+        .locked-btn { margin-top: 20px; background: rgba(0,0,0,0.5); border: 1px solid #ff4757; color: #ff4757; padding: 12px; text-align: center; border-radius: 8px; font-size: 0.85rem; cursor: pointer; transition: 0.3s; font-weight: 700; }
+        .locked-btn:hover { background: rgba(255, 71, 87, 0.1); }
+        /* --- NEW ELEMENTS (BIG COPY & IMPROVED FORM) --- */
+        .ios-copy-card {
+            background: linear-gradient(135deg, #0a2415, #05140c);
+            border: 1px solid rgba(248, 181, 0, 0.4);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .ios-copy-card:active { transform: scale(0.98); background: rgba(248, 181, 0, 0.1); }
+        .ios-code-text { font-family: 'Share Tech Mono', monospace; font-size: 1.4rem; color: #fff; letter-spacing: 2px; text-shadow: 0 0 10px rgba(248,181,0,0.5);}
+        .ios-copy-icon { color: #f8b500; width: 24px; }
+        .ios-copy-label { font-size: 0.7rem; color: #b3c2b8; text-transform: uppercase; margin-bottom: 5px; text-align: left; }
+
+        /* WD POPUP STYLES */
+        .wd-form-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid rgba(248,181,0,0.2); padding-bottom: 10px; }
+        .wd-form-title { font-weight: 700; color: #00d26a; font-size: 1rem; }
+
+        .wd-warning-box {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid #ff4757;
+            color: #ff4757;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            margin-bottom: 15px;
+            text-align: center;
+            line-height: 1.4;
+            font-weight: 700;
+        }
+
+        .wd-input-group { position: relative; margin-bottom: 12px; }
+        .wd-input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #f8b500; width: 18px; pointer-events: none; }
+        .wd-input-modern { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(248,181,0,0.3); padding: 12px 12px 12px 40px; border-radius: 10px; color: #fff; outline: none; transition: 0.3s; font-size: 0.9rem; }
+        .wd-input-modern:focus { border-color: #00d26a; box-shadow: 0 0 15px rgba(0, 210, 106, 0.2); background: rgba(0,0,0,0.7); }
+
+        .wd-summary-mini { font-size: 0.8rem; color: #ccc; margin-bottom: 15px; background: rgba(0, 210, 106, 0.1); padding: 10px; border-radius: 8px; border: 1px dashed rgba(0, 210, 106, 0.3); }
+
+        .wd-submit { width: 100%; background: linear-gradient(90deg, #f8b500, #d4af37); color: #000; border: none; padding: 12px; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 5px; box-shadow: 0 5px 15px rgba(248, 181, 0, 0.4); transition: 0.3s; }
+        .wd-submit:hover { box-shadow: 0 8px 20px rgba(248, 181, 0, 0.6); transform: translateY(-2px); }
+
+        /* SWITCH TOGGLE ADMIN */
+        .switch-wrapper { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(248, 181, 0, 0.1);}
+        .switch-label { font-size: 0.9rem; color: #fff; font-weight: bold; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #555; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #00d26a; }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        /* Media Queries untuk HP Sangat Kecil (< 360px) */
+        @media screen and (max-width: 360px) {
+            h1 { font-size: 1.5rem; }
+            .v-code { font-size: 1.2rem; }
+            .node-title { font-size: 0.55rem; }
+            .node-reward { font-size: 0.75rem; }
+            .main-content { padding: 15px; }
+            .rank-badge { width: 30px; height: 30px; font-size: 0.9rem; margin-right: 8px; }
+            .email-item { font-size: 0.75rem; }
+        }
+
+        /* animasi hiasan kiri atas tengah dan kanan */
+
+        /* --- ORNAMEN GAYA 3: BULAN MENGAMBANG --- */
+        .ramadan-vibes { position: fixed; top: 0; left: 0; width: 100%; pointer-events: none; z-index: 1000; }
+        .teks-ramadhan::before { content: "Ramadhan Kareem"; position: absolute; top: 15px; left: 50%; transform: translateX(-50%); color: #fff; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 4px; text-shadow: 0 0 20px #f8b500; opacity: 0; animation: fadeInDown 2s forwards 0.5s; }
+
+        .hiasan { position: absolute; top: 15px; font-size: 2rem; filter: drop-shadow(0 0 15px rgba(248, 181, 0, 0.8)); animation: floatItems 4s ease-in-out infinite; }
+        .hiasan-kiri { left: 8%; }
+        .hiasan-kiri::after { content: "🌙"; }
+        .hiasan-kanan { right: 10%; animation-delay: -2s; font-size: 1.5rem; }
+        .hiasan-kanan::after { content: "✨"; }
+
+        @keyframes floatItems { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(15px); } }
+        @keyframes fadeInDown { 0% { opacity: 0; transform: translate(-50%, -10px); } 100% { opacity: 1; transform: translate(-50%, 0); } }
+
+        /* --- CSS POLA PATTERN LOCK ADMIN --- */
+        .pattern-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            padding: 30px;
+            margin-top: 10px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 20px;
+            border: 1px solid rgba(248, 181, 0, 0.3);
+            touch-action: none; /* Cegah scroll layar hp saat gambar pola */
+        }
+        .pattern-dot {
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #b3c2b8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        /* Titik tengah */
+        .pattern-dot::after {
+            content: "";
+            width: 15px;
+            height: 15px;
+            background: transparent;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+        .pattern-dot.active {
+            border-color: #f8b500;
+            box-shadow: 0 0 15px rgba(248, 181, 0, 0.6);
+        }
+        .pattern-dot.active::after {
+            background: #f8b500;
+        }
+        .pattern-dot.error { 
+            border-color: #ff4757; 
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.6); 
+        }
+        .pattern-dot.error::after { background: #ff4757; }
+    </style>
 </head>
 <body>
+
+    <div class="ramadan-vibes">
+    <div class="hiasan hiasan-kiri"></div>
+    <div class="hiasan hiasan-kanan"></div>
+    <div class="teks-ramadhan"></div>
+</div>
 
     <header>
         <div class="admin-trigger" onclick="checkAdminAccess()">
@@ -206,6 +763,25 @@
         </div>
     </div>
 
+    <div id="pattern-lock-overlay" class="overlay">
+        <div class="modal-box" style="display:flex; flex-direction:column; align-items:center;">
+            <div class="close-btn" onclick="toggleOverlay('pattern-lock-overlay'); resetPattern();">x</div>
+            <h2 class="section-title">Gambar Pola Admin</h2>
+            <div class="pattern-container" id="patternContainer">
+                <div class="pattern-dot" data-val="1"></div>
+                <div class="pattern-dot" data-val="2"></div>
+                <div class="pattern-dot" data-val="3"></div>
+                <div class="pattern-dot" data-val="4"></div>
+                <div class="pattern-dot" data-val="5"></div>
+                <div class="pattern-dot" data-val="6"></div>
+                <div class="pattern-dot" data-val="7"></div>
+                <div class="pattern-dot" data-val="8"></div>
+                <div class="pattern-dot" data-val="9"></div>
+            </div>
+            <div id="pattern-msg" style="color:#ff4757; margin-top:15px; height:20px; font-weight:bold; font-size:0.9rem;"></div>
+        </div>
+    </div>
+
     <div id="custom-alert" class="custom-alert-overlay">
         <div class="custom-alert-box">
             <svg class="alert-icon-big" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
@@ -263,6 +839,485 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Memecah key menjadi potongan kecil
+        const part1 = "$2a$10$4v5UzmjJBEf7T6RUlR7";
+        const part2 = "CfeJERCrf/waXNcO7pxUk3OYGOzBNLJ7Fy";
+        const API_KEY = part1 + part2; // Gabungkan kembali saat dipakai
+
+        const BIN_ID = "6967465dd0ea881f406adee4";
+        let localUsers = [], localCodes = []; 
+        let globalGroupData = {}; // Store data for iOS modal
+        let globalSettings = { wdEnabled: false }; // Default setting
+        let currentWdCode = ""; // Menyimpan kode yang sedang di-withdraw
+
+        function switchTab(name) {
+            ['detail', 'database', 'gabung'].forEach(t => {
+                document.getElementById('tab-'+t).classList.remove('active');
+                document.getElementById('view-'+t).classList.remove('active-view');
+            });
+            document.getElementById('tab-'+name).classList.add('active');
+            document.getElementById('view-'+name).classList.add('active-view');
+            if(name === 'database') fetchPublicData();
+        }
+
+        // FUNGSI BARU UNTUK TRIGGER POLA ADMIN
+        function checkAdminAccess() {
+            toggleOverlay('pattern-lock-overlay');
+            if(typeof resetPattern === 'function') resetPattern();
+        }
+
+        function toggleOverlay(id) {
+            const el = document.getElementById(id);
+            if(el.style.display === 'flex') {
+                el.style.display = 'none';
+                if(id === 'admin-panel') { closeAction('add'); closeAction('codes'); closeAction('filter'); closeAction('settings'); }
+            } else {
+                el.style.display = 'flex';
+                if(id === 'admin-panel') fetchAdminData();
+            }
+        }
+
+        /* --- FUNGSI CUSTOM ALERT --- */
+        function triggerLockedPopup() {
+            const modal = document.getElementById('custom-alert');
+            modal.classList.add('active');
+        }
+        function closeCustomAlert() {
+            document.getElementById('custom-alert').classList.remove('active');
+        }
+        /* -------------------------- */
+
+        /* --- COPY CODE FUNCTION (NEW) --- */
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Kode tersalin: " + code);
+            });
+        }
+
+        /* --- iOS DETAIL MODAL LOGIC --- */
+        function openIosDetail(code) {
+            const data = globalGroupData[code];
+            if(!data) return;
+
+            document.getElementById('ios-modal-title').innerText = `Detail: ${code}`;
+            const container = document.getElementById('ios-modal-content');
+            
+            // Generate list dengan nomor urut & bingkai Islami
+            const emailListHTML = data.emails.map((e, index) => `
+                <div class="email-item">
+                    <div class="email-number-frame">
+                        <div class="rub-el-hizb"></div>
+                        <span class="email-number">${index + 1}</span>
+                    </div>
+                    <div class="email-text">${maskEmail(e)}</div>
+                </div>
+            `).join('');
+
+            const lockedBtn = `<div class="locked-btn" onclick="triggerLockedPopup()">🔒 Lihat Semua Email (Full)</div>`;
+            
+            // NEW: BIG COPY CARD
+            const copyCardHTML = `
+                <div class="ios-copy-card" onclick="copyCode('${code}')">
+                    <div style="text-align:left;">
+                        <div class="ios-copy-label">Kode Referral</div>
+                        <div class="ios-code-text">${code}</div>
+                    </div>
+                    <svg class="ios-copy-icon icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </div>
+            `;
+
+            container.innerHTML = `
+                ${copyCardHTML}
+                <div class="revenue-summary-box">
+                    <div class="rev-label">Total Pendapatan</div><div class="rev-amount">${data.revenue}</div>
+                    <div style="font-size:0.75rem; color:#666">Pola: 48rb - 64rb - 48rb...</div>
+                </div>
+                <div style="padding:0 5px;">
+                    <div style="font-size:0.8rem; color:#8892b0; margin-bottom:10px; font-weight:700;">DAFTAR USER (${data.count})</div>
+                    ${emailListHTML}
+                </div>
+                ${lockedBtn}
+            `;
+
+            document.getElementById('ios-detail-modal').classList.add('active');
+        }
+
+        // FUNGSI BARU UNTUK MEMBUKA POPUP WITHDRAW
+        function openWdPopup(code) {
+            currentWdCode = code; // Simpan kode global
+            const data = globalGroupData[code];
+            
+            // Isi info ringkas di popup
+            document.getElementById('wd-popup-code').innerText = code;
+            document.getElementById('wd-popup-revenue').innerText = data.revenue;
+            
+            // Buka popup
+            toggleOverlay('wd-popup');
+        }
+
+        // FUNGSI BARU UNTUK KIRIM WA DARI POPUP
+        function sendWdWa() {
+            if(!currentWdCode) return;
+            
+            const data = globalGroupData[currentWdCode];
+            const name = document.getElementById('wdName-input').value;
+            const bank = document.getElementById('wdBank-input').value;
+            const rek = document.getElementById('wdRek-input').value;
+
+            if(!name || !bank || !rek) return alert("Mohon lengkapi semua data pembayaran!");
+
+            // Generate list email
+            const emailList = data.emails.map((e, i) => `${i+1}. ${e}`).join('\n');
+
+            const text = `Halo Admin Zen, saya mau Withdraw! 💸\n\n🆔 Kode: *${currentWdCode}*\n💰 Total: *${data.revenue}*\n👥 Jumlah: *${data.count}* Users\n\n🏦 Bank: *${bank}*\n💳 No Rek: *${rek}*\n👤 A/N: *${name}*\n\n📝 *Detail User:*\n${emailList}\n\nMohon diproses. Terima kasih!`;
+            
+            window.open(`https://wa.me/6289513304878?text=${encodeURIComponent(text)}`);
+            toggleOverlay('wd-popup'); // Tutup popup setelah kirim
+        }
+
+        function closeIosDetail() {
+            document.getElementById('ios-detail-modal').classList.remove('active');
+        }
+        /* -------------------------- */
+
+        function maskEmail(email) {
+            let parts = email.split('@');
+            if(parts.length < 2) return email; 
+            let name = parts[0];
+            let domain = parts[1];
+            let visible = name.substring(0, 3);
+            return `${visible}xxxx@${domain}`;
+        }
+
+        async function fetchPublicData() {
+            const listContainer = document.getElementById('leaderboardList');
+            listContainer.innerHTML = '<div style="text-align:center; padding:30px; color:#888;">Memuat data terbaru...</div>';
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': API_KEY } });
+                const data = await res.json();
+                localUsers = data.record.users || [];
+                // Load settings from JSON
+                globalSettings = data.record.settings || { wdEnabled: false };
+                
+                globalGroupData = {}; // Reset data container
+                
+                listContainer.innerHTML = '';
+                if(localUsers.length === 0) { listContainer.innerHTML = '<div style="text-align:center; padding:30px; color:#888;">Belum ada data partner.</div>'; return; }
+
+                const groups = {};
+                localUsers.forEach(u => { if(!groups[u.code]) groups[u.code] = []; groups[u.code].push(u.email); });
+                const sortedCodes = Object.keys(groups).sort((a,b) => groups[b].length - groups[a].length);
+
+                sortedCodes.forEach((code, i) => {
+                    let rankClass = i===0?'top-1':(i===1?'top-2':(i===2?'top-3':''));
+                    const emails = groups[code];
+                    const count = emails.length;
+                    
+                    let pairs = Math.floor(count / 2);
+                    let remainder = count % 2;
+                    let revenue = (pairs * (48000 + 64000)) + (remainder * 48000);
+
+                    let revFmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(revenue);
+                    
+                    // Store data for the modal
+                    globalGroupData[code] = {
+                        emails: emails,
+                        revenue: revFmt,
+                        count: count
+                    };
+
+                    const uid = `group-${i}`;
+                    
+                    // LOGIC TOMBOL WD (STACKED FULL WIDTH)
+                    let wdBtnHTML = '';
+                    if(globalSettings.wdEnabled) {
+                        wdBtnHTML = `<button class="btn-action-full wd" onclick="openWdPopup('${code}')"><svg class="icon" viewBox="0 0 24 24" style="width:16px;"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Tarik Uang (Withdraw)</button>`;
+                    }
+
+                    listContainer.innerHTML += `
+                        <div class="group-card ${rankClass}" id="card-${uid}">
+                            <div class="group-header">
+                                <div style="display:flex; align-items:center;">
+                                    <div class="rank-badge">#${i+1}</div>
+                                    <div class="group-info"><div class="group-code">${code}</div><div class="group-label">Referral Code</div></div>
+                                </div>
+                                <div class="count-pill">${count} User</div>
+                            </div>
+                            <div class="group-actions">
+                                ${wdBtnHTML}
+                                <button class="btn-action-full dt" onclick="openIosDetail('${code}')">Lihat Detail <svg class="icon" viewBox="0 0 24 24" style="width:16px;"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                            </div>
+                        </div>`;
+                });
+            } catch(e) { listContainer.innerHTML = `<div style="text-align:center; padding:30px; color:#ff6b6b;">Gagal memuat data.</div>`; }
+        }
+
+        function openAction(type) {
+            document.querySelectorAll('.action-dialog').forEach(el => el.classList.remove('show'));
+            document.getElementById('dialog-' + type).classList.add('show');
+            if(type === 'add') updateSelectOptions();
+            if(type === 'codes') renderCodeList();
+            if(type === 'settings') {
+                document.getElementById('wdToggle').checked = globalSettings.wdEnabled;
+            }
+        }
+        function closeAction(type) { document.getElementById('dialog-' + type).classList.remove('show'); }
+
+        function updateSelectOptions() {
+            const sel = document.getElementById('admKode'); sel.innerHTML = '<option value="">-- Pilih Kode --</option>';
+            localCodes.forEach(c => { const opt = document.createElement('option'); opt.value = c; opt.innerText = c; sel.appendChild(opt); });
+        }
+
+        async function fetchAdminData() {
+            const tbody = document.getElementById('adminTableBody'); tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Syncing...</td></tr>';
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': API_KEY } });
+                const data = await res.json();
+                localUsers = data.record.users || []; localCodes = data.record.codes || [];
+                globalSettings = data.record.settings || { wdEnabled: false };
+                renderAdminTable();
+            } catch (e) { alert("Error: " + e.message); }
+        }
+
+        function renderAdminTable() {
+            const tbody = document.getElementById('adminTableBody'); 
+            tbody.innerHTML = '';
+            const searchTerm = document.getElementById('adminSearch').value.toLowerCase();
+            let filteredData = localUsers.map((u, i) => ({ ...u, originalIndex: i }))
+                                         .filter(u => u.email.toLowerCase().includes(searchTerm) || u.code.toLowerCase().includes(searchTerm));
+
+            if(filteredData.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#555;">Data tidak ditemukan</td></tr>'; 
+                return; 
+            }
+
+            filteredData.forEach((u) => {
+                tbody.innerHTML += `<tr>
+                    <td style="text-align:center"><input type="checkbox" class="row-check" value="${u.originalIndex}" onchange="checkMassDeleteState()"></td>
+                    <td><span style="color:#00c6ff; font-family:monospace">${u.code}</span></td><td>${u.email}</td>
+                    <td style="text-align:right"><button class="btn-action" style="color:#ffd700" onclick="editData(${u.originalIndex})"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="btn-action" style="color:#ff6b6b" onclick="deleteData(${u.originalIndex})"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button></td>
+                </tr>`;
+            });
+            checkMassDeleteState();
+        }
+
+        function renderCodeList() {
+            const cont = document.getElementById('codeListContainer'); cont.innerHTML = '';
+            if(localCodes.length === 0) cont.innerHTML = '<div style="text-align:center; color:#555; font-size:0.75rem;">Belum ada kode master.</div>';
+            localCodes.forEach((c, i) => { cont.innerHTML += `<div class="code-item"><span style="color:#00c6ff;">${c}</span><span class="code-del-btn" onclick="deleteCode(${i})">x</span></div>`; });
+        }
+
+        async function addNewCode() {
+            const inp = document.getElementById('newCodeInput'), val = inp.value.trim();
+            if(!val || localCodes.includes(val)) return alert("Kode tidak valid atau sudah ada");
+            localCodes.push(val); inp.value = ''; renderCodeList(); await pushToBinAll();
+        }
+        async function deleteCode(i) { if(!confirm("Hapus kode?")) return; localCodes.splice(i, 1); renderCodeList(); await pushToBinAll(); }
+
+        async function saveData() {
+            const c = document.getElementById('admKode').value, raw = document.getElementById('admEmail').value, idx = parseInt(document.getElementById('admEditIndex').value);
+            if(!c || !raw.trim()) return alert("Data tidak lengkap");
+            const emails = raw.match(/[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}/g) || [];
+            if(!emails.length) return alert("Email tidak valid");
+
+            const dups = emails.filter(ne => localUsers.some((ex, i) => (idx !== -1 && i === idx ? false : ex.email.toLowerCase() === ne.toLowerCase())));
+            if(dups.length) return alert(`Email duplikat:\n${dups.join('\n')}`);
+
+            const btns = document.querySelectorAll('.btn-submit'); btns.forEach(b => b.innerText = 'Saving...');
+            if(idx !== -1) localUsers[idx] = { code: c, email: emails[0] };
+            else emails.forEach(e => localUsers.push({ code: c, email: e }));
+
+            await pushToBinAll();
+            btns.forEach(b => b.innerText = 'Simpan');
+            document.getElementById('admEmail').value = ''; document.getElementById('admEditIndex').value = -1;
+            closeAction('add'); renderAdminTable(); alert(`Berhasil: ${emails.length} data.`);
+        }
+
+        function editData(i) {
+            document.getElementById('admEditIndex').value = i;
+            document.getElementById('admEmail').value = localUsers[i].email;
+            updateSelectOptions();
+            document.getElementById('admKode').value = localUsers[i].code;
+            openAction('add');
+        }
+
+        async function deleteData(i) { if(confirm("Hapus?")) { localUsers.splice(i, 1); renderAdminTable(); await pushToBinAll(); } }
+
+        function toggleAll(src) { document.querySelectorAll('.row-check').forEach(c => c.checked = src.checked); checkMassDeleteState(); }
+        function checkMassDeleteState() {
+            const n = document.querySelectorAll('.row-check:checked').length, btn = document.getElementById('dockDelete');
+            if(n > 0) btn.classList.add('active'); else btn.classList.remove('active');
+        }
+        async function massDelete() {
+            const chk = document.querySelectorAll('.row-check:checked');
+            if(!chk.length || !confirm("Hapus terpilih?")) return;
+            const idxs = Array.from(chk).map(c => parseInt(c.value)).sort((a,b)=>b-a);
+            idxs.forEach(i => localUsers.splice(i, 1));
+            renderAdminTable(); document.getElementById('checkAll').checked = false; await pushToBinAll();
+        }
+
+        async function massDeleteByCode() {
+            const codeToDelete = document.getElementById('filterKode').value.trim();
+            if(!codeToDelete) return alert("Masukkan Kode Referral yang mau dihapus!");
+            
+            const count = localUsers.filter(u => u.code.toLowerCase() === codeToDelete.toLowerCase()).length;
+            if(count === 0) return alert("Tidak ada data dengan kode ini.");
+
+            if(!confirm(`⚠️ PERINGATAN: Anda akan menghapus ${count} data dengan kode '${codeToDelete}'.\n\nTindakan ini tidak bisa dibatalkan. Yakin?`)) return;
+
+            localUsers = localUsers.filter(u => u.code.toLowerCase() !== codeToDelete.toLowerCase());
+            
+            renderAdminTable();
+            closeAction('filter');
+            await pushToBinAll();
+            alert(`Berhasil menghapus ${count} data.`);
+        }
+
+        /* --- SETTINGS TOGGLE LOGIC --- */
+        async function toggleWdStatus() {
+            const isChecked = document.getElementById('wdToggle').checked;
+            globalSettings.wdEnabled = isChecked;
+            // Push update to BIN
+            await pushToBinAll();
+            alert(`Fitur Withdraw: ${isChecked ? 'AKTIF' : 'NON-AKTIF'}`);
+        }
+
+        async function pushToBinAll() {
+            await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY }, body: JSON.stringify({ users: localUsers, codes: localCodes, settings: globalSettings }) });
+        }
+
+        function copyFilteredEmails() {
+            const filter = document.getElementById('filterKode').value.toLowerCase();
+            const emails = localUsers.filter(u => u.code.toLowerCase() === filter).map(u => u.email).join(', ');
+            if(emails) navigator.clipboard.writeText(emails).then(() => { alert("Disalin!"); closeAction('filter'); });
+            else alert("Tidak ada data");
+        }
+
+        function updateCard() {
+            const val = document.getElementById('reqCode').value;
+            document.getElementById('displayCardCode').innerText = val ? val : 'ZEN-MEMBER';
+        }
+
+        function laporWa() {
+            const k = document.getElementById('lapKode').value, e = document.getElementById('lapEmail').value.trim();
+            if(localUsers.some(u => u.email.toLowerCase() === e.toLowerCase())) return alert('Email sudah tercatat silahkan cek di menu database');
+            const text = `Berhasil Undang\n\nKode : ${k}\nEmail : ${e}`;
+            window.open(`https://wa.me/6289513304878?text=${encodeURIComponent(text)}`);
+        }
+        function joinWa() {
+            const k = document.getElementById('reqCode').value;
+            const t = document.getElementById('reqTarget').value;
+            if(!k) return alert("Isi kode unik dulu!");
+            const text = `🚀 *NEW AGENT REGISTRATION*\n\nHalo Admin Zen, saya siap bergabung jadi partner!\n\n🆔 Request Kode: *${k}*\n🎯 Target: *${t || '10'}* User / Minggu\n\nMohon aksesnya segera diaktifkan. Terima kasih!`;
+            window.open(`https://wa.me/6289513304878?text=${encodeURIComponent(text)}`);
+        }
+        function calc() {
+            let t = parseInt(document.getElementById('reqTarget').value)||0;
+            let pct = (t / 20) * 100;
+            if(pct > 100) pct = 100;
+            document.getElementById('calcProgress').style.width = pct + "%";
+            
+            // --- NEW CALC LOGIC ---
+            let pairs = Math.floor(t / 2);
+            let remainder = t % 2;
+            let total = (pairs * 112000) + (remainder * 48000); // 112rb = 48 + 64
+
+            const badge = document.getElementById('calcRateBadge');
+            const breakdown = document.getElementById('calcBreakdownText');
+            const bonus = document.getElementById('calcBonus');
+            const bar = document.getElementById('calcProgress');
+
+            // Set badge active style permanen karena looping
+            badge.innerText = "Zigzag 48rb/64rb";
+            badge.classList.add("active-gold"); 
+            bar.classList.add("full");
+            bonus.style.display = 'none'; // Disable bonus fixed karena sistemnya looping
+
+            breakdown.innerText = `${pairs} Pasang (112rb) + ${remainder} x 48rb`;
+            
+            document.getElementById('calcTotal').innerText = new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',minimumFractionDigits:0}).format(total);
+        }
+
+        /* --- LOGIKA PATTERN LOCK ADMIN --- */
+        const CORRECT_PATTERN = "4569871";
+        let currentPattern = [];
+        let isDrawing = false;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const dots = document.querySelectorAll('.pattern-dot');
+            const container = document.getElementById('patternContainer');
+            const msg = document.getElementById('pattern-msg');
+
+            // Mouse Events untuk PC/Laptop
+            container.addEventListener('mousedown', (e) => {
+                isDrawing = true;
+                resetPattern();
+                handleDotTouch(e.target);
+            });
+            window.addEventListener('mouseup', () => {
+                if(isDrawing) checkPattern();
+                isDrawing = false;
+            });
+            container.addEventListener('mouseover', (e) => {
+                if(isDrawing) handleDotTouch(e.target);
+            });
+
+            // Touch Events untuk Smartphone (Layar Sentuh)
+            container.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // cegah scroll
+                isDrawing = true;
+                resetPattern();
+                handleDotTouch(e.target);
+            }, {passive: false});
+            
+            window.addEventListener('touchend', () => {
+                if(isDrawing) checkPattern();
+                isDrawing = false;
+            });
+            
+            container.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if(!isDrawing) return;
+                // Deteksi elemen yang sedang disentuh jari
+                const touch = e.touches[0];
+                const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                if(target && target.classList.contains('pattern-dot')) {
+                    handleDotTouch(target);
+                }
+            }, {passive: false});
+
+            function handleDotTouch(dot) {
+                if(dot && dot.classList.contains('pattern-dot') && !dot.classList.contains('active')) {
+                    dot.classList.add('active');
+                    currentPattern.push(dot.getAttribute('data-val'));
+                }
+            }
+
+            function checkPattern() {
+                const attempt = currentPattern.join('');
+                if(attempt === CORRECT_PATTERN) {
+                    toggleOverlay('pattern-lock-overlay');
+                    toggleOverlay('admin-panel'); // Buka panel admin jika benar
+                    msg.innerText = "";
+                } else if(attempt.length > 0) {
+                    msg.innerText = "Pola Salah!";
+                    dots.forEach(d => { if(d.classList.contains('active')) d.classList.add('error'); });
+                    setTimeout(resetPattern, 1000); // Reset visual setelah 1 detik
+                }
+            }
+        });
+
+        window.resetPattern = function() {
+            currentPattern = [];
+            document.querySelectorAll('.pattern-dot').forEach(d => {
+                d.classList.remove('active', 'error');
+            });
+            const msg = document.getElementById('pattern-msg');
+            if(msg) msg.innerText = "";
+        }
+
+        fetchPublicData();
+    </script>
 </body>
 </html>
