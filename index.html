@@ -206,6 +206,16 @@
         .rev-label { font-size: 0.8rem; color: #10B981; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
         .rev-amount { font-size: 2rem; font-weight: 900; color: #064E3B; margin: 8px 0; }
         
+        /* KOMPONEN TIER BOX UNTUK MODAL DETAIL */
+        .tier-box { border: 2px solid #E2E8F0; border-radius: 24px; padding: 18px; margin-bottom: 25px; transition: 0.3s; }
+        .tier-box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .tier-title { font-size: 0.8rem; font-weight: 800; color: #64748B; letter-spacing: 0.5px; text-transform: uppercase; }
+        .tier-badge-current { font-size: 0.85rem; font-weight: 900; color: #FFFFFF; padding: 6px 14px; border-radius: 12px; }
+        .tier-bar-bg { width: 100%; height: 10px; background: #E2E8F0; border-radius: 99px; overflow: hidden; margin-bottom: 12px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);}
+        .tier-bar-fill { height: 100%; border-radius: 99px; transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .tier-msg { font-size: 0.85rem; color: #475569; font-weight: 600; line-height: 1.4; }
+        .tier-msg strong { color: #0F172A; font-weight: 800; }
+
         .email-item { padding: 16px 12px; color: #1E293B; font-size: 0.95rem; display: flex; align-items: center; gap: 15px; border-bottom: 2px solid #F1F5F9; transition: all 0.2s ease; }
         .email-item:last-child { border-bottom: none; } 
         .email-item:hover { background: #F8FAFC; border-radius: 16px; transform: translateX(5px); }
@@ -416,49 +426,21 @@
                     <thead>
                         <tr>
                             <th style="width: 50%;">Total Invite</th>
-                            <th>Total Komisi</th>
+                            <th>Komisi Per Invite</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> 1 User</div></td>
+                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> 1 - 9 User</div></td>
                             <td class="profit-val">Rp 48.000</td>
                         </tr>
                         <tr>
-                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 2 User</div></td>
-                            <td class="profit-val">Rp 112.000</td>
+                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 10 - 19 User</div></td>
+                            <td class="profit-val">Rp 64.000</td>
                         </tr>
                         <tr>
-                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 3 User</div></td>
-                            <td class="profit-val">Rp 160.000</td>
-                        </tr>
-                        <tr>
-                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 4 User</div></td>
-                            <td class="profit-val">Rp 224.000</td>
-                        </tr>
-                        <tr>
-                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 5 User</div></td>
-                            <td class="profit-val">Rp 272.000</td>
-                        </tr>
-                        <tr>
-                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 6 User</div></td>
-                            <td class="profit-val">Rp 336.000</td>
-                        </tr>
-                        <tr>
-                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 7 User</div></td>
-                            <td class="profit-val">Rp 384.000</td>
-                        </tr>
-                        <tr>
-                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 8 User</div></td>
-                            <td class="profit-val">Rp 448.000</td>
-                        </tr>
-                        <tr>
-                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 9 User</div></td>
-                            <td class="profit-val">Rp 496.000</td>
-                        </tr>
-                        <tr>
-                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 10 User</div></td>
-                            <td class="profit-val" style="color: #F59E0B;">Rp 560.000</td>
+                            <td><div class="invite-col"><svg class="premium-user-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 20+ User</div></td>
+                            <td class="profit-val" style="color: #F59E0B;">Rp 80.000</td>
                         </tr>
                     </tbody>
                 </table>
@@ -517,7 +499,7 @@
             </div>
 
             <div class="calc-result-box">
-                <div id="calcRateBadge" class="calc-rate-badge">Zigzag 48/64</div>
+                <div id="calcRateBadge" class="calc-rate-badge">Sistem Tier Baru</div>
                 <div class="calc-header">Estimasi Profit</div>
                 <div class="result-amount" id="calcTotal">IDR 0</div>
                 <div class="calc-progress-bg"><div id="calcProgress" class="calc-progress-fill"></div></div>
@@ -841,11 +823,27 @@
                 </div>
             `;
 
+            // MEMBUAT UI TIER PROGRESS DINAMIS
+            const t = data.tier;
+            const tierUIHTML = `
+                <div class="tier-box" style="border-color: ${t.color}40; background: ${t.color}08;">
+                    <div class="tier-box-header">
+                        <div class="tier-title" style="color: ${t.color}">STATUS TIER</div>
+                        <div class="tier-badge-current" style="background: ${t.color}; box-shadow: 0 4px 10px ${t.color}40;">${t.name}</div>
+                    </div>
+                    <div class="tier-bar-bg">
+                        <div class="tier-bar-fill" style="width: ${t.pct}%; background: ${t.color};"></div>
+                    </div>
+                    <div class="tier-msg">${t.msg}</div>
+                </div>
+            `;
+
             container.innerHTML = `
                 ${copyCardHTML}
+                ${tierUIHTML}
                 <div class="revenue-summary-box">
                     <div class="rev-label">Total Pendapatan</div><div class="rev-amount">${data.revenue}</div>
-                    <div style="font-size:0.8rem; color:#10B981; font-weight:700;">Pola: 48rb - 64rb - 48rb...</div>
+                    <div style="font-size:0.8rem; color:#10B981; font-weight:700;">Sistem Tier: 48k / 64k / 80k</div>
                 </div>
                 <div style="padding:0 5px;">
                     <div style="font-size:0.85rem; color:#64748B; margin-bottom:12px; font-weight:800;">DAFTAR USER (${data.count})</div>
@@ -924,13 +922,38 @@
                     const emails = groups[code];
                     const count = emails.length;
                     
-                    let pairs = Math.floor(count / 2);
-                    let remainder = count % 2;
-                    let revenue = (pairs * (48000 + 64000)) + (remainder * 48000);
+                    // Kalkulasi TIER BARU
+                    let revenue = 0;
+                    if(count <= 9) {
+                        revenue = count * 48000;
+                    } else if(count <= 19) {
+                        revenue = (9 * 48000) + ((count - 9) * 64000);
+                    } else {
+                        revenue = (9 * 48000) + (10 * 64000) + ((count - 19) * 80000);
+                    }
 
                     let revFmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(revenue);
                     
-                    globalGroupData[code] = { emails: emails, revenue: revFmt, count: count };
+                    // Logika Status Tier
+                    let tName = "MEMBER", tColor = "#0A66C2", tNext = 10;
+                    if(count >= 10 && count <= 19) { tName = "PRO"; tColor = "#8B5CF6"; tNext = 20; }
+                    if(count >= 20) { tName = "VIP"; tColor = "#F59E0B"; tNext = null; }
+
+                    let tPct = 100;
+                    let tMsg = "✨ Level Maksimal! Komisi Tertinggi (Rp 80k/user)";
+                    if(tNext) {
+                        let bCount = tName === "MEMBER" ? 0 : 10;
+                        tPct = ((count - bCount) / 10) * 100;
+                        let nName = tName === "MEMBER" ? "PRO (Rp 64k)" : "VIP (Rp 80k)";
+                        tMsg = `Butuh <strong>${tNext - count} user</strong> lagi untuk naik ke <strong>${nName}</strong>`;
+                    }
+
+                    globalGroupData[code] = { 
+                        emails: emails, 
+                        revenue: revFmt, 
+                        count: count,
+                        tier: { name: tName, color: tColor, next: tNext, pct: tPct, msg: tMsg }
+                    };
 
                     const uid = `group-${i}`;
                     
@@ -944,7 +967,13 @@
                             <div class="group-header">
                                 <div style="display:flex; align-items:center;">
                                     <div class="rank-badge">#${i+1}</div>
-                                    <div class="group-info"><div class="group-code">${code}</div><div class="group-label">Referral Code</div></div>
+                                    <div class="group-info">
+                                        <div class="group-code">${code}</div>
+                                        <div class="group-label">Referral Code</div>
+                                        <div style="font-size:0.75rem; font-weight:800; color:${tColor}; margin-top:4px;">
+                                            ✦ Tier ${tName} ${tNext ? `<span style="font-weight:600; font-size:0.7rem; color:#64748B;">(Kurang ${tNext - count} ke ${tName==='MEMBER'?'PRO':'VIP'})</span>` : '<span style="font-weight:600; font-size:0.7rem; color:#F59E0B;">(MAX)</span>'}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="count-pill">${count} User</div>
                             </div>
@@ -1189,24 +1218,36 @@
             const text = `🚀 *NEW AGENT REGISTRATION*\n\nHalo Admin Zen, saya siap bergabung jadi partner!\n\n🆔 Request Kode: *${k}*\n🎯 Target: *${t || '10'}* User / Minggu\n\nMohon aksesnya segera diaktifkan. Terima kasih!`;
             window.open(`https://wa.me/6289513304878?text=${encodeURIComponent(text)}`);
         }
+        
         function calc() {
             let t = parseInt(document.getElementById('reqTarget').value)||0;
             let pct = (t / 20) * 100;
             if(pct > 100) pct = 100;
             document.getElementById('calcProgress').style.width = pct + "%";
             
-            let pairs = Math.floor(t / 2);
-            let remainder = t % 2;
-            let total = (pairs * 112000) + (remainder * 48000); 
+            // Kalkulasi TIER BARU di Kalkulator Simulasi Gabung
+            let total = 0;
+            let breakdownTxt = "";
+            
+            if (t <= 9) {
+                total = t * 48000;
+                breakdownTxt = `${t} x 48rb`;
+            } else if (t <= 19) {
+                total = (9 * 48000) + ((t - 9) * 64000);
+                breakdownTxt = `9x 48rb + ${t - 9}x 64rb`;
+            } else {
+                total = (9 * 48000) + (10 * 64000) + ((t - 19) * 80000);
+                breakdownTxt = `9x 48rb + 10x 64rb + ${t - 19}x 80rb`;
+            }
 
             const badge = document.getElementById('calcRateBadge');
             const breakdown = document.getElementById('calcBreakdownText');
             const bonus = document.getElementById('calcBonus');
             const bar = document.getElementById('calcProgress');
 
-            badge.innerText = "Zigzag 48rb/64rb"; badge.classList.add("active-gold"); 
+            badge.innerText = "Sistem Tier Baru"; badge.classList.add("active-gold"); 
             bar.classList.add("full"); bonus.style.display = 'none'; 
-            breakdown.innerText = `${pairs} Pasang (112rb) + ${remainder} x 48rb`;
+            breakdown.innerText = breakdownTxt;
             
             document.getElementById('calcTotal').innerText = new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',minimumFractionDigits:0}).format(total);
         }
